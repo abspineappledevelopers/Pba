@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UCL.ISM.Client", "UCL.ISM.Client\UCL.ISM.Client.csproj", "{72029443-56FD-41AE-B1D2-3279D520251F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyField", "StudyField\StudyField.csproj", "{DE391862-FC06-41B0-82E4-FAEA2B371F8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UCL.ISM.StudyField", "StudyField\UCL.ISM.StudyField.csproj", "{DE391862-FC06-41B0-82E4-FAEA2B371F8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCL.ISM.StudyField.Test", "UCL.ISM.StudyField.Test\UCL.ISM.StudyField.Test.csproj", "{B47E3A46-18EB-46DE-9D09-1B9F69F04687}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{DE391862-FC06-41B0-82E4-FAEA2B371F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE391862-FC06-41B0-82E4-FAEA2B371F8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE391862-FC06-41B0-82E4-FAEA2B371F8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B47E3A46-18EB-46DE-9D09-1B9F69F04687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B47E3A46-18EB-46DE-9D09-1B9F69F04687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B47E3A46-18EB-46DE-9D09-1B9F69F04687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B47E3A46-18EB-46DE-9D09-1B9F69F04687}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
