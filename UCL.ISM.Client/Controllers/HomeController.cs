@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using UCL.ISM.Client.Models;
 
@@ -12,6 +9,8 @@ namespace UCL.ISM.Client.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["Culture"] = CultureInfo.CurrentUICulture.DisplayName;
+            ViewData["Message"] = "Dette er det nye software til studie administrationen til afhjælpning af håndtering af internationale studerende.";
             return View();
         }
 

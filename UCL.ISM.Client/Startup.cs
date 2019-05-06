@@ -42,10 +42,10 @@ namespace UCL.ISM.Client
 
             services.AddMvc(options =>
             {
-                var policy = new AuthorizationPolicyBuilder()
+                /*var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
+                options.Filters.Add(new AuthorizeFilter(policy));*/
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
