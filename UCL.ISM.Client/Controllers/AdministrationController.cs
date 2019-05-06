@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace UCL.ISM.Client.Controllers
 {
-    [Authorize(Roles = "Administration")]
+    [Authorize]
     public class AdministrationController : Controller
     {
         public IActionResult Index()
@@ -15,13 +15,17 @@ namespace UCL.ISM.Client.Controllers
             return View();
         }
 
+        [Authorize(Policy = "RequireAdministration")]
         public IActionResult Create_StudyField()
         {
+            ViewData["Message"] = "StudyField test.";
             return View();
         }
 
+        [Authorize(Policy = "RequireAdministration")]
         public IActionResult Create_InterviewScheme()
         {
+            ViewData["Message"] = "Interview test.";
             return View();
         }
     }

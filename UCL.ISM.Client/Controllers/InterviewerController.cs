@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace UCL.ISM.Client.Controllers
 {
-    [Authorize(Roles = "Interviewer")]
+    [Authorize]
     public class InterviewerController : Controller
     {
+        [Authorize(Policy = "RequireInterviewer")]
         public IActionResult Index()
         {
             return View();

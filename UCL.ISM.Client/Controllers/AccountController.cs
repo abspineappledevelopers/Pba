@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Graph;
 using Microsoft.Identity.Web.Client;
+using System.Security.Claims;
 
 namespace UCL.ISM.Client.Controllers
 {
@@ -18,14 +19,34 @@ namespace UCL.ISM.Client.Controllers
             this._service = service;
         }
 
-        [MsalUiRequiredExceptionFilter(Scopes = new[] { "User.Read" })]
+        [MsalUiRequiredExceptionFilter(Scopes = new[] { "User.Read", "Directory.Read.All" })]
         public async Task<IActionResult> Index()
         {
-            string accessToken = await tokenAcquisition.GetAccessTokenOnBehalfOfUser(HttpContext, new[] { "User.Read" });
+            string accessToken = await tokenAcquisition.GetAccessTokenOnBehalfOfUser(HttpContext, new[] { "User.Read", "Directory.Read.All" });
 
             User me = await _service.GetMeAsync(accessToken);
             IList<Group> groups = await _service.GetMyGroupsAsync(accessToken);
 
+            /*var user = new ClaimsIdentity();
+            foreach (var group in groups)
+            {
+                user.AddClaim(new Claim("group", group.Id));
+                user.AddClaim(new Claim("role", group.DisplayName));
+            }
+
+            foreach (var claim in user.Claims)
+            {
+                if (claim == new Claim("role", "Student administration") ||
+                    claim == new Claim("role", "Interviewer"))
+                {
+                    var identity = new ClaimsIdentity();
+                    identity.AddClaim(claim);
+                    User.AddIdentity(identity);
+                }
+            }*/
+
+            /// TODO: Fix appRoles i AzureAD, 
+            
             ViewData["Me"] = me;
             ViewData["Groups"] = groups;
 

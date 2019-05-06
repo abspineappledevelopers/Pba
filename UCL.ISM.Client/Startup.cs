@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Client.TokenCacheProviders;
-
+using System.IdentityModel.Tokens.Jwt;
 using UCL.ISM.Authentication;
 
 namespace UCL.ISM.Client
@@ -25,6 +25,8 @@ namespace UCL.ISM.Client
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -35,10 +37,18 @@ namespace UCL.ISM.Client
             services.AddOptions();
 
             services.AddAzureAdV2Authentication(Configuration)
-                .AddMsal(new string[] { "User.Read" })
+                .AddMsal(new string[] { "User.Read", "Directory.Read.All" })
                 .AddInMemoryTokenCaches();
 
             services.AddUserService(Configuration);
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministration",
+                    policy => policy.RequireRole("Student administration"));
+                options.AddPolicy("RequireInterviewer",
+                    policy => policy.RequireRole("Interviewer"));
+            });
 
             services.AddMvc(options =>
             {
