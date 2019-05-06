@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UCL.ISM.StudyField", "Study
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UCL.ISM.StudyField.Test", "UCL.ISM.StudyField.Test\UCL.ISM.StudyField.Test.csproj", "{B47E3A46-18EB-46DE-9D09-1B9F69F04687}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCL.ISM.Authentication", "UCL.ISM.Authentication\UCL.ISM.Authentication.csproj", "{53B4E2A2-C589-4DCE-BD1C-8208FC2E8A02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UCL.ISM.Authentication", "UCL.ISM.Authentication\UCL.ISM.Authentication.csproj", "{53B4E2A2-C589-4DCE-BD1C-8208FC2E8A02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Identity.Web", "..\AzureAuthZ\microsoft-identity-platform-aspnetcore-webapp-tutorial\Microsoft.Identity.Web\Microsoft.Identity.Web.csproj", "{ABF4486E-652D-4574-9F65-0B9B02275857}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{53B4E2A2-C589-4DCE-BD1C-8208FC2E8A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53B4E2A2-C589-4DCE-BD1C-8208FC2E8A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53B4E2A2-C589-4DCE-BD1C-8208FC2E8A02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABF4486E-652D-4574-9F65-0B9B02275857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABF4486E-652D-4574-9F65-0B9B02275857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABF4486E-652D-4574-9F65-0B9B02275857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABF4486E-652D-4574-9F65-0B9B02275857}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

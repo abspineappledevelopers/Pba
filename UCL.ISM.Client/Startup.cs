@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.Client.TokenCacheProviders;
+
+using UCL.ISM.Authentication;
 
 namespace UCL.ISM.Client
 {
@@ -31,8 +32,21 @@ namespace UCL.ISM.Client
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddOptions();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddAzureAdV2Authentication(Configuration)
+                .AddMsal(new string[] { "User.Read" })
+                .AddInMemoryTokenCaches();
+
+            services.AddUserService(Configuration);
+
+            services.AddMvc(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-
-using crm = Microsoft.Xrm.Sdk;
-using Microsoft.Crm.Sdk;
+using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
+using Microsoft.Graph;
 
 namespace UCL.ISM.Authentication
 {
@@ -12,77 +11,106 @@ namespace UCL.ISM.Authentication
         /// <summary>
         /// Local variables
         /// </summary>
-        private string _discoveryService;
-        private string _orgUniqueName;
+        private readonly WebOptions _webOptions;
+        private GraphServiceClient _serviceClient;
 
-        private crm.Client.IServiceManagement<crm.Discovery.IDiscoveryService> _discoveryManagement;
-        private crm.Client.DiscoveryServiceProxy _discoveryProxy;
-
-        private string _orgUri;
-
-        //private crm.Client.AuthenticationProviderType _type;
-        private Guid _userId;
-
-        public Service(string discoveryService)
+        public Service(IOptions<WebOptions> webOptions, GraphServiceClient serviceClient)
         {
-            _orgUri = string.Empty;
-            _discoveryManagement = crm.Client.ServiceConfigurationFactory.CreateManagement<crm.Discovery.IDiscoveryService>(new Uri(discoveryService));
-            //_type = _discoveryManagement.AuthenticationType;
-
-            using (_discoveryProxy)
-            {
-                if (_discoveryProxy != null)
-                {
-                    crm.Discovery.OrganizationDetailCollection organizationDetails = DiscoverOrganizations(_discoveryProxy);
-                    _orgUri = FindOrganization(_orgUniqueName, organizationDetails.ToArray()).Endpoints[crm.Discovery.EndpointType.OrganizationService];
-                }
-            }
+            _webOptions = webOptions.Value;
+            _serviceClient = serviceClient;
         }
 
-        /// <summary>
-        /// Discovers the organizations that the calling user belongs to.
-        /// </summary>
-        /// <param name="service">A Discovery service proxy instance.</param>
-        /// <returns>Array containing detailed information on each organization that 
-        /// the user belongs to.</returns>
-        public crm.Discovery.OrganizationDetailCollection DiscoverOrganizations(
-            crm.Discovery.IDiscoveryService service)
+        public Service(IOptions<WebOptions> webOption)
         {
-            if (service == null) throw new ArgumentNullException("service");
-            crm.Discovery.RetrieveOrganizationsRequest orgRequest = new crm.Discovery.RetrieveOrganizationsRequest();
-            crm.Discovery.RetrieveOrganizationsResponse orgResponse =
-                (crm.Discovery.RetrieveOrganizationsResponse)service.Execute(orgRequest);
-
-            return orgResponse.Details;
+            _webOptions = webOption.Value;
         }
 
-        /// <summary>
-        /// Finds a specific organization detail in the array of organization details
-        /// returned from the Discovery service.
-        /// </summary>
-        /// <param name="orgUniqueName">The unique name of the organization to find.</param>
-        /// <param name="orgDetails">Array of organization detail object returned from the discovery service.</param>
-        /// <returns>Organization details or null if the organization was not found.</returns>
-        /// <seealso cref="DiscoveryOrganizations"/>
-        public crm.Discovery.OrganizationDetail FindOrganization(string orgUniqueName,
-            crm.Discovery.OrganizationDetail[] orgDetails)
+        public async Task<User> GetMeAsync(string accessToken)
         {
-            if (String.IsNullOrWhiteSpace(orgUniqueName))
-                throw new ArgumentNullException("orgUniqueName");
-            if (orgDetails == null)
-                throw new ArgumentNullException("orgDetails");
-            crm.Discovery.OrganizationDetail orgDetail = null;
+            User currentUserObject;
 
-            foreach (crm.Discovery.OrganizationDetail detail in orgDetails)
+            try
             {
-                if (String.Compare(detail.UniqueName, orgUniqueName,
-                    StringComparison.InvariantCultureIgnoreCase) == 0)
+                PrepareAuthenticatedClient(accessToken);
+                currentUserObject = await _serviceClient.Me.Request().GetAsync();
+            }
+            catch (ServiceException ex)
+            {
+
+                throw;
+            }
+            return currentUserObject;
+        }
+
+        public async Task<IList<Group>> GetMyGroupsAsync(string accessToken)
+        {
+            IList<Group> groups = new List<Group>();
+
+            try
+            {
+                // Get groups the current user is a direct member of.
+                IUserMemberOfCollectionWithReferencesPage memberOfGroups = await _serviceClient.Me.MemberOf.Request().GetAsync();
+                if (memberOfGroups?.Count > 0)
                 {
-                    orgDetail = detail;
-                    break;
+                    foreach (var directoryObject in memberOfGroups)
+                    {
+                        // We only want groups, so ignore DirectoryRole objects.
+                        if (directoryObject is Group)
+                        {
+                            Group group = directoryObject as Group;
+                            groups.Add(group);
+                        }
+                    }
+                }
+
+                // If paginating
+                while (memberOfGroups.NextPageRequest != null)
+                {
+                    memberOfGroups = await memberOfGroups.NextPageRequest.GetAsync();
+
+                    if (memberOfGroups?.Count > 0)
+                    {
+                        foreach (var directoryObject in memberOfGroups)
+                        {
+                            // We only want groups, so ignore DirectoryRole objects.
+                            if (directoryObject is Group)
+                            {
+                                Group group = directoryObject as Group;
+                                groups.Add(group);
+                            }
+                        }
+                    }
                 }
             }
-            return orgDetail;
+            catch (Exception)
+            {
+                throw;
+            }
+            return groups;
+        }
+
+        private void PrepareAuthenticatedClient(string accessToken)
+        {
+            if (_serviceClient == null)
+            {
+                try
+                {
+                    _serviceClient = new GraphServiceClient(_webOptions.GraphApiUrl,
+                                                                new DelegateAuthenticationProvider(
+                                                                    async (requestMessage) =>
+                                                                    {
+                                                                        await Task.Run(() =>
+                                                                        {
+                                                                            requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", accessToken);
+                                                                        });
+                                                                    }));
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+            }
         }
     }
 }
