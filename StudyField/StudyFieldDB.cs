@@ -10,5 +10,25 @@ namespace UCL.ISM.StudyField
         {
             //Contact DB
         }
+
+        public StudyField GetStudyField(int Id)
+        {
+            return null;
+        }
+
+        public List<StudyField> GetAllStudyFields()
+        {
+            return null;
+        }
+
+        public void DeleteStudyField(int Id)
+        {
+
+        }
+
+        public StudyField EditStudyField(StudyField studyField)
+        {
+            return null;
+        }
     }
 }
