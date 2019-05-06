@@ -13,22 +13,22 @@ namespace UCL.ISM.StudyField
 
         public StudyField GetStudyField(int Id)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         public List<StudyField> GetAllStudyFields()
         {
-            return null;
+            throw new NotImplementedException();
+        }
+
+        public StudyField EditStudyField(StudyField studyField)
+        {
+            throw new NotImplementedException();
         }
 
         public void DeleteStudyField(int Id)
         {
 
-        }
-
-        public StudyField EditStudyField(StudyField studyField)
-        {
-            return null;
         }
     }
 }

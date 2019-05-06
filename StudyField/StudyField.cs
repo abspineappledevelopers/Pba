@@ -29,22 +29,37 @@ namespace UCL.ISM.StudyField
 
         public StudyField GetStudyField(int Id)
         {
-            throw new NotImplementedException();
+            _db = new StudyFieldDB();
+
+            return _db.GetStudyField(Id);
         }
 
         public List<StudyField> GetAllStudyFields()
         {
-            throw new NotImplementedException();
+            _db = new StudyFieldDB();
+
+            return _db.GetAllStudyFields();
         }
 
         public StudyField EditStudyField(StudyField studyField)
         {
-            throw new NotImplementedException();
+            _db = new StudyFieldDB();
+
+            return _db.EditStudyField(studyField);
         }
 
         public void DeleteStudyField(int Id)
         {
-            throw new NotImplementedException();
+            _db = new StudyFieldDB();
+
+            try
+            {
+                _db.DeleteStudyField(Id);
+            }
+            catch
+            {
+                throw new ArgumentException("Could not delete study field.");
+            }
         }
     }
 }
