@@ -50,6 +50,7 @@ namespace Microsoft.Identity.Web
                 // For more details see [ID Tokens](https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens)
                 // and [Access Tokens](https://docs.microsoft.com/en-us/azure/active-directory/develop/access-tokens)
                 options.TokenValidationParameters.NameClaimType = "preferred_username";
+                options.TokenValidationParameters.RoleClaimType = "groups";
 
                 // Handling the sign-out: removing the account from MSAL.NET cache
                 options.Events.OnRedirectToIdentityProviderForSignOut = async context =>

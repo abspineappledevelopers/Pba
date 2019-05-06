@@ -5,8 +5,23 @@
 <div class="text-center">
 
     <h3>@ViewData["Title"]</h3>
+
+</div>
+
+<br />
+<br />
+<br />
     <p>@ViewData["Message"]</p>
 
-    <img src="~/images/ms-symbollockup_signin_dark.svg" />
+<div class="text-center">
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <a asp-area="AzureAD" asp-controller="Account" asp-action="SignIn">
+            <img src="~/images/ms-symbollockup_signin_dark.svg" />
+        </a>
+    }
+
 </div>
+
 <p>@ViewData["Culture"]</p>
