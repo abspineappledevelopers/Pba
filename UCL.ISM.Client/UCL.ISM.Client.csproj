@@ -15,4 +15,10 @@
     <ProjectReference Include="..\UCL.ISM.Authentication\UCL.ISM.Authentication.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Administration\" />
+    <Folder Include="Views\Interviewer\" />
+    <Folder Include="Views\Account\" />
+  </ItemGroup>
+
 </Project>
