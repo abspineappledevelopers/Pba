@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using UCL.ISM.Authentication;
 using System.Collections.Generic;
 using System.Threading.Tasks;

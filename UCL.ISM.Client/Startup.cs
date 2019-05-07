@@ -42,14 +42,6 @@ namespace UCL.ISM.Client
 
             services.AddUserService(Configuration);
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireAdministration",
-                    policy => policy.RequireRole("Student administration"));
-                options.AddPolicy("RequireInterviewer",
-                    policy => policy.RequireRole("Interviewer"));
-            });
-
             services.AddMvc(options =>
             {
                 /*var policy = new AuthorizationPolicyBuilder()

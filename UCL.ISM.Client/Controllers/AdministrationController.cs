@@ -15,14 +15,14 @@ namespace UCL.ISM.Client.Controllers
             return View();
         }
 
-        [Authorize(Policy = "RequireAdministration")]
+        [Authorize(Roles = "DirectoryViewers")]
         public IActionResult Create_StudyField()
         {
             ViewData["Message"] = "StudyField test.";
             return View();
         }
 
-        [Authorize(Policy = "RequireAdministration")]
+        [Authorize(Roles = "DirectoryViewers")]
         public IActionResult Create_InterviewScheme()
         {
             ViewData["Message"] = "Interview test.";

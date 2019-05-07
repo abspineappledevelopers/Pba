@@ -10,7 +10,7 @@ namespace UCL.ISM.Client.Controllers
     [Authorize]
     public class InterviewerController : Controller
     {
-        [Authorize(Policy = "RequireInterviewer")]
+        [Authorize(Roles = "UserReaders")]
         public IActionResult Index()
         {
             return View();
