@@ -15,6 +15,10 @@ namespace UCL.ISM.Client.Controllers
             return View();
         }
 
+        /// <summary>
+        /// ("Role") Security Group - Student Administration = (GUID) "e102cb19-0f15-4a64-b781-446947355a51".
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = "e102cb19-0f15-4a64-b781-446947355a51")]
         public IActionResult Create_StudyField()
         {
