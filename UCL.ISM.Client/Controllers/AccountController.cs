@@ -27,26 +27,6 @@ namespace UCL.ISM.Client.Controllers
 
             User me = await _service.GetMeAsync(accessToken);
             IList<Group> groups = await _service.GetMyGroupsAsync(accessToken);
-
-            /*var user = new ClaimsIdentity();
-            foreach (var group in groups)
-            {
-                user.AddClaim(new Claim("group", group.Id));
-                user.AddClaim(new Claim("role", group.DisplayName));
-            }
-
-            foreach (var claim in user.Claims)
-            {
-                if (claim == new Claim("role", "Student administration") ||
-                    claim == new Claim("role", "Interviewer"))
-                {
-                    var identity = new ClaimsIdentity();
-                    identity.AddClaim(claim);
-                    User.AddIdentity(identity);
-                }
-            }*/
-
-            /// TODO: Fix appRoles i AzureAD, 
             
             ViewData["Me"] = me;
             ViewData["Groups"] = groups;

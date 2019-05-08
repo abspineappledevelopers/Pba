@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using UCL.ISM.Client.Infrastructure;
 
 namespace UCL.ISM.Client.Controllers
 {
@@ -15,9 +11,14 @@ namespace UCL.ISM.Client.Controllers
         /// ("Role") Security Group - Interviewer = (GUID) "be407188-013b-43da-8c34-444f6a944b0f".
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "be407188-013b-43da-8c34-444f6a944b0f")]
+        [Authorize(Roles = UserRoles.Interviewer)]
         public IActionResult Index()
         {
+            ViewData["Title"] = "Interviewer";
+
+            ViewData["Header1"] = "Ansøgere";
+
+            ViewData["Calendar"] = "Kalender";
             return View();
         }
     }

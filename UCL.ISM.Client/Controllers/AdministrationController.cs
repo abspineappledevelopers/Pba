@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using UCL.ISM.Client.Infrastructure;
 
 namespace UCL.ISM.Client.Controllers
 {
@@ -19,14 +16,14 @@ namespace UCL.ISM.Client.Controllers
         /// ("Role") Security Group - Student Administration = (GUID) "e102cb19-0f15-4a64-b781-446947355a51".
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "e102cb19-0f15-4a64-b781-446947355a51")]
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Create_StudyField()
         {
             ViewData["Message"] = "StudyField test.";
             return View();
         }
 
-        [Authorize(Roles = "e102cb19-0f15-4a64-b781-446947355a51")]
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Create_InterviewScheme()
         {
             ViewData["Message"] = "Interview test.";
