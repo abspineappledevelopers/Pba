@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,7 +26,8 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li><a asp-controller="Administration" asp-action="Create_StudyField">Opret Fagområde</a></li>
-                        <li><a asp-controller="Administration" asp-action="Create_InterviewScheme">Opret spørgeskema</a></li>
+                        <li><a asp-controller="Administration" asp-action="Create_Applicant">Opret Ansøger</a></li>
+                        <li><a asp-controller="Administration" asp-action="Create_InterviewScheme">Opret Spørgeskema</a></li>
                     }
                     <li><a asp-area="" asp-controller="Home" asp-action="About">Om</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Kontakt</a></li>

@@ -24,9 +24,15 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [Authorize(Roles = UserRoles.Administration)]
-        public IActionResult Create_InterviewScheme()
+        public IActionResult Create_Applicant()
         {
             ViewData["Message"] = "Interview test.";
+            return View();
+        }
+
+        [Authorize(Roles = UserRoles.Administration)]
+        public IActionResult Create_InterviewScheme()
+        {
             return View();
         }
     }

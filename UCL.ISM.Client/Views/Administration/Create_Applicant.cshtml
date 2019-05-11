@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewData["Title"] = "Create_Applicant";
+}
+
+<br />
+<h2>Opret ansøger</h2>
+<br />
+<div class="container">
+    <div class="panel-title">Ansøger information</div>
+    <br />
+    <form class="form-horizontal" method="post">
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="prio">Prioritet:</label>
+            <div class="col-lg-4">
+                <select id="priority" class="form-control" name="prio">
+                    <option selected="selected" value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="prio2">Fag:</label>
+            <div class="col-lg-4">
+                <select id="priority2" class="form-control" name="prio2">
+                    <option selected="selected" value="Social Education">Social Education</option>
+                    <option value="Occupational Therapy">Occupational Therapy</option>
+                    <option value="Physiotherapy">Physiotherapy</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="applicant">Fornavn:</label>
+            <div class="col-lg-2">
+                <input type="text" class="form-control" id="applicant" placeholder="Ansøgers fornavn" />
+            </div>
+            <label class="control-label col-lg-1" for="lastname">Efternavn:</label>
+            <div class="col-lg-2">
+                <input type="text" class="form-control" id="lastname" placeholder="Ansøgers efternavn" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="age">Alder:</label>
+            <div class="col-lg-4">
+                <input class="form-control" id="age" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="nationality">Nationalitet:</label>
+            <div class="col-lg-2">
+                <select id="country" class="form-control" name="country">
+                    <option selected="selected" value="DK">Denmark</option>
+                    <option value="ES">Spain</option>
+                    <option value="DE">Germany</option>
+                    <option value="US">USA</option>
+                </select>
+            </div>
+            <label class="control-label col-md-1" for="check">EU:</label>
+            <div class="col-md-1">
+                <input type="checkbox" class="form-control" id="check" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="email">E-mail:</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" id="email" placeholder="Ansøgers E-mail" />
+            </div>
+        </div>
+        <br /><br />
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="interviewer">Interviewer:</label>
+            <div class="col-lg-2">
+                <select id="interviewer" class="form-control" name="interviewer">
+                    <option selected="selected" value="user">Henrik Steen Krogh</option>
+                    <option value="user2">Peter Lütken Hertel-Storm</option>
+                    <option value="user3">Kaj Bromose</option>
+                    <option value="user4">Jens</option>
+                </select>
+            </div>
+        </div>
+        <br /><br /><br />
+        <input type="submit" class="pull-left" value="Opret" />
+    </form>
+</div>
