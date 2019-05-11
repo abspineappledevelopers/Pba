@@ -3,5 +3,80 @@
     ViewData["Title"] = "Create_InterviewScheme";
 }
 
-<h2>Create_InterviewScheme</h2>
+<h2>Opret Interview skema</h2>
 
+<div class="container">
+    <div class="panel-title">Ansøger information</div>
+    <form class="form-horizontal" method="post">
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="prio">Prioritet:</label>
+            <div class="col-lg-4">
+                <select id="priority" class="form-control" name="prio">
+                    <option selected="selected" value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="prio2">Fag:</label>
+            <div class="col-lg-4">
+                <select id="priority2" class="form-control" name="prio2">
+                    <option selected="selected" value="Social Education">Social Education</option>
+                    <option value="Occupational Therapy">Occupational Therapy</option>
+                    <option value="Physiotherapy">Physiotherapy</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="applicant">Fornavn:</label>
+            <div class="col-lg-2">
+                <input type="text" class="form-control" id="applicant" placeholder="Ansøgers fornavn" />
+            </div>
+            <label class="control-label col-lg-1" for="lastname">Efternavn:</label>
+            <div class="col-lg-2">
+                <input type="text" class="form-control" id="lastname" placeholder="Ansøgers efternavn" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="age">Alder:</label>
+            <div class="" col-lg-4">
+                @Html.TextBox(DateTime.Today.ToShortDateString())
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="customCheck">EU-borger:</label>
+            <div class="col-lg-1">
+                <input type="checkbox" class="form-control" id="customCheck" name="EU" />
+            </div>
+            <label class="control-label col-lg-2" for="nationality">Nationalitet:</label>
+            <div class="col-lg-2">
+                <select id="country" class="form-control" name="country">
+                    <option selected="selected" value="DK">Denmark</option>
+                    <option value="ES">Spain</option>
+                    <option value="DE">Germany</option>
+                    <option value="US">USA</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="email">E-mail:</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" id="email" placeholder="Ansøgers E-mail" />
+            </div>
+        </div>
+        <br /><br />
+        <div class="form-group">
+            <label class="control-label col-lg-2" for="question1">#1 Spørgsmål:</label>
+            <div class="col-lg-4">
+                <textarea class="form-control" spellcheck="true" id="question1" placeholder="Why did you pick this study field?.." />
+            </div>
+        </div>
+        <input type="submit" value="Opret" />
+    </form>
+</div>

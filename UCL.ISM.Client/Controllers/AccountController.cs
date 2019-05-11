@@ -20,8 +20,14 @@ namespace UCL.ISM.Client.Controllers
             this._service = service;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        #region Easier access to User data / Though we don't have access to use.
         [MsalUiRequiredExceptionFilter(Scopes = new[] { "User.Read", "Directory.Read.All" })]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index2()
         {
             string accessToken = await tokenAcquisition.GetAccessTokenOnBehalfOfUser(HttpContext, new[] { "User.Read", "Directory.Read.All" });
 
@@ -33,5 +39,6 @@ namespace UCL.ISM.Client.Controllers
 
             return View();
         }
+        #endregion
     }
 }
