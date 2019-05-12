@@ -10,44 +10,14 @@ namespace UCL.ISM.BLL.DAL
     public class InterviewSchemeDB
     {
         private readonly string _connectionString;
-        private readonly List<IQuestion> _questions;
         private IInterviewScheme _scheme;
-
-        internal List<IQuestion> Questions => _questions;
-
-        public InterviewSchemeDB()
-        {
-            _questions = new List<IQuestion>();
-        }
-
+        
         public void CreateNewInterviewScheme(int id)
         {
             string param1 = "@Id";
             string query = "INSERT INTO UCL_INTERVIEWSCHEME(Id) VALUES (@Id)";
 
-            MySqlCommand cmd = new MySqlCommand();
-            using (cmd.Connection = new MySqlConnection(_connectionString))
-            {
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.Parameters.Add(param1, MySqlDbType.Guid);
-                cmd.Parameters[param1].Value = id;
-                cmd.Connection.Open();
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    cmd.Connection.Close();
-                }   
-            }
-            
+            ExecuteCmd(query, SetParameterWithValue(param1, id));
         }
 
         public void AddQuestion(int id, string question)
@@ -59,48 +29,11 @@ namespace UCL.ISM.BLL.DAL
             string query = "INSERT INTO UCL_QUESTION(Id, Question) VALUES (@Id, @Question)";
             string query2 = "UPDATE UCL_INTERVIEWSCHEME SET qId = @qId WHERE Id = @Id";
 
-            MySqlCommand cmd = new MySqlCommand();
-            using (cmd.Connection = new MySqlConnection(_connectionString))
-            {
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.Parameters.Add(param1, MySqlDbType.Guid);
-                cmd.Parameters.Add(param2, MySqlDbType.VarChar, 1900);
-                cmd.Parameters[param1].Value = newId;
-                cmd.Parameters[param2].Value = question;
-                cmd.Connection.Open();
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-
-                cmd.CommandText = query2;
-                cmd.Parameters.Add(param3, MySqlDbType.Guid);
-                cmd.Parameters.Add(param1, MySqlDbType.Guid);
-                cmd.Parameters[param3].Value = newId;
-                cmd.Parameters[param1].Value = id;
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    cmd.Connection.Close();
-                }
-            }
+            ExecuteCmd(query, SetParameterWithValue(param1, newId), SetParameterWithValue(param2, question));
+            ExecuteCmd(query2, SetParameterWithValue(param3, newId), SetParameterWithValue(param1, id));
         }
 
-        public IInterviewScheme GetInterviewScheme()
+        public IInterviewScheme GetInterviewScheme(int id)
         {
             string query = "SELECT * FROM UCL_INTERVIEWSCHEME WHERE Id = @Id";
 
@@ -140,7 +73,7 @@ namespace UCL.ISM.BLL.DAL
             string query = "";
 
 
-            return Questions;
+            return new List<IQuestion>();
         }
 
         public void UpdateInterviewScheme(int id)
@@ -148,7 +81,7 @@ namespace UCL.ISM.BLL.DAL
             string param1 = "@Id";
             string query = "UPDATE UCL_INTERVIEWSCHEME ";
 
-            ExecureCmd(query, id, param1);
+            ExecuteCmd(query, SetParameterWithValue(param1, id));
         }
 
         public void DeleteInterviewScheme(int id)
@@ -156,25 +89,19 @@ namespace UCL.ISM.BLL.DAL
             string param1 = "@Id";
             string query = "DELETE FROM UCL_INTERVIEWSCHEME WHERE Id = @id";
 
-            ExecureCmd(query, id, param1);
+            ExecuteCmd(query, SetParameterWithValue(param1, id));
         }
 
-        private void ExecureCmd(string query, int id, string param1, string param2 = null)
+        #region Functionality
+        private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
         {
             MySqlCommand cmd = new MySqlCommand();
             using (cmd.Connection = new MySqlConnection(_connectionString))
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
-                if (param2 != null)
-                {
-
-                }
-                else
-                {
-                    cmd.Parameters.Add(param1, MySqlDbType.Int32);
-                    cmd.Parameters[param1].Value = id;
-                }
+                cmd.Parameters.Add(param1);
+                cmd.Parameters.Add(param2);
                 cmd.Connection.Open();
                 try
                 {
@@ -189,7 +116,49 @@ namespace UCL.ISM.BLL.DAL
                 {
                     cmd.Connection.Close();
                 }
+
             }
         }
+
+        private void ExecuteCmd(string query, MySqlParameter param)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            using (cmd.Connection = new MySqlConnection(_connectionString))
+            {
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = query;
+                cmd.Parameters.Add(param);
+                cmd.Connection.Open();
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    cmd.Connection.Close();
+                }
+
+            }
+        }
+        
+        private MySqlParameter SetParameter(string param, MySqlDbType type, int size)
+        {
+            return new MySqlParameter(param, type, size);
+        }
+        private MySqlParameter SetParameter(string param, MySqlDbType type)
+        {
+            return new MySqlParameter(param, type);
+        }
+
+        private MySqlParameter SetParameterWithValue(string param, object value)
+        {
+            return new MySqlParameter(param, value);
+        }
+        #endregion
     }
 }
