@@ -6,6 +6,8 @@ using UCL.ISM.BLL.Interface;
 using UCL.ISM.BLL;
 using UCL.ISM.Client.Models;
 using System.Collections.Generic;
+using UCL.ISM.BLL.BLL;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace UCL.ISM.Client.Controllers
 {
@@ -13,6 +15,9 @@ namespace UCL.ISM.Client.Controllers
     public class AdministrationController : Controller
     {
         IStudyField _studyField;
+        INationality _nationality;
+        IApplicant _applicant;
+
         public IActionResult Index()
         {
             return View();
@@ -25,11 +30,11 @@ namespace UCL.ISM.Client.Controllers
         [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Create_StudyField()
         {
-            IStudyField sf = new StudyField();
+            _studyField = new StudyField();
             StudyFieldVM model = new StudyFieldVM();
             StudyFieldVM sfvm;
 
-            var allStudyFields = sf.GetAllStudyFields();
+            var allStudyFields = _studyField.GetAllStudyFields();
             foreach (var studyfield in allStudyFields)
             {
                 sfvm = new StudyFieldVM();
@@ -76,8 +81,24 @@ namespace UCL.ISM.Client.Controllers
         public IActionResult Create_Applicant()
         {
             _studyField = new StudyField();
-            ViewData["Fields"] = _studyField.GetAllStudyFields();
-            return View();
+            _nationality = new Nationality();
+
+            ApplicantVM vm = new ApplicantVM();
+
+            var studyfields = _studyField.GetAllStudyFields();
+            var nationalities = _nationality.GetAllNationalities();
+
+            foreach(var sf in studyfields)
+            {
+                vm.StudyFields.Add(new SelectListItem() { Text = sf.FieldName, Value = sf.Id.ToString() });
+            }
+
+            foreach(var na in nationalities)
+            {
+                vm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
+            }
+
+            return View("../Administration/Create_Applicant", vm);
         }
 
         [Authorize(Roles = UserRoles.Administration)]
