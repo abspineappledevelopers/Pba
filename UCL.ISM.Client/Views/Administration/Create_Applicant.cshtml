@@ -35,16 +35,6 @@
                     <option value="Occupational Therapy">Occupational Therapy</option>
                     <option value="Physiotherapy">Physiotherapy</option>
                     <!---->
-                    <!--Remove section when not connected to db-->
-                    @using UCL.ISM.Client.Models
-                    @if (@Html.ViewData["Fields"] != null)
-                    {
-                        @foreach (var item in @Html.ViewData["Fields"] as IEnumerable<StudyFieldVM>)
-                        {
-                            <option value="item">item</option>
-                        }
-                    }
-                    <!---->
                 </select>
             </div>
         </div>

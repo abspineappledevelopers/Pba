@@ -4,7 +4,8 @@ using System.Text;
 
 namespace UCL.ISM.InterviewScheme
 {
-    public interface IQuestions
+    public class InterviewSchemeDB
     {
+        private readonly List<IQuestions> _questions;
     }
 }
