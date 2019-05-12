@@ -42,7 +42,7 @@ namespace UCL.ISM.Applicant
             Applicant currentApplicant;
             try
             {
-                currentApplicant = await 
+                currentApplicant = null;
             }
             catch (Exception)
             {

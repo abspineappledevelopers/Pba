@@ -35,9 +35,11 @@ namespace UCL.ISM.Client.Controllers
         [HttpPost]
         public async Task<IActionResult> createApplicant(int prio, IStudyField field, string fname, string lname, string age, string nationality, bool eu, string email, string interviewer)
         {
+            
+            
             try
             {
-                
+            
             }
             catch (System.Exception)
             {

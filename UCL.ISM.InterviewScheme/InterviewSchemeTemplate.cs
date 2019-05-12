@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UCL.ISM.InterviewScheme
 {
-    class InterviewSchemeTemplate
+    public class InterviewSchemeTemplate : IInterviewScheme
     {
     }
 }
