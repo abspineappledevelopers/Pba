@@ -4,14 +4,13 @@ using UCL.ISM.Client.Infrastructure;
 
 namespace UCL.ISM.Client.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = UserRoles.Interviewer)]
     public class InterviewerController : Controller
     {
         /// <summary>
         /// ("Role") Security Group - Interviewer = (GUID) "be407188-013b-43da-8c34-444f6a944b0f".
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = UserRoles.Interviewer)]
         public IActionResult Index()
         {
             ViewData["Title"] = "Interviewer";
