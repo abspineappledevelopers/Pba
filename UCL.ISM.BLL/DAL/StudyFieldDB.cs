@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 using MySql.Data.MySqlClient;
+using UCL.ISM.BLL.DAL;
 
 namespace UCL.ISM.BLL
 {
     class StudyFieldDB
     {
-        private string myCon = "Server=mysql72.unoeuro.com; user id=pineappledevelopers_com;password=Bregnevej942; Allow User Variables=True;persist security info=true;database=pineappledevelopers_com_db2";
+        private Database db = new Database();
         StudyField _sf;
         List<StudyField> _listsf;
 
         public void CreateNewStudyField(string fieldName)
         {
-            MySqlConnection conn = new MySqlConnection(myCon);
-            MySqlCommand cmd;
+            db.Get_Connection();
+            MySqlCommand cmd = new MySqlCommand();
 
-            conn.Open();
+            cmd.Connection = db.connection;
+            
             try
             {
-                cmd = conn.CreateCommand();
                 cmd.CommandText = "INSERT INTO UCL_StudyField(Name) VALUES (@Name)";
                 cmd.Parameters.Add("@Name", MySqlDbType.VarChar, 50);
                 cmd.Parameters["@Name"].Value = fieldName;
@@ -27,15 +28,15 @@ namespace UCL.ISM.BLL
             }
             catch (Exception e)
             {
-                conn.Close();
+                db.CloseConnection();
 
                 throw;
             }
             finally
             {
-                if (conn.State == System.Data.ConnectionState.Open)
+                if (db.connection.State == System.Data.ConnectionState.Open)
                 {
-                    conn.Close();
+                    db.connection.Close();
                 }
             }
         }
@@ -49,13 +50,13 @@ namespace UCL.ISM.BLL
         {
             List<StudyField> list = new List<StudyField>();
 
-            MySqlConnection conn = new MySqlConnection(myCon);
-            MySqlCommand cmd;
+            db.Get_Connection();
+            MySqlCommand cmd = new MySqlCommand();
 
-            conn.Open();
+            cmd.Connection = db.connection;
+
             try
             {
-                cmd = conn.CreateCommand();
                 cmd.CommandText = "SELECT * FROM UCL_StudyField";
 
                 MySqlDataReader reader = cmd.ExecuteReader();
@@ -74,15 +75,15 @@ namespace UCL.ISM.BLL
             }
             catch (Exception e)
             {
-                conn.Close();
+                db.CloseConnection();
 
                 throw;
             }
             finally
             {
-                if (conn.State == System.Data.ConnectionState.Open)
+                if (db.connection.State == System.Data.ConnectionState.Open)
                 {
-                    conn.Close();
+                    db.CloseConnection();
                 }
             }
 
@@ -91,13 +92,14 @@ namespace UCL.ISM.BLL
 
         public void EditStudyField(StudyField studyField)
         {
-            MySqlConnection conn = new MySqlConnection(myCon);
-            MySqlCommand cmd;
+            db.Get_Connection();
 
-            conn.Open();
+            MySqlCommand cmd = new MySqlCommand();
+
+            cmd.Connection = db.connection;
+
             try
             {
-                cmd = conn.CreateCommand();
                 cmd.CommandText = "UPDATE UCL_StudyField SET Name = @Name WHERE Id = @id;";
 
                 //Creating parameter objects
@@ -112,28 +114,27 @@ namespace UCL.ISM.BLL
             }
             catch
             {
-                conn.Close();
+                db.CloseConnection();
 
                 throw;
             }
             finally
             {
-                if (conn.State == System.Data.ConnectionState.Open)
+                if (db.connection.State == System.Data.ConnectionState.Open)
                 {
-                    conn.Close();
+                    db.CloseConnection();
                 }
             }
         }
 
         public void DeleteStudyField(int Id)
         {
-            MySqlConnection conn = new MySqlConnection(myCon);
-            MySqlCommand cmd;
+            MySqlCommand cmd = new MySqlCommand();
 
-            conn.Open();
+            cmd.Connection = db.connection;
+
             try
             {
-                cmd = conn.CreateCommand();
                 cmd.CommandText = "DELETE FROM UCL_StudyField WHERE Id = @id;";
 
             //Creating parameter objects
@@ -146,15 +147,15 @@ namespace UCL.ISM.BLL
             }
             catch
             {
-                conn.Close();
+                db.CloseConnection();
 
                 throw;
             }
             finally
             {
-                if (conn.State == System.Data.ConnectionState.Open)
+                if (db.connection.State == System.Data.ConnectionState.Open)
                 {
-                    conn.Close();
+                    db.CloseConnection();
                 }
             }
         }
