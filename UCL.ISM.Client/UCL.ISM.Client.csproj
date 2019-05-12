@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Identity.Web\Microsoft.Identity.Web.csproj" />
+    <ProjectReference Include="..\StudyField\UCL.ISM.StudyField.csproj" />
     <ProjectReference Include="..\UCL.ISM.Authentication\UCL.ISM.Authentication.csproj" />
   </ItemGroup>
 

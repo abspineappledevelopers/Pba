@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using UCL.ISM.Client.Infrastructure;
+using System.Threading.Tasks;
+using UCL.ISM.StudyField;
 
 namespace UCL.ISM.Client.Controllers
 {
@@ -27,6 +29,21 @@ namespace UCL.ISM.Client.Controllers
         public IActionResult Create_Applicant()
         {
             ViewData["Message"] = "Interview test.";
+            return View();
+        }
+
+        [Authorize(Roles = UserRoles.Administration)]
+        public async Task<IActionResult> createApplicant(int prio, IStudyField field, string fname, string lname, string age, string nationality, bool eu, string email, string interviewer)
+        {
+            try
+            {
+                
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
             return View();
         }
 
