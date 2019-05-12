@@ -20,8 +20,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\StudyField\UCL.ISM.StudyField.csproj" />
-  </ItemGroup>
-
 </Project>
