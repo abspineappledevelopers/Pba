@@ -6,73 +6,84 @@
 <br />
 <h2>Opret ansøger</h2>
 <br />
-<div class="container">
-    <div class="panel-title">Ansøger information</div>
+<div class="container-fluid">
+    <h3>Ansøger information</h3>
     <br />
     <form asp-action="createApplicant" asp-controller="Administration" class="form-horizontal" method="post">
-        <div class="form-group">
-            <label class="control-label col-lg-2" for="prio">Prioritet:</label>
-            <div class="col-lg-4">
-                <select asp-for="Priority" id="priority" class="form-control" name="prio">
-                    <option selected="selected" value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                </select>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="control-label" for="prio">Prioritet:</label>
+                    <select asp-for="Priority" id="priority" class="form-control">
+                        <option selected="selected" value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="control-label" for="field">Fag:</label>
+                    <select asp-for="StudyField.Id" asp-items="@Model.StudyFields" class="form-control" required id="studyfield">
+                        <option value="">Vælg fag</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-lg-2" for="field">Fag:</label>
-            <div class="col-lg-4">
-                <select asp-for="StudyField" asp-items="@Model.StudyFields" class="form-control" required id="studyfield">
-                    <option value="">Vælg fag</option>
-                </select>
+
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="control-label" for="applicant">Fornavn:</label>
+                    <input asp-for="Firstname" type="text" class="form-control" id="firstname" placeholder="Ansøgers fornavn" />
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="control-label col-lg-1" for="lastname">Efternavn:</label>
+                    <input asp-for="Lastname" type="text" class="form-control" id="lastname" placeholder="Ansøgers efternavn" />
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-lg-2" for="applicant">Fornavn:</label>
-            <div class="col-lg-2">
-                <input asp-for="Firstname" type="text" class="form-control" id="firstname" placeholder="Ansøgers fornavn" />
+
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="control-label" for="age">Alder:</label>
+                    <input asp-for="Age" type="number" class="form-control" id="age" />
+                </div>
             </div>
-            <label class="control-label col-lg-1" for="lastname">Efternavn:</label>
-            <div class="col-lg-2">
-                <input asp-for="Lastname" type="text" class="form-control" id="lastname" placeholder="Ansøgers efternavn" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-lg-2" for="age">Alder:</label>
-            <div class="col-lg-4">
-                <input asp-for="Age" type="number" class="form-control" id="age" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-lg-2" for="nationality">Nationalitet:</label>
-            <div class="col-lg-2">
-                <select asp-for="Nationality" asp-items="@Model.Nationalities" class="form-control" required id="nationality">
-                    <option value="">Vælg land</option>
-                </select>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="control-label" for="nationality">Nationalitet:</label>
+                    <select asp-for="Nationality.Id" asp-items="@Model.Nationalities" class="form-control" required id="nationality">
+                        <option value="">Vælg land</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-lg-2" for="email">E-mail:</label>
-            <div class="col-lg-4">
-                <input asp-for="Email" type="email" class="form-control" id="email" placeholder="Ansøgers E-mail" />
+
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="control-label" for="email">E-mail:</label>
+                    <input asp-for="Email" type="email" class="form-control" id="email" placeholder="Ansøgers E-mail" />
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="control-label" for="interviewer">Interviewer:</label>
+                    <select asp-for="Interviewer.Id" asp-items="@Model.Interviewers" class="form-control" id="interviewer">
+                        <option value="">Vælg interviewer</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <br /><br />
-        <div class="form-group">
-            <label class="control-label col-lg-2" for="interviewer">Interviewer:</label>
-            <div class="col-lg-2">
-                <select asp-for="Interviewer" asp-items="@Model.Interviewers" class="form-control" required id="inteviewer">
-                    <option value="">Vælg interviewer</option>
-                </select>
-            </div>
-        </div>
-        <br /><br /><br />
-        <input type="submit" class="pull-left" value="Opret" />
+        <button type="submit" class="btn btn-success">Opret</button>
     </form>
 </div>

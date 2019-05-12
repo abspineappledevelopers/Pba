@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using UCL.ISM.BLL.BLL;
@@ -10,14 +11,21 @@ namespace UCL.ISM.Client.Models
     public class ApplicantVM
     {
         public Guid Id { get; set; }
+        [Required]
         public string Firstname { get; set; }
+        [Required]
         public string Lastname { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Email { get; set; }
+        [Required]
         public int Age { get; set; }
         public NationalityVM Nationality { get; set; }
         public List<SelectListItem> Nationalities { get; set; }
         public bool IsEU { get; set; }
         //What does this do?
+        [Required]
         public int Priority { get; set; }
         public InterviewerVM Interviewer { get; set; }
         public List<SelectListItem> Interviewers { get; set; }

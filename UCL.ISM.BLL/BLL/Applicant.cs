@@ -38,5 +38,12 @@ namespace UCL.ISM.BLL.BLL
             db = new ApplicantDB();
             db.CreateApplicant(applicant);
         }
+
+        public List<Applicant> GetAllApplicantsWithoutSchema()
+        {
+            db = new ApplicantDB();
+
+            return db.GetAllApplicantsWithoutSchema();
+        }
     }
 }

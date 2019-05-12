@@ -1,39 +1,41 @@
-﻿
+﻿@model List<UCL.ISM.Client.Models.ApplicantVM>
 @{
     ViewData["Title"] = "Index";
 }
 <br />
-<h2>Index</h2>
+<h2>Ansøgere der ikke har fået tildelt et interview skema endnu</h2>
 <br />
-<div class="container">
-    <div class="form-group" id="applicants">
-        <table class="table-responsive">
-            <thead>
-                <tr>
-                    <th class="col-lg-2">Prioritet</th>
-                    <th class="col-lg-2">Fornavn</th>
-                    <th class="col-lg-2">Efternavn</th>
-                    <th class="col-lg-2">Fag</th>
-                    <th class="col-lg-2">Status</th>
-                    <th class="col-lg-2">Interviewer</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="text-center">gsgrgrsr</td>
-                    <td class="text-center">rsgrgs</td>
-                    <td class="text-center">rgrgs</td>
-                    <td class="text-center">unknown</td>
-                    <td class="text-center">
-                        <select class="form-control">
-                            <option selected="selected" value=""></option>
-                            <option value="">Henrik Steen Krogh</option>
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-2">
+            <b>Fornavn</b>
+        </div>
+        <div class="col-xs-2">
+            <b>Efternavn</b>
+        </div>
+        <div class="col-xs-2">
+            <b>Email</b>
+        </div>
+        <div class="col-xs-2">
+            <div class="row">
+                <div class="col-xs-8">
+                    <b>Alder</b>
+                </div>
+                <div class="col-xs-4">
+                    <b>EU</b>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <b>Prioritet</b>
+        </div>
+        <div class="col-xs-2">
+            <b>Nationalitet</b>
+        </div>
     </div>
+    @for(int i = 0; i < Model.Count(); i++)
+    {
+        <partial name="../Administration/Partials/_ApplicantWithoutSchema" model="@Model[i]" />
+    }
 </div>
 

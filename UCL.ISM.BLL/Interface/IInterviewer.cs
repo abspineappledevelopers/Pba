@@ -5,9 +5,8 @@ using UCL.ISM.BLL.BLL;
 
 namespace UCL.ISM.BLL.Interface
 {
-    public interface IApplicant
+    public interface IInterviewer
     {
-        void CreateNewApplicant(Applicant model);
-        List<Applicant> GetAllApplicantsWithoutSchema();
+        List<Interviewer> GetAllInterviewers();
     }
 }
