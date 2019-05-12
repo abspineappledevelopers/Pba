@@ -33,6 +33,11 @@ namespace UCL.ISM.BLL.DAL
             ExecuteCmd(query2, SetParameterWithValue(param3, newId), SetParameterWithValue(param1, id));
         }
 
+        public void RemoveQuestion(IQuestion question)
+        {
+            throw new NotImplementedException();
+        }
+
         public IInterviewScheme GetInterviewScheme(int id)
         {
             string query = "SELECT * FROM UCL_INTERVIEWSCHEME WHERE Id = @Id";
@@ -50,7 +55,10 @@ namespace UCL.ISM.BLL.DAL
                         while (reader.Read())
                         {
                             _scheme = new InterviewScheme();
-                           
+                            _scheme.Id = reader.GetInt32(0);
+                            _scheme.CreatedDate = reader.GetDateTime(1);
+                            _scheme.EditedDate = reader.GetDateTime(2);
+                            _scheme.Comment = reader.GetString(3);
                         }
                     }
                 }
@@ -67,12 +75,10 @@ namespace UCL.ISM.BLL.DAL
             return _scheme;
         }
 
-        private List<IQuestion> GetAllSchemeQuestions()
+        public List<IQuestion> GetAllSchemeQuestions(int id)
         {
-            string param1 = "@Id";
-            string query = "";
-
-
+            string query = "SELECT * FROM UCL_QUESTIONS WHERE Id = @Id";
+            ExecureReader(query);
             return new List<IQuestion>();
         }
 
@@ -93,6 +99,37 @@ namespace UCL.ISM.BLL.DAL
         }
 
         #region Functionality
+        private void ExecureReader(string query)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            using (cmd.Connection = new MySqlConnection(_connectionString))
+            {
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = query;
+                cmd.Connection.Open();
+                try
+                {
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            _scheme = new InterviewScheme();
+
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    cmd.Connection.Close();
+                }
+            }
+        }
+
         private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
         {
             MySqlCommand cmd = new MySqlCommand();

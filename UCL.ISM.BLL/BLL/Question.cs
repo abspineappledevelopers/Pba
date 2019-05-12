@@ -6,7 +6,9 @@ using UCL.ISM.BLL.DAL;
 
 namespace UCL.ISM.BLL.BLL
 {
-    public class Question
+    public class Question : IQuestion
     {
+        public int Id { get; set; }
+        public string Content { get; set; }
     }
 }
