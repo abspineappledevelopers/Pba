@@ -47,8 +47,21 @@ namespace UCL.ISM.Client.Controllers
             return View();
         }
 
-        public IActionResult Create_InterviewScheme()
+        [HttpPost]
+        public async Task<IActionResult> Create_InterviewScheme()
         {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    
+                }
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
             return View();
         }
     }

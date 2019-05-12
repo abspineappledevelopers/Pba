@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using UCL.ISM.StudyField;
 
 namespace UCL.ISM.Applicant
 {
+    [ModelBinder]
     public class Applicant
     {
+        private Guid _id;
         private int _priority;
         private IStudyField _studyField;
         private string _firstName;
@@ -31,5 +35,21 @@ namespace UCL.ISM.Applicant
         public bool EU { get => _eu; set => _eu = value; }
         public string Email { get => _email; set => _email = value; }
         public string Interviewer { get => _interviewer; set => _interviewer = value; }
+        public Guid Id { get => _id; set => _id = value; }
+
+        public async Task<Applicant> getApplicant()
+        {
+            Applicant currentApplicant;
+            try
+            {
+                currentApplicant = await 
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return currentApplicant;
+        }
     }
 }
