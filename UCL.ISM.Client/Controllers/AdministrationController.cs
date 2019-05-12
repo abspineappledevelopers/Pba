@@ -9,6 +9,7 @@ namespace UCL.ISM.Client.Controllers
     [Authorize]
     public class AdministrationController : Controller
     {
+        IStudyField _studyField;
         public IActionResult Index()
         {
             return View();
@@ -28,7 +29,8 @@ namespace UCL.ISM.Client.Controllers
         [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Create_Applicant()
         {
-            ViewData["Message"] = "Interview test.";
+            _studyField = new UCL.ISM.StudyField.StudyField();
+            ViewData["Fields"] = _studyField.GetAllStudyFields();
             return View();
         }
 

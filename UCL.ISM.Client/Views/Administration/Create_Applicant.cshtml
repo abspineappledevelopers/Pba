@@ -26,12 +26,25 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-2" for="prio2">Fag:</label>
+            <label class="control-label col-lg-2" for="field">Fag:</label>
             <div class="col-lg-4">
-                <select id="priority2" class="form-control" name="prio2">
-                    <option selected="selected" value="Social Education">Social Education</option>
+                <select id="field" class="form-control" name="field">
+                    <option selected="selected" value=""></option>
+                    <!--Remove section when connected to db-->
+                    <option value="Social Education">Social Education</option>
                     <option value="Occupational Therapy">Occupational Therapy</option>
                     <option value="Physiotherapy">Physiotherapy</option>
+                    <!---->
+                    <!--Remove section when not connected to db-->
+                    @using UCL.ISM.StudyField
+                    @if (@Html.ViewData["Fields"] != null)
+                    {
+                        @foreach (var item in @Html.ViewData["Fields"] as IEnumerable<IStudyField>)
+                        {
+                            <option value="item">item</option>
+                        }
+                    }
+                    <!---->
                 </select>
             </div>
         </div>
