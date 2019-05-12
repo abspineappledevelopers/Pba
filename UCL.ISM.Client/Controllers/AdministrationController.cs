@@ -8,6 +8,7 @@ using UCL.ISM.Client.Models;
 using System.Collections.Generic;
 using UCL.ISM.BLL.BLL;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace UCL.ISM.Client.Controllers
 {
@@ -17,10 +18,46 @@ namespace UCL.ISM.Client.Controllers
         IStudyField _studyField;
         INationality _nationality;
         IApplicant _applicant;
+        IInterviewer _interviewer;
 
         public IActionResult Index()
         {
-            return View();
+            _studyField = new StudyField();
+            _applicant = new Applicant();
+            _nationality = new Nationality();
+            _interviewer = new Interviewer();
+            ApplicantVM appvm;
+            
+            List<ApplicantVM> listapp = new List<ApplicantVM>();
+
+            var studyfields = _studyField.GetAllStudyFields();
+            var nationalities = _nationality.GetAllNationalities();
+            var interviewers = _interviewer.GetAllInterviewers();
+            var list = _applicant.GetAllApplicantsWithoutSchema();
+            foreach(var app in list)
+            {
+                appvm = new ApplicantVM();
+                appvm = app;
+
+                foreach (var st in studyfields)
+                {
+                    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
+                }
+
+                foreach (var na in nationalities)
+                {
+                    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
+                }
+
+                foreach (var inn in interviewers)
+                {
+                    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+                }
+
+                listapp.Add(appvm);
+            }
+
+            return View("../Administration/Index", listapp);
         }
 
         /// <summary>
@@ -82,11 +119,13 @@ namespace UCL.ISM.Client.Controllers
         {
             _studyField = new StudyField();
             _nationality = new Nationality();
+            _interviewer = new Interviewer();
 
             ApplicantVM vm = new ApplicantVM();
 
             var studyfields = _studyField.GetAllStudyFields();
             var nationalities = _nationality.GetAllNationalities();
+            var interviewers = _interviewer.GetAllInterviewers();
 
             foreach(var sf in studyfields)
             {
@@ -98,24 +137,32 @@ namespace UCL.ISM.Client.Controllers
                 vm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
             }
 
+            foreach(var inn in interviewers)
+            {
+                vm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+            }
+
             return View("../Administration/Create_Applicant", vm);
         }
 
         [Authorize(Roles = UserRoles.Administration)]
-        public async Task<IActionResult> createApplicant(int prio, IStudyField field, string fname, string lname, string age, string nationality, bool eu, string email, string interviewer)
+        public async Task<IActionResult> createApplicant(ApplicantVM model)
         {
-            
-            
             try
             {
-            
-            }
-            catch (System.Exception)
-            {
+                _applicant = new Applicant();
+                _nationality = new Nationality();
+                model.Id = Guid.NewGuid();
+                model.IsEU = _nationality.IsEu(model.Nationality.Id);
 
-                throw;
+                _applicant.CreateNewApplicant(model);
             }
-            return View();
+            catch
+            {
+                return RedirectToAction("Create_Applicant");
+            }
+
+            return RedirectToAction("Create_Applicant");
         }
 
         [Authorize(Roles = UserRoles.Administration)]

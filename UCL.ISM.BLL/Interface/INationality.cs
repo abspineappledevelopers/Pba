@@ -8,5 +8,6 @@ namespace UCL.ISM.BLL.Interface
     public interface INationality
     {
         List<Nationality> GetAllNationalities();
+        bool IsEu(int id);
     }
 }

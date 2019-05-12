@@ -8,15 +8,17 @@ namespace UCL.ISM.Client.Models
 {
     public class InterviewerVM
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Firstname { get; set; }
+        public string Lastname { get; set; }
 
         public static implicit operator InterviewerVM(Interviewer interviewer)
         {
             return new InterviewerVM
             {
                 Id = interviewer.Id,
-                Firstname = interviewer.Firstname
+                Firstname = interviewer.Firstname,
+                Lastname = interviewer.Lastname
             };
         }
 
@@ -25,7 +27,8 @@ namespace UCL.ISM.Client.Models
             return new Interviewer
             {
                 Id = vm.Id,
-                Firstname = vm.Firstname
+                Firstname = vm.Firstname,
+                Lastname = vm.Lastname
             };
         }
     }

@@ -20,5 +20,12 @@ namespace UCL.ISM.BLL.BLL
 
             return _db.GetAllNationalities();
         }
+
+        public bool IsEu(int id)
+        {
+            _db = new NationalityDB();
+
+            return _db.IsEu(id);
+        }
     }
 }
