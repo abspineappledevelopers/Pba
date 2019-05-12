@@ -1,0 +1,14 @@
+﻿@model UCL.ISM.Client.Models.StudyFieldVM
+
+
+<form asp-action="Pass_New_StudyField" asp-controller="Administration" method="post">
+    <div class="form-group">
+        <label class="control-label col-lg-2">Fagets navn:</label>
+        <div class="col-lg-2">
+            <div class="form-group">
+                <input asp-for="FieldName" type="text" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Gem</button>
+</form>

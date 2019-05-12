@@ -1,18 +1,15 @@
-﻿
-@{
-    ViewData["Title"] = "Create_StudyField";
-}
+﻿@model UCL.ISM.Client.Models.StudyFieldVM
+
 <br />
 <h2>Opret fag</h2>
 <br />
 <div class="container-fluid">
-    <form method="post">
-        <div class="form-group">
-            <label class="control-label col-lg-2">Navn:</label>
-            <div class="col-lg-2">
-                <input type="text" class="form-control" />
-            </div>
-        </div>
+    <partial name="../Administration/Partials/_Add_StudyField" />
 
-    </form>
-</div>
+    <div style="margin-top: 50px;">
+        <h3>Registrerede fagområder</h3>
+        <hr />
+        <partial name="../Administration/Partials/_All_StudyFields" model="Model.AllStudyFields" />
+    </div>
+   
+    </div>

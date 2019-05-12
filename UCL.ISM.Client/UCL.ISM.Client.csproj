@@ -12,12 +12,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Identity.Web\Microsoft.Identity.Web.csproj" />
-    <ProjectReference Include="..\StudyField\UCL.ISM.StudyField.csproj" />
     <ProjectReference Include="..\UCL.ISM.Authentication\UCL.ISM.Authentication.csproj" />
+    <ProjectReference Include="..\UCL.ISM.BLL\UCL.ISM.BLL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Administration\" />
     <Folder Include="Views\Interviewer\" />
     <Folder Include="Views\Account\" />
   </ItemGroup>
