@@ -9,5 +9,6 @@ namespace UCL.ISM.BLL.Interface
         Guid Id { get; set; }
         string Quest { get; set; }
         string Answer { get; set; }
+        int InterviewSchemeId { get; set; }
     }
 }

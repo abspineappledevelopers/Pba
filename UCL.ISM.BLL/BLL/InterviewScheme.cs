@@ -16,22 +16,22 @@ namespace UCL.ISM.BLL.BLL
         public DateTime EditedDate { get; set; }
         public string Name { get; set; }
         public string Comment { get; set; }
-        public List<Question> Questions { get; set; }
+        public List<IQuestion> Questions { get; set; }
         public List<int> CountryId { get; set; }
 
         public InterviewScheme()
         {
             _db = new InterviewSchemeDB();
-            Questions = new List<Question>();
+            Questions = new List<IQuestion>();
             CountryId = new List<int>();
         }
 
-        public int AddInterviewSchema(InterviewScheme interview)
+        public int AddInterviewSchema(IInterviewScheme interview)
         {
             return _db.CreateNewInterviewScheme(interview);
         }
 
-        public void AddQuestionToInterview(Question question)
+        public void AddQuestionToInterview(IQuestion question)
         {
             _db.AddQuestion(question);
         }
@@ -41,9 +41,9 @@ namespace UCL.ISM.BLL.BLL
             _db.RemoveQuestion(question);
         }
 
-        public List<Question> GetQuestions(int id)
+        public List<IQuestion> GetQuestions(int id)
         {
-            List<Question> temp = _db.GetAllSchemeQuestions(id);
+            List<IQuestion> temp = _db.GetAllSchemeQuestions(id);
             return temp;
         }
     }
