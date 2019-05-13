@@ -92,6 +92,9 @@ namespace UCL.ISM.BLL.DAL
 
         public List<IQuestion> GetAllSchemeQuestions(int id)
         {
+            string query = "SELECT * FROM UCL_Question WHERE InterviewScheme =" + id;
+
+
             _db = new Database();
 
             _db.Get_Connection();
@@ -102,7 +105,7 @@ namespace UCL.ISM.BLL.DAL
             List<IQuestion> list = new List<IQuestion>();
             try
             {
-                cmd.CommandText = "SELECT * FROM UCL_Question WHERE InterviewScheme =" + id;
+                cmd.CommandText = 
                 MySqlDataReader reader = cmd.ExecuteReader();
                 
                 IQuestion quest;
@@ -153,6 +156,47 @@ namespace UCL.ISM.BLL.DAL
         }
 
         #region Functionality
+        private List<IQuestion> ExecuteReader(string query)
+        {
+            _db.Get_Connection();
+            List<IQuestion> temp = new List<IQuestion>();
+
+            using (cmd.Connection = _db.connection)
+            {
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = query;
+
+                try
+                {
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    IQuestion quest;
+
+                    while (reader.Read())
+                    {
+                        quest = new Question();
+                        quest.Id = reader.GetGuid(0);
+                        quest.Quest = reader.GetString(1).ToString();
+                        quest.InterviewSchemeId = reader.GetInt32(3);
+                        temp.Add(quest);
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
+                }
+            }
+            return temp;
+        }
+
         private void ExecureReader(string query)
         {
             using (cmd.Connection = new MySqlConnection(_connectionString))
