@@ -1,4 +1,4 @@
-﻿
+﻿@model UCL.ISM.Client.Models.InterviewSchemeVM
 @{
     ViewData["Title"] = "Create_InterviewScheme";
 }
@@ -7,10 +7,12 @@
 <h2>Opret spørgeskema</h2>
 <br />
 
-<div class="container">
-    <form asp-action="Create_InterviewScheme" method="post">
+<div class="container-fluid">
+    <form asp-action="Pass_InterviewScheme" asp-controller="Administration" method="post">
         <div class="form-group">
-
+            <select multiple="multiple" asp-for="CountryId" asp-items="@Model.Countries" class="form-control multi-select"  id="countries"></select>
         </div>
+
+        <button type="submit" class="btn">Grem</button>
     </form>
 </div>

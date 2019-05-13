@@ -9,11 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UCL.ISM.Authentication", "U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Identity.Web", "Microsoft.Identity.Web\Microsoft.Identity.Web.csproj", "{A8DC2866-544A-4785-8B88-DACF9898D993}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UCL.ISM.Applicant", "UCL.ISM.Applicant\UCL.ISM.Applicant.csproj", "{D1702733-8912-4AB5-9897-EA6E830E044F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UCL.ISM.InterviewScheme", "UCL.ISM.InterviewScheme\UCL.ISM.InterviewScheme.csproj", "{41F28C85-BF73-4222-8E88-994608E7A9D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCL.ISM.InterviewScheme", "UCL.ISM.InterviewScheme\UCL.ISM.InterviewScheme.csproj", "{41F28C85-BF73-4222-8E88-994608E7A9D1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCL.ISM.BLL", "UCL.ISM.BLL\UCL.ISM.BLL.csproj", "{C52790C0-7D85-431E-908C-AA871D09918C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UCL.ISM.BLL", "UCL.ISM.BLL\UCL.ISM.BLL.csproj", "{C52790C0-7D85-431E-908C-AA871D09918C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,18 +31,14 @@ Global
 		{A8DC2866-544A-4785-8B88-DACF9898D993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8DC2866-544A-4785-8B88-DACF9898D993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8DC2866-544A-4785-8B88-DACF9898D993}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D1702733-8912-4AB5-9897-EA6E830E044F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1702733-8912-4AB5-9897-EA6E830E044F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1702733-8912-4AB5-9897-EA6E830E044F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1702733-8912-4AB5-9897-EA6E830E044F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C52790C0-7D85-431E-908C-AA871D09918C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C52790C0-7D85-431E-908C-AA871D09918C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C52790C0-7D85-431E-908C-AA871D09918C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C52790C0-7D85-431E-908C-AA871D09918C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{41F28C85-BF73-4222-8E88-994608E7A9D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{41F28C85-BF73-4222-8E88-994608E7A9D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41F28C85-BF73-4222-8E88-994608E7A9D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41F28C85-BF73-4222-8E88-994608E7A9D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C52790C0-7D85-431E-908C-AA871D09918C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C52790C0-7D85-431E-908C-AA871D09918C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C52790C0-7D85-431E-908C-AA871D09918C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C52790C0-7D85-431E-908C-AA871D09918C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

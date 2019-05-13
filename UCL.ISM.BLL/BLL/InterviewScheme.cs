@@ -15,17 +15,26 @@ namespace UCL.ISM.BLL.BLL
         public DateTime CreatedDate { get; set; }
         public DateTime EditedDate { get; set; }
         public string Comment { get; set; }
+        public List<Question> Questions { get; set; }
+        public List<Nationality> SchemeForCountries { get; set; }
 
         public InterviewScheme()
         {
             _db = new InterviewSchemeDB();
+            Questions = new List<Question>();
+            SchemeForCountries = new List<Nationality>();
         }
 
-        internal List<IQuestion> Questions => _questions;
-
-        public void AddQuestion(IQuestion question)
+        public void AddInterviewSchema(InterviewScheme interview)
         {
-            _db.AddQuestion(question.Id, question.Content);
+            _db.CreateNewInterviewScheme(interview);
+
+
+        }
+
+        public void AddQuestion(Question question)
+        {
+            _db.AddQuestion(question);
         }
 
         public void RemoveQuestion(IQuestion question)

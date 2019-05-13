@@ -19,6 +19,7 @@ namespace UCL.ISM.Client.Controllers
         INationality _nationality;
         IApplicant _applicant;
         IInterviewer _interviewer;
+        IInterviewScheme _interviewScheme;
 
         public IActionResult Index()
         {
@@ -168,7 +169,23 @@ namespace UCL.ISM.Client.Controllers
         [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Create_InterviewScheme()
         {
-            return View();
+            _nationality = new Nationality();
+            //_interviewScheme = new InterviewScheme();
+            InterviewSchemeVM vm = new InterviewSchemeVM();
+
+            var nationalities = _nationality.GetAllNationalities();
+            foreach(var country in nationalities)
+            {
+                vm.Countries.Add(new SelectListItem() { Text = country.Name, Value = country.Id.ToString() });
+            }
+
+            return View("../Administration/Create_InterviewScheme", vm);
+        }
+
+        [HttpPost]
+        public IActionResult Pass_InterviewScheme(InterviewSchemeVM model)
+        {
+            return null;
         }
     }
 }

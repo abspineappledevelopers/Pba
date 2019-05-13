@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UCL.ISM.BLL.BLL;
 
 namespace UCL.ISM.BLL.Interface
 {
@@ -12,5 +13,6 @@ namespace UCL.ISM.BLL.Interface
         string Comment { get; set; }
 
         List<IQuestion> GetQuestions();
+        void AddInterviewSchema(InterviewScheme interview);
     }
 }

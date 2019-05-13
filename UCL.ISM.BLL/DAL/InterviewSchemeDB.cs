@@ -4,6 +4,7 @@ using System.Text;
 using UCL.ISM.BLL.Interface;
 using UCL.ISM.BLL.BLL;
 using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace UCL.ISM.BLL.DAL
 {
@@ -11,26 +12,80 @@ namespace UCL.ISM.BLL.DAL
     {
         private readonly string _connectionString;
         private IInterviewScheme _scheme;
-        
-        public void CreateNewInterviewScheme(int id)
-        {
-            string param1 = "@Id";
-            string query = "INSERT INTO UCL_INTERVIEWSCHEME(Id) VALUES (@Id)";
+        private Database _db;
 
-            ExecuteCmd(query, SetParameterWithValue(param1, id));
+        public void CreateNewInterviewScheme(InterviewScheme interview)
+        {
+            _db = new Database();
+            _db.Get_Connection();
+
+            MySqlConnection conn = _db.connection;
+            conn.Open();
+
+            MySqlCommand cmd = new MySqlCommand();
+            MySqlTransaction myTrans;
+
+            // Start a local transaction
+            myTrans = conn.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            cmd.Connection = conn;
+            cmd.Transaction = myTrans;
+
+            try
+            {
+                cmd.CommandText = "INSERT INTO UCL_InterviewScheme(Comment) VALUES (@Comment)";
+
+                cmd.Parameters.Add("@Comment", MySqlDbType.VarChar, 1900);
+                cmd.Parameters["@Comment"].Value = interview.Comment;
+
+                cmd.ExecuteNonQuery();
+                var schemeId = cmd.LastInsertedId;
+
+                for (int i = 0; i < interview.SchemeForCountries.Count; i++)
+                {
+                    cmd.CommandText = "INSERT INTO UCL_InterviewSchemeForCountry(Country, InterviewScheme) VALUES (@CountryId, @InterviewScheme)";
+                    cmd.Parameters.Add("@CountryId", MySqlDbType.Int32, 11);
+                    cmd.Parameters.Add("@InterviewScheme", MySqlDbType.Int32, 11);
+                    cmd.Parameters["@CountryId"].Value = interview.SchemeForCountries[i].Id;
+                    cmd.Parameters["@InterviewScheme"].Value = schemeId;
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                myTrans.Commit();
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (SqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+
+                    }
+                }
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
-        public void AddQuestion(int id, string question)
+        public void AddQuestion(Question question)
         {
-            string param1 = "@Id";
-            string param2 = "@Question";
-            string param3 = "@qId";
-            Guid newId = new Guid();
-            string query = "INSERT INTO UCL_QUESTION(Id, Question) VALUES (@Id, @Question)";
-            string query2 = "UPDATE UCL_INTERVIEWSCHEME SET qId = @qId WHERE Id = @Id";
+            //string param1 = "@Id";
+            //string param2 = "@Question";
+            //string param3 = "@qId";
+            //Guid newId = new Guid();
+            //string query = "INSERT INTO UCL_QUESTION(Id, Question) VALUES (@Id, @Question)";
+            //string query2 = "UPDATE UCL_INTERVIEWSCHEME SET qId = @qId WHERE Id = @Id";
 
-            ExecuteCmd(query, SetParameterWithValue(param1, newId), SetParameterWithValue(param2, question));
-            ExecuteCmd(query2, SetParameterWithValue(param3, newId), SetParameterWithValue(param1, id));
+            //ExecuteCmd(query, SetParameterWithValue(param1, newId), SetParameterWithValue(param2, question));
+            //ExecuteCmd(query2, SetParameterWithValue(param3, newId), SetParameterWithValue(param1, id));
         }
 
         public void RemoveQuestion(IQuestion question)
@@ -132,8 +187,11 @@ namespace UCL.ISM.BLL.DAL
 
         private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
         {
+            _db.Get_Connection();
+
             MySqlCommand cmd = new MySqlCommand();
-            using (cmd.Connection = new MySqlConnection(_connectionString))
+
+            using (cmd.Connection = _db.connection)
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
@@ -182,7 +240,7 @@ namespace UCL.ISM.BLL.DAL
 
             }
         }
-        
+
         private MySqlParameter SetParameter(string param, MySqlDbType type, int size)
         {
             return new MySqlParameter(param, type, size);
