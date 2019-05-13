@@ -13,72 +13,24 @@ namespace UCL.ISM.BLL.DAL
         private readonly string _connectionString;
         private IInterviewScheme _scheme;
         private Database _db;
+        private MySqlCommand cmd;
 
+        public InterviewSchemeDB()
         public int CreateNewInterviewScheme(InterviewScheme interview)
         {
             _db = new Database();
-            _db.Get_Connection();
+            cmd = new MySqlCommand();
+        }
 
-            MySqlConnection conn = _db.connection;
-
-            MySqlCommand cmd = new MySqlCommand();
-            MySqlTransaction myTrans;
-
-            // Start a local transaction
-            myTrans = conn.BeginTransaction();
-            // Must assign both transaction object and connection
-            // to Command object for a pending local transaction
-            cmd.Connection = conn;
-            cmd.Transaction = myTrans;
-
-            try
-            {
-                cmd.CommandText = "INSERT INTO UCL_InterviewScheme(Comment, Name) VALUES (@Comment, @Name)";
-
-                cmd.Parameters.Add("@Comment", MySqlDbType.VarChar, 1900);
-                cmd.Parameters.Add("@Name", MySqlDbType.VarChar, 100);
-                cmd.Parameters["@Comment"].Value = interview.Comment;
-                cmd.Parameters["@Name"].Value = interview.Name;
-
-                cmd.ExecuteNonQuery();
-
-                interview.Id = Convert.ToInt32(cmd.LastInsertedId);
-
-                cmd.Parameters.Add("@Id", MySqlDbType.VarChar, 128);
-                cmd.Parameters.Add("@CountryId", MySqlDbType.Int32, 11);
-                cmd.Parameters.Add("@InterviewScheme", MySqlDbType.Int32, 11);
-                for (int i = 0; i < interview.CountryId.Count; i++)
-                {
-                    cmd.CommandText = "INSERT INTO UCL_InterviewSchemeForCountry(Id, Country, InterviewScheme) VALUES (@Id, @CountryId, @InterviewScheme)";
-
-                    cmd.Parameters["@Id"].Value = Guid.NewGuid().ToString();
-                    cmd.Parameters["@CountryId"].Value = interview.CountryId[i].ToString();
-                    cmd.Parameters["@InterviewScheme"].Value = interview.Id;
-
-                    cmd.ExecuteNonQuery();
-                }
-
-                myTrans.Commit();
-            }
-            catch (Exception e)
-            {
-                try
-                {
-                    myTrans.Rollback();
-                }
-                catch (SqlException ex)
-                {
-                    if (myTrans.Connection != null)
-                    {
-
-                    }
-                }
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return interview.Id;
+        public void CreateNewInterviewScheme(InterviewScheme interview)
+        {
+            string query = "INSERT INTO UCL_InterviewScheme(Comment) VALUES (@Comment)";
+            string query2 = "INSERT INTO UCL_InterviewSchemeForCountry(Country, InterviewScheme) VALUES (@CountryId, @InterviewScheme)";
+            string param1 = "@Comment";
+            string param2 = "@CountryId";
+            string param3 = "@InterviewScheme";
+            
+            ExecuteTrans(query, query2, SetParameterWithValue(param1, interview.Comment), param2, param3, interview);
         }
 
         public void AddQuestion(Question question)
@@ -235,7 +187,6 @@ namespace UCL.ISM.BLL.DAL
         #region Functionality
         private void ExecureReader(string query)
         {
-            MySqlCommand cmd = new MySqlCommand();
             using (cmd.Connection = new MySqlConnection(_connectionString))
             {
                 cmd.CommandType = System.Data.CommandType.Text;
@@ -264,11 +215,56 @@ namespace UCL.ISM.BLL.DAL
             }
         }
 
-        private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
+        private void ExecuteTrans(string query, string query2, MySqlParameter param, string param2, string param3, object value)
         {
             _db.Get_Connection();
 
-            MySqlCommand cmd = new MySqlCommand();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            cmd.Connection = _db.connection;
+            cmd.Connection.Open();
+            cmd.Transaction = _db.connection.BeginTransaction();
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.CommandText = query;
+            cmd.Parameters.Add(param);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                var schemeId = cmd.LastInsertedId;
+                var type = value as InterviewScheme;
+                for (int i = 0; i < type.SchemeForCountries.Count; i++)
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query2;
+                    cmd.Parameters.Add(SetParameterWithValue(param2, type.SchemeForCountries[i].Id));
+                    cmd.Parameters.Add(SetParameterWithValue(param3, schemeId));
+                    cmd.ExecuteNonQuery();
+                }
+                cmd.Transaction.Commit();
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    cmd.Transaction.Rollback();
+                }
+                catch (SqlException ex)
+                {
+                    if (cmd.Transaction.Connection != null)
+                    {
+
+                    }
+                }
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
+        {
+            _db.Get_Connection();
 
             using (cmd.Connection = _db.connection)
             {
@@ -296,8 +292,8 @@ namespace UCL.ISM.BLL.DAL
 
         private void ExecuteCmd(string query, MySqlParameter param)
         {
-            MySqlCommand cmd = new MySqlCommand();
-            using (cmd.Connection = new MySqlConnection(_connectionString))
+            _db.Get_Connection();
+            using (cmd.Connection = _db.connection)
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
