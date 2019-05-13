@@ -113,7 +113,6 @@ namespace UCL.ISM.BLL.DAL
         #region Functionality
         private void ExecureReader(string query)
         {
-            MySqlCommand cmd = new MySqlCommand();
             using (cmd.Connection = new MySqlConnection(_connectionString))
             {
                 cmd.CommandType = System.Data.CommandType.Text;
@@ -161,8 +160,10 @@ namespace UCL.ISM.BLL.DAL
                 var type = value as InterviewScheme;
                 for (int i = 0; i < type.SchemeForCountries.Count; i++)
                 {
-                    ExecuteCmd(query2, SetParameterWithValue(param2, type.SchemeForCountries[i].Id));
-                    ExecuteCmd(query2, SetParameterWithValue(param3, cmd.LastInsertedId));
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query2;
+                    cmd.Parameters.Add(SetParameterWithValue(param2, type.SchemeForCountries[i].Id));
+                    cmd.Parameters.Add(SetParameterWithValue(param3, schemeId));
                     cmd.ExecuteNonQuery();
                 }
                 cmd.Transaction.Commit();
