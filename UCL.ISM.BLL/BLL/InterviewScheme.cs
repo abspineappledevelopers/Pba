@@ -33,6 +33,8 @@ namespace UCL.ISM.BLL.BLL
 
         public void AddQuestionToInterview(Question question)
         {
+            question.Id = Guid.NewGuid();
+
             _db.AddQuestion(question);
         }
 
