@@ -6,7 +6,7 @@ namespace UCL.ISM.BLL.Interface
 {
     public interface IQuestion
     {
-        int Id { get; set; }
+        Guid Id { get; set; }
         string Quest { get; set; }
         string Answer { get; set; }
     }

@@ -185,7 +185,44 @@ namespace UCL.ISM.Client.Controllers
         [HttpPost]
         public IActionResult Pass_InterviewScheme(InterviewSchemeVM model)
         {
-            return null;
+            _interviewScheme = new InterviewScheme();
+            _nationality = new Nationality();
+
+            var id = _interviewScheme.AddInterviewSchema(model);
+
+            var nationalities = _nationality.GetAllNationalities();
+            foreach (var country in nationalities)
+            {
+                model.Countries.Add(new SelectListItem() { Text = country.Name, Value = country.Id.ToString() });
+            }
+
+            model.Id = id;
+            model.Questions = _interviewScheme.GetQuestions(id);
+
+            return View("../Administration/CreateQuestionToInterview", model);
+        }
+
+        [HttpPost]
+        public IActionResult Pass_InterviewScheme_Question(InterviewSchemeVM model)
+        {
+            _interviewScheme = new InterviewScheme();
+            _nationality = new Nationality();
+
+            model.Question.InterviewSchemeId = model.Id;
+            
+            _interviewScheme.AddQuestionToInterview(model.Question);
+
+            var nationalities = _nationality.GetAllNationalities();
+            foreach (var country in nationalities)
+            {
+                model.Countries.Add(new SelectListItem() { Text = country.Name, Value = country.Id.ToString() });
+            }
+
+            model.Questions = _interviewScheme.GetQuestions(model.Id);
+
+            model.Question = new Question();
+
+            return View("../Administration/CreateQuestionToInterview", model);
         }
     }
 }

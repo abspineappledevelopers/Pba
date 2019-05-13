@@ -14,13 +14,12 @@ namespace UCL.ISM.BLL.DAL
         private IInterviewScheme _scheme;
         private Database _db;
 
-        public void CreateNewInterviewScheme(InterviewScheme interview)
+        public int CreateNewInterviewScheme(InterviewScheme interview)
         {
             _db = new Database();
             _db.Get_Connection();
 
             MySqlConnection conn = _db.connection;
-            conn.Open();
 
             MySqlCommand cmd = new MySqlCommand();
             MySqlTransaction myTrans;
@@ -34,21 +33,27 @@ namespace UCL.ISM.BLL.DAL
 
             try
             {
-                cmd.CommandText = "INSERT INTO UCL_InterviewScheme(Comment) VALUES (@Comment)";
+                cmd.CommandText = "INSERT INTO UCL_InterviewScheme(Comment, Name) VALUES (@Comment, @Name)";
 
                 cmd.Parameters.Add("@Comment", MySqlDbType.VarChar, 1900);
+                cmd.Parameters.Add("@Name", MySqlDbType.VarChar, 100);
                 cmd.Parameters["@Comment"].Value = interview.Comment;
+                cmd.Parameters["@Name"].Value = interview.Name;
 
                 cmd.ExecuteNonQuery();
-                var schemeId = cmd.LastInsertedId;
 
-                for (int i = 0; i < interview.SchemeForCountries.Count; i++)
+                interview.Id = Convert.ToInt32(cmd.LastInsertedId);
+
+                cmd.Parameters.Add("@Id", MySqlDbType.VarChar, 128);
+                cmd.Parameters.Add("@CountryId", MySqlDbType.Int32, 11);
+                cmd.Parameters.Add("@InterviewScheme", MySqlDbType.Int32, 11);
+                for (int i = 0; i < interview.CountryId.Count; i++)
                 {
-                    cmd.CommandText = "INSERT INTO UCL_InterviewSchemeForCountry(Country, InterviewScheme) VALUES (@CountryId, @InterviewScheme)";
-                    cmd.Parameters.Add("@CountryId", MySqlDbType.Int32, 11);
-                    cmd.Parameters.Add("@InterviewScheme", MySqlDbType.Int32, 11);
-                    cmd.Parameters["@CountryId"].Value = interview.SchemeForCountries[i].Id;
-                    cmd.Parameters["@InterviewScheme"].Value = schemeId;
+                    cmd.CommandText = "INSERT INTO UCL_InterviewSchemeForCountry(Id, Country, InterviewScheme) VALUES (@Id, @CountryId, @InterviewScheme)";
+
+                    cmd.Parameters["@Id"].Value = Guid.NewGuid().ToString();
+                    cmd.Parameters["@CountryId"].Value = interview.CountryId[i].ToString();
+                    cmd.Parameters["@InterviewScheme"].Value = interview.Id;
 
                     cmd.ExecuteNonQuery();
                 }
@@ -73,10 +78,44 @@ namespace UCL.ISM.BLL.DAL
             {
                 conn.Close();
             }
+            return interview.Id;
         }
 
         public void AddQuestion(Question question)
         {
+            _db = new Database();
+
+            _db.Get_Connection();
+            MySqlCommand cmd = new MySqlCommand();
+
+            cmd.Connection = _db.connection;
+
+            try
+            {
+                cmd.CommandText = "INSERT INTO UCL_Question(Id, Question, InterviewScheme) VALUES (@Id, @Question, @InterviewScheme)";
+                cmd.Parameters.Add("@Id", MySqlDbType.Guid);
+                cmd.Parameters.Add("@Question", MySqlDbType.VarChar, 25);
+                cmd.Parameters.Add("@InterviewScheme", MySqlDbType.Int32, 11);
+
+                cmd.Parameters["@Id"].Value = Guid.NewGuid().ToString();
+                cmd.Parameters["@Question"].Value = question.Quest;
+                cmd.Parameters["@InterviewScheme"].Value = question.InterviewSchemeId;
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                _db.CloseConnection();
+
+                throw;
+            }
+            finally
+            {
+                if (_db.connection.State == System.Data.ConnectionState.Open)
+                {
+                    _db.connection.Close();
+                }
+            }
             //string param1 = "@Id";
             //string param2 = "@Question";
             //string param3 = "@qId";
@@ -87,6 +126,7 @@ namespace UCL.ISM.BLL.DAL
             //ExecuteCmd(query, SetParameterWithValue(param1, newId), SetParameterWithValue(param2, question));
             //ExecuteCmd(query2, SetParameterWithValue(param3, newId), SetParameterWithValue(param1, id));
         }
+        
 
         public void RemoveQuestion(IQuestion question)
         {
@@ -130,11 +170,50 @@ namespace UCL.ISM.BLL.DAL
             return _scheme;
         }
 
-        public List<IQuestion> GetAllSchemeQuestions(int id)
+        public List<Question> GetAllSchemeQuestions(int id)
         {
-            string query = "SELECT * FROM UCL_QUESTIONS WHERE Id = @Id";
-            ExecureReader(query);
-            return new List<IQuestion>();
+            _db = new Database();
+
+            _db.Get_Connection();
+
+            MySqlCommand cmd = new MySqlCommand();
+
+            cmd.Connection = _db.connection;
+            List<Question> list = new List<Question>();
+            try
+            {
+                cmd.CommandText = "SELECT * FROM UCL_Question WHERE InterviewScheme =" + id;
+                MySqlDataReader reader = cmd.ExecuteReader();
+                
+                Question quest;
+
+                while (reader.Read())
+                {
+                    quest = new Question();
+                    quest.Id = reader.GetGuid(0);
+                    quest.Quest = reader.GetString(1).ToString();
+                    quest.InterviewSchemeId = reader.GetInt32(3);
+                    list.Add(quest);
+                }
+            }
+            catch (Exception e)
+            {
+                _db.CloseConnection();
+
+                throw;
+            }
+            finally
+            {
+                if (_db.connection.State == System.Data.ConnectionState.Open)
+                {
+                    _db.CloseConnection();
+                }
+                
+            }
+            return list;
+            //string query = "SELECT * FROM UCL_QUESTIONS WHERE Id = @Id";
+            //ExecureReader(query);
+            //return new List<IQuestion>();
         }
 
         public void UpdateInterviewScheme(int id)

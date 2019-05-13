@@ -12,7 +12,9 @@ namespace UCL.ISM.BLL.Interface
         DateTime EditedDate { get; set; }
         string Comment { get; set; }
 
-        List<IQuestion> GetQuestions();
-        void AddInterviewSchema(InterviewScheme interview);
+        List<Question> GetQuestions(int id);
+        int AddInterviewSchema(InterviewScheme interview);
+        void AddQuestionToInterview(Question quest);
+        
     }
 }

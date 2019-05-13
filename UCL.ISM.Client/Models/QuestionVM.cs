@@ -8,9 +8,10 @@ namespace UCL.ISM.Client.Models
 {
     public class QuestionVM
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Quest { get; set; }
         public string Answer { get; set; }
+        public int InterviewSchemeId { get; set; }
 
         public static implicit operator QuestionVM(Question quest)
         {
@@ -18,7 +19,8 @@ namespace UCL.ISM.Client.Models
             {
                 Id = quest.Id,
                 Quest = quest.Quest,
-                Answer = quest.Answer
+                Answer = quest.Answer,
+                InterviewSchemeId = quest.InterviewSchemeId
 
             };
         }
@@ -29,7 +31,8 @@ namespace UCL.ISM.Client.Models
             {
                 Id = vm.Id,
                 Quest = vm.Quest,
-                Answer = vm.Answer
+                Answer = vm.Answer,
+                InterviewSchemeId = vm.InterviewSchemeId
             };
         }
     }

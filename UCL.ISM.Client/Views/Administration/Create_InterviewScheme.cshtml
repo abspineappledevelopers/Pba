@@ -9,10 +9,24 @@
 
 <div class="container-fluid">
     <form asp-action="Pass_InterviewScheme" asp-controller="Administration" method="post">
-        <div class="form-group">
-            <select multiple="multiple" asp-for="CountryId" asp-items="@Model.Countries" class="form-control multi-select"  id="countries"></select>
+        <div class="row">
+            <div class="col-xs-4">
+                <label class="control-label">Skema navn:</label>
+                <input asp-for="Name" type="text" class="form-control" id="name" />
+            </div>
+            <div class="col-xs-4">
+                <label class="control-label">Skema Kommentar:</label>
+                <input asp-for="Comment" type="text" class="form-control" id="comment" />
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label class="control-label">Lande skema gælder for:</label>
+                    <select multiple="multiple" asp-for="CountryId" asp-items="@Model.Countries" class="form-control multi-select" id="countries"></select>
+                </div>
+            </div>
         </div>
+        
 
-        <button type="submit" class="btn">Grem</button>
+        <button type="submit" class="btn">Gem</button>
     </form>
 </div>
