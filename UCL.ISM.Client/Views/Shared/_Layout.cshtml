@@ -23,7 +23,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index"><span class="glyphicon glyphicon-home"/></a></li>
                     @using Microsoft.Identity.Web
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity.IsAuthenticated && User.IsInRole(UCL.ISM.Client.Infrastructure.UserRoles.Administration))
                     {
                         <li><a asp-controller="Administration" asp-action="Create_StudyField">Opret Fagområde</a></li>
                         <li><a asp-controller="Administration" asp-action="Create_Applicant">Opret Ansøger</a></li>
