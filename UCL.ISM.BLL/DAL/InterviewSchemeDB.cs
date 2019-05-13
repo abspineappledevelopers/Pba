@@ -13,66 +13,23 @@ namespace UCL.ISM.BLL.DAL
         private readonly string _connectionString;
         private IInterviewScheme _scheme;
         private Database _db;
+        private MySqlCommand cmd;
+
+        public InterviewSchemeDB()
+        {
+            _db = new Database();
+            cmd = new MySqlCommand();
+        }
 
         public void CreateNewInterviewScheme(InterviewScheme interview)
         {
-            _db = new Database();
-            _db.Get_Connection();
-
-            MySqlConnection conn = _db.connection;
-            conn.Open();
-
-            MySqlCommand cmd = new MySqlCommand();
-            MySqlTransaction myTrans;
-
-            // Start a local transaction
-            myTrans = conn.BeginTransaction();
-            // Must assign both transaction object and connection
-            // to Command object for a pending local transaction
-            cmd.Connection = conn;
-            cmd.Transaction = myTrans;
-
-            try
-            {
-                cmd.CommandText = "INSERT INTO UCL_InterviewScheme(Comment) VALUES (@Comment)";
-
-                cmd.Parameters.Add("@Comment", MySqlDbType.VarChar, 1900);
-                cmd.Parameters["@Comment"].Value = interview.Comment;
-
-                cmd.ExecuteNonQuery();
-                var schemeId = cmd.LastInsertedId;
-
-                for (int i = 0; i < interview.SchemeForCountries.Count; i++)
-                {
-                    cmd.CommandText = "INSERT INTO UCL_InterviewSchemeForCountry(Country, InterviewScheme) VALUES (@CountryId, @InterviewScheme)";
-                    cmd.Parameters.Add("@CountryId", MySqlDbType.Int32, 11);
-                    cmd.Parameters.Add("@InterviewScheme", MySqlDbType.Int32, 11);
-                    cmd.Parameters["@CountryId"].Value = interview.SchemeForCountries[i].Id;
-                    cmd.Parameters["@InterviewScheme"].Value = schemeId;
-
-                    cmd.ExecuteNonQuery();
-                }
-
-                myTrans.Commit();
-            }
-            catch (Exception e)
-            {
-                try
-                {
-                    myTrans.Rollback();
-                }
-                catch (SqlException ex)
-                {
-                    if (myTrans.Connection != null)
-                    {
-
-                    }
-                }
-            }
-            finally
-            {
-                conn.Close();
-            }
+            string query = "INSERT INTO UCL_InterviewScheme(Comment) VALUES (@Comment)";
+            string query2 = "INSERT INTO UCL_InterviewSchemeForCountry(Country, InterviewScheme) VALUES (@CountryId, @InterviewScheme)";
+            string param1 = "@Comment";
+            string param2 = "@CountryId";
+            string param3 = "@InterviewScheme";
+            
+            ExecuteTrans(query, query2, SetParameterWithValue(param1, interview.Comment), param2, param3, interview);
         }
 
         public void AddQuestion(Question question)
@@ -185,11 +142,54 @@ namespace UCL.ISM.BLL.DAL
             }
         }
 
-        private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
+        private void ExecuteTrans(string query, string query2, MySqlParameter param, string param2, string param3, object value)
         {
             _db.Get_Connection();
 
-            MySqlCommand cmd = new MySqlCommand();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            cmd.Connection = _db.connection;
+            cmd.Connection.Open();
+            cmd.Transaction = _db.connection.BeginTransaction();
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.CommandText = query;
+            cmd.Parameters.Add(param);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                var schemeId = cmd.LastInsertedId;
+                var type = value as InterviewScheme;
+                for (int i = 0; i < type.SchemeForCountries.Count; i++)
+                {
+                    ExecuteCmd(query2, SetParameterWithValue(param2, type.SchemeForCountries[i].Id));
+                    ExecuteCmd(query2, SetParameterWithValue(param3, cmd.LastInsertedId));
+                    cmd.ExecuteNonQuery();
+                }
+                cmd.Transaction.Commit();
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    cmd.Transaction.Rollback();
+                }
+                catch (SqlException ex)
+                {
+                    if (cmd.Transaction.Connection != null)
+                    {
+
+                    }
+                }
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
+        private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
+        {
+            _db.Get_Connection();
 
             using (cmd.Connection = _db.connection)
             {
@@ -217,8 +217,8 @@ namespace UCL.ISM.BLL.DAL
 
         private void ExecuteCmd(string query, MySqlParameter param)
         {
-            MySqlCommand cmd = new MySqlCommand();
-            using (cmd.Connection = new MySqlConnection(_connectionString))
+            _db.Get_Connection();
+            using (cmd.Connection = _db.connection)
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
