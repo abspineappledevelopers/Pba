@@ -10,24 +10,22 @@
 <div class="container-fluid">
     <form asp-action="Pass_InterviewScheme" asp-controller="Administration" method="post">
         <div class="row">
-            <div class="col-8">
+            <div class="col-12 col-md-7">
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-xs-5">
                         <label class="control-label">Skema navn:</label>
                         <input asp-for="Name" type="text" class="form-control" id="name" />
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-7">
                         <label class="control-label">Skema Kommentar:</label>
-                        <textarea asp-for="Comment" type="text" class="form-control" style="height: 450px;" id="comment"></textarea>
+                        <textarea asp-for="Comment" type="text" class="form-control" style="height: 500px;" id="comment"></textarea>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-success" style="margin-top: 30px;">Gem</button>
-
             </div>
-            <div class="col-4">
+            <div class="col-12 col-md-5">
                 <div class="row">
-                    <div class="col-10">
+                    <div class="col-8">
                         <div class="form-group">
                             <label class="control-label">Lande skema gælder for:</label>
                             <select multiple="multiple" asp-for="CountryId" asp-items="@Model.Countries" class="form-control multi-select" style="height: 500px;" id="countries"></select>
@@ -35,13 +33,27 @@
                     </div>
                     <div class="col-2">
                         <div class="form-group">
-                            <label for="eu" class="control-label">EU: <br />
+                            <label for="eu" class="control-label">
+                                EU: <br />
                                 <input type="checkbox" name="vehicle1" value="Bike" style="width: 25px; height: 25px;" id="eu">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="eu" class="control-label">
+                                Alle: <br />
+                                <input type="checkbox" name="vehicle1" value="Bike" style="width: 25px; height: 25px;" id="all">
                             </label>
                         </div>
                     </div>
                 </div>
                 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-2">
+                <button type="submit" class="btn btn-success" style="margin-top: 30px; width: 100%">Gem</button>
             </div>
         </div>
     </form>

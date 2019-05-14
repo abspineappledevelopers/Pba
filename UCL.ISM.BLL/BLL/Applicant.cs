@@ -18,6 +18,7 @@ namespace UCL.ISM.BLL.BLL
         public bool IsEU { get; set; }
         //What does this do?
         public int Priority { get; set; }
+        public string Comment { get; set; }
         public Interviewer Interviewer { get; set; }
         public List<Interviewer> Interviewers { get; set; }
         public StudyField StudyField { get; set; }

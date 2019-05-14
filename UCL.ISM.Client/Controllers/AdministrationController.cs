@@ -24,37 +24,37 @@ namespace UCL.ISM.Client.Controllers
 
         public IActionResult Index()
         {
-            _studyField = new StudyField();
+            //_studyField = new StudyField();
             _applicant = new Applicant();
-            _nationality = new Nationality();
-            _interviewer = new Interviewer();
+            //_nationality = new Nationality();
+            //_interviewer = new Interviewer();
             ApplicantVM appvm;
             
             List<ApplicantVM> listapp = new List<ApplicantVM>();
 
-            var studyfields = _studyField.GetAllStudyFields();
-            var nationalities = _nationality.GetAllNationalities();
-            var interviewers = _interviewer.GetAllInterviewers();
+            //var studyfields = _studyField.GetAllStudyFields();
+            //var nationalities = _nationality.GetAllNationalities();
+            //var interviewers = _interviewer.GetAllInterviewers();
             var list = _applicant.GetAllApplicantsWithoutSchema();
             foreach(var app in list)
             {
                 appvm = new ApplicantVM();
                 appvm = app;
 
-                foreach (var st in studyfields)
-                {
-                    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
-                }
+                //foreach (var st in studyfields)
+                //{
+                //    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
+                //}
 
-                foreach (var na in nationalities)
-                {
-                    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
-                }
+                //foreach (var na in nationalities)
+                //{
+                //    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
+                //}
 
-                foreach (var inn in interviewers)
-                {
-                    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
-                }
+                //foreach (var inn in interviewers)
+                //{
+                //    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+                //}
 
                 listapp.Add(appvm);
             }

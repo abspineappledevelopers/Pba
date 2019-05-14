@@ -27,6 +27,7 @@ namespace UCL.ISM.Client.Models
         //What does this do?
         [Required]
         public int Priority { get; set; }
+        public string Comment { get; set; }
         public InterviewerVM Interviewer { get; set; }
         public List<SelectListItem> Interviewers { get; set; }
         public StudyFieldVM StudyField { get; set; }
@@ -55,7 +56,8 @@ namespace UCL.ISM.Client.Models
                 IsEU = applicant.IsEU,
                 Priority = applicant.Priority,
                 Interviewer = applicant.Interviewer, 
-                StudyField = applicant.StudyField
+                StudyField = applicant.StudyField,
+                Comment = applicant.Comment
             };
         }
 
@@ -72,7 +74,8 @@ namespace UCL.ISM.Client.Models
                 IsEU = vm.IsEU,
                 Priority = vm.Priority,
                 Interviewer = vm.Interviewer,
-                StudyField = vm.StudyField
+                StudyField = vm.StudyField,
+                Comment = vm.Comment
             };
         }
     }
