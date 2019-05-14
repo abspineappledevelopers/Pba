@@ -28,9 +28,9 @@ namespace UCL.ISM.Client.Controllers
             _applicant = new Applicant();
             //_nationality = new Nationality();
             //_interviewer = new Interviewer();
-            ApplicantVM appvm;
+            //ApplicantVM appvm;
             
-            List<ApplicantVM> listapp = new List<ApplicantVM>();
+            List<IApplicant> listapp = new List<IApplicant>();
 
             //var studyfields = _studyField.GetAllStudyFields();
             //var nationalities = _nationality.GetAllNationalities();
@@ -38,9 +38,9 @@ namespace UCL.ISM.Client.Controllers
             var list = _applicant.GetAllApplicantsWithoutSchema();
             foreach(var app in list)
             {
-                appvm = new ApplicantVM();
-                appvm = app;
-
+                //appvm = new ApplicantVM();
+                //appvm = app;
+                IApplicant applicant = app;
                 //foreach (var st in studyfields)
                 //{
                 //    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
@@ -56,7 +56,7 @@ namespace UCL.ISM.Client.Controllers
                 //    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
                 //}
 
-                listapp.Add(appvm);
+                listapp.Add(applicant);
             }
 
             return View("../Administration/Index", listapp);
@@ -70,18 +70,17 @@ namespace UCL.ISM.Client.Controllers
         public IActionResult Create_StudyField()
         {
             _studyField = new StudyField();
-            StudyFieldVM model = new StudyFieldVM();
-            StudyFieldVM sfvm;
 
-            var allStudyFields = _studyField.GetAllStudyFields();
-            foreach (var studyfield in allStudyFields)
-            {
-                sfvm = new StudyFieldVM();
-                sfvm = studyfield;
-                model.AllStudyFields.Add(sfvm);
-            }
+            //var allStudyFields = _studyField.GetAllStudyFields();
+            //foreach (var studyfield in allStudyFields)
+            //{
+               // model.All
+                //sfvm = new StudyFieldVM();
+                //sfvm = studyfield;
+                //model.AllStudyFields.Add(sfvm);
+            //}
 
-            return View("../Administration/Create_StudyField", model);
+            return View("../Administration/Create_StudyField", _studyField.GetAllStudyFields());
         }
 
         [HttpPost]
@@ -97,7 +96,7 @@ namespace UCL.ISM.Client.Controllers
 
         [HttpPost]
         [Authorize(Roles = UserRoles.Administration)]
-        public IActionResult Edit_StudyField(StudyFieldVM model)
+        public IActionResult Edit_StudyField(IStudyField model)
         {
             _studyField = new StudyField();
             

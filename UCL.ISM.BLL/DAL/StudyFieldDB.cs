@@ -3,161 +3,208 @@ using System.Collections.Generic;
 using System.Text;
 using MySql.Data.MySqlClient;
 using UCL.ISM.BLL.DAL;
+using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.BLL
 {
     class StudyFieldDB
     {
-        private Database db = new Database();
+        private Database _db;
+        private MySqlCommand cmd;
         StudyField _sf;
-        List<StudyField> _listsf;
+        List<IStudyField> _listsf;
+
+        public StudyFieldDB()
+        {
+            _db = new Database();
+            cmd = new MySqlCommand();
+        }
 
         public void CreateNewStudyField(string fieldName)
         {
-            db.Get_Connection();
-            MySqlCommand cmd = new MySqlCommand();
-
-            cmd.Connection = db.connection;
+            string query = "INSERT INTO UCL_StudyField(Name) VALUES (@Name)";
+            string param1 = "@Name";
             
-            try
-            {
-                cmd.CommandText = "INSERT INTO UCL_StudyField(Name) VALUES (@Name)";
-                cmd.Parameters.Add("@Name", MySqlDbType.VarChar, 50);
-                cmd.Parameters["@Name"].Value = fieldName;
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                db.CloseConnection();
-
-                throw;
-            }
-            finally
-            {
-                if (db.connection.State == System.Data.ConnectionState.Open)
-                {
-                    db.connection.Close();
-                }
-            }
+            ExecuteCmd(query, SetParameterWithValue(param1, fieldName));
         }
 
-        public StudyField GetStudyField(int Id)
+        public IStudyField GetStudyField(int Id)
         {
+            string query = "SELECT * FROM UCL_StudyField WHERE Id = @Id";
             throw new NotImplementedException();
         }
 
-        public List<StudyField> GetAllStudyFields()
+        public List<IStudyField> GetAllStudyFields()
         {
-            List<StudyField> list = new List<StudyField>();
+            string query = "SELECT * FROM UCL_StudyField";
 
-            db.Get_Connection();
-            MySqlCommand cmd = new MySqlCommand();
-
-            cmd.Connection = db.connection;
-
-            try
-            {
-                cmd.CommandText = "SELECT * FROM UCL_StudyField";
-
-                MySqlDataReader reader = cmd.ExecuteReader();
-                _listsf = new List<StudyField>();
-
-                while (reader.Read())
-                {
-                    _sf = new StudyField();
-                    _sf.Id = Convert.ToInt32(reader.GetInt32(0));
-                    _sf.FieldName = reader.GetString(1).ToString();
-                    _sf.Created = reader.GetDateTime(2);
-                    _sf.Edited = reader.GetDateTime(3);
-
-                    _listsf.Add(_sf);
-                }
-            }
-            catch (Exception e)
-            {
-                db.CloseConnection();
-
-                throw;
-            }
-            finally
-            {
-                if (db.connection.State == System.Data.ConnectionState.Open)
-                {
-                    db.CloseConnection();
-                }
-            }
-
-            return _listsf;
+            return ExecuteReaderStudyFields(query);
         }
 
-        public void EditStudyField(StudyField studyField)
+        public void EditStudyField(IStudyField studyField)
         {
-            db.Get_Connection();
-
-            MySqlCommand cmd = new MySqlCommand();
-
-            cmd.Connection = db.connection;
-
-            try
-            {
-                cmd.CommandText = "UPDATE UCL_StudyField SET Name = @Name WHERE Id = @id;";
-
-                //Creating parameter objects
-                cmd.Parameters.Add("@id", MySqlDbType.Int32, 11);
-                cmd.Parameters.Add("@Name", MySqlDbType.VarChar, 50);
-
-                //Adding values to parameter
-                cmd.Parameters["@id"].Value = studyField.Id;
-                cmd.Parameters["@Name"].Value = studyField.FieldName;
-
-                cmd.ExecuteNonQuery();
-            }
-            catch
-            {
-                db.CloseConnection();
-
-                throw;
-            }
-            finally
-            {
-                if (db.connection.State == System.Data.ConnectionState.Open)
-                {
-                    db.CloseConnection();
-                }
-            }
+            string query = "UPDATE UCL_StudyField SET Name = @Name WHERE Id = @id;";
+            string param1 = "@id";
+            string param2 = "@Name";
+            ExecuteCmd(query, SetParameterWithValue(param1, studyField.Id), SetParameterWithValue(param2, studyField.FieldName));
         }
 
         public void DeleteStudyField(int Id)
         {
-            MySqlCommand cmd = new MySqlCommand();
+            string query = "DELETE FROM UCL_StudyField WHERE Id = @id;";
+            string param1 = "@id";
 
-            cmd.Connection = db.connection;
+            ExecuteCmd(query, SetParameterWithValue(param1, Id));
+        }
 
-            try
+        #region Functionality
+        private List<IStudyField> ExecuteReaderStudyFields(string query)
+        {
+            _db.Get_Connection();
+            List<IStudyField> list = new List<IStudyField>();
+
+            using (cmd.Connection = _db.connection)
             {
-                cmd.CommandText = "DELETE FROM UCL_StudyField WHERE Id = @id;";
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = query;
 
-            //Creating parameter objects
-                cmd.Parameters.Add("@id", MySqlDbType.Int32, 11);
-
-                //Adding values to parameter
-                cmd.Parameters["@id"].Value = Id;
-
-                cmd.ExecuteNonQuery();
-            }
-            catch
-            {
-                db.CloseConnection();
-
-                throw;
-            }
-            finally
-            {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                try
                 {
-                    db.CloseConnection();
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            IStudyField sf = new StudyField();
+                            sf.Id = Convert.ToInt32(reader.GetInt32(0));
+                            sf.FieldName = reader.GetString(1).ToString();
+                            sf.Created = reader.GetDateTime(2);
+                            sf.Edited = reader.GetDateTime(3);
+
+                            list.Add(sf);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
+                }
+            }
+            return list;
+        }
+
+        private void ExecuteCmd(string query, List<MySqlParameter> parameters)
+        {
+            _db.Get_Connection();
+
+            using (cmd.Connection = _db.connection)
+            {
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = query;
+
+                foreach (var item in parameters)
+                {
+                    cmd.Parameters.Add(item);
+                }
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
                 }
             }
         }
+
+        private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
+        {
+            _db.Get_Connection();
+
+            using (cmd.Connection = _db.connection)
+            {
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = query;
+                cmd.Parameters.Add(param1);
+                cmd.Parameters.Add(param2);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
+                }
+
+            }
+        }
+
+        private void ExecuteCmd(string query, MySqlParameter param)
+        {
+            _db.Get_Connection();
+
+            using (cmd.Connection = _db.connection)
+            {
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = query;
+                cmd.Parameters.Add(param);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
+                }
+
+            }
+        }
+
+        private MySqlParameter SetParameter(string param, MySqlDbType type, int size)
+        {
+            return new MySqlParameter(param, type, size);
+        }
+        private MySqlParameter SetParameter(string param, MySqlDbType type)
+        {
+            return new MySqlParameter(param, type);
+        }
+
+        private MySqlParameter SetParameterWithValue(string param, object value)
+        {
+            return new MySqlParameter(param, value);
+        }
+        #endregion
     }
 }
