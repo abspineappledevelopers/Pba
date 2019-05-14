@@ -26,7 +26,7 @@ namespace UCL.ISM.BLL.BLL
             CountryId = new List<int>();
         }
 
-        public int AddInterviewSchema(IInterviewScheme interview)
+        public int AddInterviewSchema(InterviewScheme interview)
         {
             return _db.CreateNewInterviewScheme(interview);
         }

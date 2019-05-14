@@ -8,7 +8,7 @@ using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.Client.Models
 {
-    public class InterviewSchemeVM : IInterviewScheme
+    public class InterviewSchemeVM
     {
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -28,7 +28,7 @@ namespace UCL.ISM.Client.Models
             Question = new Question();
         }
 
-        public static implicit operator InterviewSchemeVM(IInterviewScheme interview)
+        public static implicit operator InterviewSchemeVM(InterviewScheme interview)
         {
             return new InterviewSchemeVM
             {
