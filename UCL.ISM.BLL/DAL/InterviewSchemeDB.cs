@@ -10,8 +10,6 @@ namespace UCL.ISM.BLL.DAL
 {
     public class InterviewSchemeDB
     {
-        private readonly string _connectionString;
-        private IInterviewScheme _scheme;
         private Database _db;
         private MySqlCommand cmd;
 
@@ -57,92 +55,20 @@ namespace UCL.ISM.BLL.DAL
         {
             string query = "SELECT * FROM UCL_INTERVIEWSCHEME WHERE Id = @Id";
 
-            MySqlCommand cmd = new MySqlCommand();
-            using (cmd.Connection = new MySqlConnection(_connectionString))
-            {
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.Connection.Open();
-                try
-                {
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            _scheme = new InterviewScheme();
-                            _scheme.Id = reader.GetInt32(0);
-                            _scheme.CreatedDate = reader.GetDateTime(1);
-                            _scheme.EditedDate = reader.GetDateTime(2);
-                            _scheme.Comment = reader.GetString(3);
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    cmd.Connection.Close();
-                }
-            }
-            return _scheme;
+            return ExecuteReaderScheme(query);
         }
 
         public List<IQuestion> GetAllSchemeQuestions(int id)
         {
             string query = "SELECT * FROM UCL_Question WHERE InterviewScheme =" + id;
 
-
-            _db = new Database();
-
-            _db.Get_Connection();
-
-            MySqlCommand cmd = new MySqlCommand();
-
-            cmd.Connection = _db.connection;
-            List<IQuestion> list = new List<IQuestion>();
-            try
-            {
-                cmd.CommandText = 
-                MySqlDataReader reader = cmd.ExecuteReader();
-                
-                IQuestion quest;
-
-                while (reader.Read())
-                {
-                    quest = new Question();
-                    quest.Id = reader.GetGuid(0);
-                    quest.Quest = reader.GetString(1).ToString();
-                    quest.InterviewSchemeId = reader.GetInt32(3);
-                    list.Add(quest);
-                }
-            }
-            catch (Exception e)
-            {
-                _db.CloseConnection();
-
-                throw;
-            }
-            finally
-            {
-                if (_db.connection.State == System.Data.ConnectionState.Open)
-                {
-                    _db.CloseConnection();
-                }
-                
-            }
-            return list;
-            //string query = "SELECT * FROM UCL_QUESTIONS WHERE Id = @Id";
-            //ExecureReader(query);
-            //return new List<IQuestion>();
+            return ExecuteReaderQuestions(query);
         }
 
         public void UpdateInterviewScheme(int id)
         {
             string param1 = "@Id";
-            string query = "UPDATE UCL_INTERVIEWSCHEME ";
+            string query = "UPDATE UCL_INTERVIEWSCHEME WHERE Id = @Id";
 
             ExecuteCmd(query, SetParameterWithValue(param1, id));
         }
@@ -156,7 +82,7 @@ namespace UCL.ISM.BLL.DAL
         }
 
         #region Functionality
-        private List<IQuestion> ExecuteReader(string query)
+        private List<IQuestion> ExecuteReaderQuestions(string query)
         {
             _db.Get_Connection();
             List<IQuestion> temp = new List<IQuestion>();
@@ -168,17 +94,18 @@ namespace UCL.ISM.BLL.DAL
 
                 try
                 {
-                    MySqlDataReader reader = cmd.ExecuteReader();
-
-                    IQuestion quest;
-
-                    while (reader.Read())
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        quest = new Question();
-                        quest.Id = reader.GetGuid(0);
-                        quest.Quest = reader.GetString(1).ToString();
-                        quest.InterviewSchemeId = reader.GetInt32(3);
-                        temp.Add(quest);
+                        IQuestion quest;
+
+                        while (reader.Read())
+                        {
+                            quest = new Question();
+                            quest.Id = reader.GetGuid(0);
+                            quest.Quest = reader.GetString(1).ToString();
+                            quest.InterviewSchemeId = reader.GetInt32(3);
+                            temp.Add(quest);
+                        }
                     }
                 }
                 catch (Exception)
@@ -197,21 +124,26 @@ namespace UCL.ISM.BLL.DAL
             return temp;
         }
 
-        private void ExecureReader(string query)
+        private IInterviewScheme ExecuteReaderScheme(string query)
         {
-            using (cmd.Connection = new MySqlConnection(_connectionString))
+            _db.Get_Connection();
+            IInterviewScheme scheme = new InterviewScheme();
+
+            using (cmd.Connection = _db.connection)
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
-                cmd.Connection.Open();
+
                 try
                 {
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            _scheme = new InterviewScheme();
-
+                            scheme.Id = reader.GetInt32(0);
+                            scheme.CreatedDate = reader.GetDateTime(1);
+                            scheme.EditedDate = reader.GetDateTime(2);
+                            scheme.Comment = reader.GetString(3);
                         }
                     }
                 }
@@ -222,8 +154,12 @@ namespace UCL.ISM.BLL.DAL
                 }
                 finally
                 {
-                    cmd.Connection.Close();
+                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
                 }
+                return scheme;
             }
         }
 
@@ -329,7 +265,10 @@ namespace UCL.ISM.BLL.DAL
                 }
                 finally
                 {
-                    cmd.Connection.Close();
+                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
                 }
 
             }
@@ -355,7 +294,10 @@ namespace UCL.ISM.BLL.DAL
                 }
                 finally
                 {
-                    cmd.Connection.Close();
+                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
                 }
 
             }

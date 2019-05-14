@@ -171,7 +171,7 @@ namespace UCL.ISM.Client.Controllers
         {
             _nationality = new Nationality();
             //_interviewScheme = new InterviewScheme();
-            InterviewSchemeVM vm = new InterviewSchemeVM();
+            IInterviewScheme vm = new InterviewSchemeVM();
 
             var nationalities = _nationality.GetAllNationalities();
             foreach(var country in nationalities)

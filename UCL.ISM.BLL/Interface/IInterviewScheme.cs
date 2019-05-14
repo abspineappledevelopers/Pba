@@ -10,11 +10,14 @@ namespace UCL.ISM.BLL.Interface
         int Id { get; set; }
         DateTime CreatedDate { get; set; }
         DateTime EditedDate { get; set; }
+        string Name { get; set; }
         string Comment { get; set; }
+        List<IQuestion> Questions { get; set; }
+        List<int> CountryId { get; set; }
 
-        List<Question> GetQuestions(int id);
-        int AddInterviewSchema(InterviewScheme interview);
-        void AddQuestionToInterview(Question quest);
+        List<IQuestion> GetQuestions(int id);
+        int AddInterviewSchema(IInterviewScheme interview);
+        void AddQuestionToInterview(IQuestion quest);
         
     }
 }
