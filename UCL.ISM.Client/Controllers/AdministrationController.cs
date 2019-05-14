@@ -27,7 +27,7 @@ namespace UCL.ISM.Client.Controllers
             //_studyField = new StudyField();
             _applicant = new Applicant();
             //_nationality = new Nationality();
-            //_interviewer = new Interviewer();
+            _interviewer = new Interviewer();
             ApplicantVM appvm;
             
             List<ApplicantVM> listapp = new List<ApplicantVM>();
@@ -36,7 +36,9 @@ namespace UCL.ISM.Client.Controllers
             //var nationalities = _nationality.GetAllNationalities();
             //var interviewers = _interviewer.GetAllInterviewers();
             var list = _applicant.GetAllApplicantsWithoutSchema();
-            foreach(var app in list)
+            
+
+            foreach (var app in list)
             {
                 appvm = new ApplicantVM();
                 appvm = app;
@@ -51,9 +53,12 @@ namespace UCL.ISM.Client.Controllers
                 //    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
                 //}
 
-                //foreach (var inn in interviewers)
+                //if (appvm.Interviewer.Id == null)
                 //{
-                //    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+                //    foreach (var inn in interviewers)
+                //    {
+                //        appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+                //    }
                 //}
 
                 listapp.Add(appvm);
@@ -165,6 +170,36 @@ namespace UCL.ISM.Client.Controllers
             }
 
             return RedirectToAction("Create_Applicant");
+        }
+
+        
+        public IActionResult Get_Interview_Modal(string id)
+        {
+            _interviewer = new Interviewer();
+            var interviewers = _interviewer.GetAllInterviewers();
+            
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach(var inn in interviewers)
+            {
+                list.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+            }
+            
+            ApplicantVM vm = new ApplicantVM()
+            {
+                Id = Guid.Parse(id),
+                Interviewers = list
+            };
+
+            return PartialView("../Administration/Partials/_PopulateModalWithInterviewers", vm);
+        }
+
+        [HttpPost]
+        public IActionResult Add_Interviewer(ApplicantVM model)
+        {
+            _applicant = new Applicant();
+            _applicant.AddInterviewerToApplicant(model);
+
+            return RedirectToAction("Index");
         }
 
         [Authorize(Roles = UserRoles.Administration)]

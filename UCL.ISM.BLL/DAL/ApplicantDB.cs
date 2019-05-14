@@ -121,5 +121,38 @@ namespace UCL.ISM.BLL.DAL
                 }
             }
         }
+
+        public void AddInterviewerToApplicant(Applicant model)
+        {
+            db.Get_Connection();
+            MySqlCommand cmd = new MySqlCommand();
+
+            cmd.Connection = db.connection;
+
+            try
+            {
+                cmd.CommandText = "UPDATE UCL_Applicant SET Interviewer=@Interviewer WHERE Id = @Id";
+                cmd.Parameters.Add("@Id", MySqlDbType.Guid);
+                cmd.Parameters.Add("@Interviewer", MySqlDbType.Guid);
+
+                cmd.Parameters["@Id"].Value = model.Id;
+                cmd.Parameters["@Interviewer"].Value = model.Interviewer.Id;
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                db.CloseConnection();
+
+                throw;
+            }
+            finally
+            {
+                if (db.connection.State == System.Data.ConnectionState.Open)
+                {
+                    db.connection.Close();
+                }
+            }
+        }
     }
 }

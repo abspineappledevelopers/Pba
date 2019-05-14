@@ -46,5 +46,11 @@ namespace UCL.ISM.BLL.BLL
 
             return db.GetAllApplicantsWithoutSchema();
         }
+
+        public void AddInterviewerToApplicant(Applicant model)
+        {
+            db = new ApplicantDB();
+            db.AddInterviewerToApplicant(model);
+        }
     }
 }

@@ -57,14 +57,16 @@
             </div>
             <div class="col-md-12 col-lg-6">
                 <div class="form-group">
-                    <small><label for="priority">Interviewer</label></small>
+                    <small><label for="interviewer">Interviewer</label></small>
                     @if (Model.Interviewer.Id != null)
                     {
                         <p id="priority">@Model.Interviewer.Firstname @Model.Interviewer.Lastname</p>
                     }
                     else
                     {
-                        <p>Ingen valgt</p>
+                        <a id="interviewerbtn" class="btn btn-warning" href="#" onclick="createModal('@Url.Action("Get_Interview_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                            Tilføj interviewer
+                        </a>
                     }
 
                 </div>
@@ -72,12 +74,12 @@
             <div class="col-md-12 col-lg-6">
                 <div class="form-group">
                     <small><label for="scheme">Interview skema</label></small>
-                    <p id="scheme">Ingen valgt</p>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#schemeModal" id="scheme">
+                        Tilføj skema
+                    </button>
                 </div>
             </div>
         </div>
-
-
 
     </div>
     <div class="card-footer">
@@ -88,3 +90,19 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="modelContent">
+        </div>
+    </div>
+</div>
+
+<script>
+    function createModal(url) {
+        $('#modelContent').load(url);
+        $('#myModal').modal('show');
+    }
+</script>
+
+
