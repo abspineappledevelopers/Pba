@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UCL.ISM.BLL.BLL;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Linq;
 
 namespace UCL.ISM.Client.Controllers
 {
@@ -23,37 +24,37 @@ namespace UCL.ISM.Client.Controllers
 
         public IActionResult Index()
         {
-            _studyField = new StudyField();
+            //_studyField = new StudyField();
             _applicant = new Applicant();
-            _nationality = new Nationality();
-            _interviewer = new Interviewer();
+            //_nationality = new Nationality();
+            //_interviewer = new Interviewer();
             ApplicantVM appvm;
             
             List<ApplicantVM> listapp = new List<ApplicantVM>();
 
-            var studyfields = _studyField.GetAllStudyFields();
-            var nationalities = _nationality.GetAllNationalities();
-            var interviewers = _interviewer.GetAllInterviewers();
+            //var studyfields = _studyField.GetAllStudyFields();
+            //var nationalities = _nationality.GetAllNationalities();
+            //var interviewers = _interviewer.GetAllInterviewers();
             var list = _applicant.GetAllApplicantsWithoutSchema();
             foreach(var app in list)
             {
                 appvm = new ApplicantVM();
                 appvm = app;
 
-                foreach (var st in studyfields)
-                {
-                    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
-                }
+                //foreach (var st in studyfields)
+                //{
+                //    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
+                //}
 
-                foreach (var na in nationalities)
-                {
-                    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
-                }
+                //foreach (var na in nationalities)
+                //{
+                //    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
+                //}
 
-                foreach (var inn in interviewers)
-                {
-                    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
-                }
+                //foreach (var inn in interviewers)
+                //{
+                //    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+                //}
 
                 listapp.Add(appvm);
             }
@@ -223,6 +224,120 @@ namespace UCL.ISM.Client.Controllers
             model.Question = new Question();
 
             return View("../Administration/CreateQuestionToInterview", model);
+        }
+
+        
+        public IActionResult SortByPriority()
+        {
+            _applicant = new Applicant();
+            ApplicantVM appvm;
+
+            List<ApplicantVM> listapp = new List<ApplicantVM>();
+            
+            var list = _applicant.GetAllApplicantsWithoutSchema();
+            foreach (var app in list)
+            {
+                appvm = new ApplicantVM();
+                appvm = app;
+
+                listapp.Add(appvm);
+            }
+
+            var ordered = listapp.OrderBy(x => x.Priority).ToList();
+
+            return View("../Administration/Index", ordered);
+        }
+
+        public IActionResult SortByEU()
+        {
+            ApplicantVM appvm;
+            _applicant = new Applicant();
+            List<ApplicantVM> listapp = new List<ApplicantVM>();
+            
+            var list = _applicant.GetAllApplicantsWithoutSchema();
+
+            foreach (var app in list)
+            {
+                if (app.IsEU)
+                {
+                    appvm = new ApplicantVM();
+                    appvm = app;
+
+                    listapp.Add(appvm);
+                }                
+            }
+
+            return View("../Administration/Index", listapp);
+        }
+
+        public IActionResult SortByEUPriority()
+        {
+            _applicant = new Applicant();
+            ApplicantVM appvm;
+
+            List<ApplicantVM> listapp = new List<ApplicantVM>();
+
+            var list = _applicant.GetAllApplicantsWithoutSchema();
+            foreach (var app in list)
+            {
+                if (app.IsEU)
+                {
+                    appvm = new ApplicantVM();
+                    appvm = app;
+
+                    listapp.Add(appvm);
+                }
+            }
+
+            var ordered = listapp.OrderBy(x => x.Priority).ToList();
+
+            return View("../Administration/Index", ordered);
+        }
+
+        public IActionResult SortByNonEU()
+        {
+            ApplicantVM appvm;
+            _applicant = new Applicant();
+            List<ApplicantVM> listapp = new List<ApplicantVM>();
+
+            var list = _applicant.GetAllApplicantsWithoutSchema();
+
+            foreach (var app in list)
+            {
+                if (!app.IsEU)
+                {
+                    appvm = new ApplicantVM();
+                    appvm = app;
+
+                    listapp.Add(appvm);
+                }
+            }
+
+            return View("../Administration/Index", listapp);
+        }
+
+        public IActionResult SortByNonEUPriority()
+        {
+            ApplicantVM appvm;
+            _applicant = new Applicant();
+            List<ApplicantVM> listapp = new List<ApplicantVM>();
+
+            var list = _applicant.GetAllApplicantsWithoutSchema();
+
+            foreach (var app in list)
+            {
+                if (!app.IsEU)
+                {
+                    appvm = new ApplicantVM();
+                    appvm = app;
+
+                    listapp.Add(appvm);
+                }
+            }
+
+            var ordered = listapp.OrderBy(x => x.Priority).ToList();
+
+            return View("../Administration/Index", ordered);
         }
     }
 }

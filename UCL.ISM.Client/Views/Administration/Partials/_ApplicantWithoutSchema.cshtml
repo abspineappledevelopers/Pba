@@ -3,55 +3,88 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<div class="row">
-    <div class="col-xs-2">
-        <input asp-for="Id" type="hidden" />
-        <input asp-for="Firstname" type="text" class="form-control" />
-    </div>
-    <div class="col-xs-2">
-        <input asp-for="Lastname" type="text" class="form-control" />
-    </div>
-    <div class="col-xs-2">
-        <input asp-for="Email" type="email" class="form-control" />
-    </div>
-    <div class="col-xs-2">
+<div class="card flex-fill" style="background-color: #e6e6e6; margin-bottom: 30px;">
+    <div class="card-body">
         <div class="row">
-            <div class="col-xs-8">
-                <input asp-for="Age" type="number" class="form-control" />
+            <div class="col-md-12 col-lg-6">
+                <input asp-for="Id" type="hidden" />
+                <div class="form-group">
+                    <small><label for="firstname">Fornavn(e)</label></small>
+                    <p id="firstname">@Model.Firstname</p>
+                </div>
             </div>
-            <div class="col-xs-4">
-                <input asp-for="IsEU" type="checkbox" class="form-control" />
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="lastname">Efternavn(e)</label></small>
+                    <p id="lastname">@Model.Lastname</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                    <small><label for="age">Alder</label></small>
+                    <p id="age">@Model.Age</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                    <small><label for="email">Email</label></small>
+                    <p id="lastname">@Model.Email</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="nationality">Land</label></small>
+                    <p id="nationality">@Model.Nationality.Name</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="iseu">EU?</label></small>
+                    <p id="iseu">@(Model.Nationality.IsEU ? "Ja" : "Nej")</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="priority">Prioritet</label></small>
+                    <p id="priority">@Model.Priority</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="study">Uddannelse</label></small>
+                    <p id="study">@Model.StudyField.FieldName</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="priority">Interviewer</label></small>
+                    @if (Model.Interviewer.Id != null)
+                    {
+                        <p id="priority">@Model.Interviewer.Firstname @Model.Interviewer.Lastname</p>
+                    }
+                    else
+                    {
+                        <p>Ingen valgt</p>
+                    }
+
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="scheme">Interview skema</label></small>
+                    <p id="scheme">Ingen valgt</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-xs-2">
-        <select asp-for="Priority" id="priority" class="form-control">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-        </select>
-    </div>
-    <div class="col-xs-2">
-        <select asp-for="Nationality.Id" asp-items="@Model.Nationalities" class="form-control" required id="nationality"></select>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-xs-4">
-        <select asp-for="StudyField.Id" asp-items="@Model.StudyFields" class="form-control" required id="studyfield"></select>
-    </div>
-    <div class="col-xs-4">
-        <select asp-for="Interviewer.Id" asp-items="@Model.Interviewers" class="form-control" required id="interview"></select>
-    </div>
-    <div class="col-xs-2">
+
 
     </div>
-    <div class="col-xs-2">
-
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-success" style="width: 100%;">Gå til</button>
+            </div>
+        </div>
     </div>
 </div>
