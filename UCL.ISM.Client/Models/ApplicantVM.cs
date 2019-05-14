@@ -24,6 +24,7 @@ namespace UCL.ISM.Client.Models
         public NationalityVM Nationality { get; set; }
         public List<SelectListItem> Nationalities { get; set; }
         public bool IsEU { get; set; }
+        public bool HasResidencePermit { get; set; }
         //What does this do?
         [Required]
         public int Priority { get; set; }
@@ -32,6 +33,8 @@ namespace UCL.ISM.Client.Models
         public List<SelectListItem> Interviewers { get; set; }
         public StudyFieldVM StudyField { get; set; }
         public List<SelectListItem> StudyFields { get; set; }
+        public InterviewSchemeVM InterviewScheme { get; set; }
+        public List<SelectListItem> InterviewSchemes { get; set; }
 
         public ApplicantVM()
         {
@@ -41,6 +44,8 @@ namespace UCL.ISM.Client.Models
             StudyFields = new List<SelectListItem>();
             Nationality = new NationalityVM();
             Nationalities = new List<SelectListItem>();
+            InterviewScheme = new InterviewSchemeVM();
+            InterviewSchemes = new List<SelectListItem>();
         }
 
         public static implicit operator ApplicantVM(Applicant applicant)
@@ -54,10 +59,12 @@ namespace UCL.ISM.Client.Models
                 Age = applicant.Age,
                 Nationality = applicant.Nationality,
                 IsEU = applicant.IsEU,
+                HasResidencePermit = applicant.HasResidencePermit,
                 Priority = applicant.Priority,
                 Interviewer = applicant.Interviewer, 
                 StudyField = applicant.StudyField,
-                Comment = applicant.Comment
+                Comment = applicant.Comment,
+                InterviewScheme = applicant.InterviewScheme
             };
         }
 
@@ -72,10 +79,12 @@ namespace UCL.ISM.Client.Models
                 Age = vm.Age,
                 Nationality = vm.Nationality,
                 IsEU = vm.IsEU,
+                HasResidencePermit = vm.HasResidencePermit,
                 Priority = vm.Priority,
                 Interviewer = vm.Interviewer,
                 StudyField = vm.StudyField,
-                Comment = vm.Comment
+                Comment = vm.Comment,
+                InterviewScheme = vm.InterviewScheme
             };
         }
     }

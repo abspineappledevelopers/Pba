@@ -18,6 +18,7 @@ namespace UCL.ISM.BLL.Interface
         List<IQuestion> GetQuestions(int id);
         int AddInterviewSchema(InterviewScheme interview);
         void AddQuestionToInterview(IQuestion quest);
+        List<InterviewScheme> GetAllInterviewSchemes();
         
     }
 }

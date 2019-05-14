@@ -193,11 +193,79 @@ namespace UCL.ISM.Client.Controllers
             return PartialView("../Administration/Partials/_PopulateModalWithInterviewers", vm);
         }
 
+        public IActionResult Get_InterviewScheme_Modal(string id)
+        {
+            _interviewScheme = new InterviewScheme();
+            var schemes = _interviewScheme.GetAllInterviewSchemes();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (var sch in schemes)
+            {
+                list.Add(new SelectListItem() { Text = sch.Name, Value = sch.Id.ToString() });
+            }
+
+            ApplicantVM vm = new ApplicantVM()
+            {
+                Id = Guid.Parse(id),
+                InterviewSchemes = list
+            };
+
+            return PartialView("../Administration/Partials/_PopulateModalWithInterviewSchemes", vm);
+        }
+
+        public IActionResult Get_Applicant_Modal(string id)
+        {
+            _applicant = new Applicant();
+            ApplicantVM vm = new ApplicantVM();
+
+            vm = _applicant.GetApplicant(id);
+
+            _studyField = new StudyField();
+            _nationality = new Nationality();
+            _interviewer = new Interviewer();
+            _interviewScheme = new InterviewScheme();
+            var studyfields = _studyField.GetAllStudyFields();
+            var nationalities = _nationality.GetAllNationalities();
+            var interviewers = _interviewer.GetAllInterviewers();
+            var schemes = _interviewScheme.GetAllInterviewSchemes();
+
+            foreach (var sf in studyfields)
+            {
+                vm.StudyFields.Add(new SelectListItem() { Text = sf.FieldName, Value = sf.Id.ToString() });
+            }
+
+            foreach (var na in nationalities)
+            {
+                vm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
+            }
+
+            foreach (var inn in interviewers)
+            {
+                vm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+            }
+
+            foreach (var sch in schemes)
+            {
+                vm.InterviewSchemes.Add(new SelectListItem() { Text = sch.Name, Value = sch.Id.ToString() });
+            }
+
+            return PartialView("../Administration/Partials/_PopulateModalWithApplicant", vm);
+        }
+
         [HttpPost]
         public IActionResult Add_Interviewer(ApplicantVM model)
         {
             _applicant = new Applicant();
             _applicant.AddInterviewerToApplicant(model);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Add_InterviewSchemeToApplicant(ApplicantVM model)
+        {
+            _applicant = new Applicant();
+            _applicant.AddInterviewSchemeToApplicant(model);
 
             return RedirectToAction("Index");
         }

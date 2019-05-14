@@ -1,0 +1,112 @@
+﻿@model UCL.ISM.Client.Models.ApplicantVM
+
+<div class="modal-header">
+    <h4 class="modal-title">Rediger ansøger</h4>
+</div>
+
+<form asp-action="Edit_Applicant" asp-controller="Administration" method="post">
+    <div class="modal-body">
+        <input asp-for="Id" type="hidden" />
+
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <input asp-for="Id" type="hidden" />
+                <div class="form-group">
+                    <small><label for="firstname">Fornavn(e)</label></small>
+                    <input asp-for="Firstname" type="text" class="form-control" id="firstname" />
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="lastname">Efternavn(e)</label></small>
+                    <input asp-for="Lastname" type="text" class="form-control" id="lastname" />
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                    <small><label for="age">Alder</label></small>
+                    <input asp-for="Age" type="number" class="form-control" id="age" />
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                    <small><label for="email">Email</label></small>
+                    <input asp-for="Email" type="email" class="form-control" id="lastname" />
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="nationality">Land</label></small>
+                    <select asp-for="Nationality.Id" asp-items="@Model.Nationalities" class="form-control" id="nationality">
+                        <option value="">Vælg land</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="form-group">
+                            <label> <small><b>EU?</b></small>
+                            <input asp-for="Nationality.IsEU" type="checkbox" class="form-control" style="width: 35px; height: 35px;" id="iseu" />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="form-group">
+                            <label><small><b>Opholds.til?</b></small>
+                                <input asp-for="HasResidencePermit" type="checkbox" class="form-control" style="width: 35px; height: 35px;" id="residence" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="priority">Prioritet</label></small>
+                    <select asp-for="Priority" id="priority" class="form-control">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="studyfield">Uddannelse</label></small>
+                    <select asp-for="StudyField.Id" asp-items="@Model.StudyFields" class="form-control" id="studyfield">
+                        <option value="">Vælg uddannelse</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="interviewer">Interviewer</label></small>
+                    <select asp-for="Interviewer.Id" asp-items="@Model.Interviewers" class="form-control" id="interviewer">
+                        <option value="">Vælg interviewer</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="scheme">Interview skema</label></small>
+                    <select asp-for="InterviewScheme.Id" asp-items="@Model.InterviewSchemes" class="form-control">
+                        <option value="">Vælg skema</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Gem</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Luk</button>
+    </div>
+</form>
+
+

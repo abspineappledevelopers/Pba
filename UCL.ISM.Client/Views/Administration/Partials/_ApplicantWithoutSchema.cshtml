@@ -38,9 +38,19 @@
                 </div>
             </div>
             <div class="col-md-12 col-lg-6">
-                <div class="form-group">
-                    <small><label for="iseu">EU?</label></small>
-                    <p id="iseu">@(Model.Nationality.IsEU ? "Ja" : "Nej")</p>
+                <div class="row">
+                    <div class="col-5">
+                        <div class="form-group">
+                            <small><label for="iseu">EU?</label></small>
+                            <p id="iseu">@(Model.Nationality.IsEU ? "Ja" : "Nej")</p>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="form-group">
+                            <small><label for="residence">Opholds.til?</label></small>
+                            <p id="residence">@(Model.HasResidencePermit ? "Ja" : "Nej")</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-12 col-lg-6">
@@ -74,9 +84,16 @@
             <div class="col-md-12 col-lg-6">
                 <div class="form-group">
                     <small><label for="scheme">Interview skema</label></small>
-                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#schemeModal" id="scheme">
-                        Tilføj skema
-                    </button>
+                    @if (Model.InterviewScheme.Id != 0)
+                    {
+                        <p id="scheme">@Model.InterviewScheme.Name</p>
+                    }
+                    else
+                    {
+                        <a id="schemebtn" class="btn btn-warning" href="#" onclick="createModal('@Url.Action("Get_InterviewScheme_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                            Tilføj skema
+                        </a>
+                    }
                 </div>
             </div>
         </div>
@@ -85,7 +102,9 @@
     <div class="card-footer">
         <div class="row">
             <div class="col-xs-12">
-                <button type="button" class="btn btn-success" style="width: 100%;">Gå til</button>
+                <a id="schemebtn" class="btn btn-success" style="width: 100%;" href="#" onclick="createModal('@Url.Action("Get_Applicant_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                    Gå til
+                </a>
             </div>
         </div>
     </div>

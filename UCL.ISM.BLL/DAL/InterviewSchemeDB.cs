@@ -26,7 +26,7 @@ namespace UCL.ISM.BLL.DAL
             string param1 = "@Comment";
             string param2 = "@CountryId";
             string param3 = "@InterviewScheme";
-            
+
             return ExecuteTrans(query, query2, SetParameterWithValue(param1, interview.Comment), param2, param3, interview);
         }
 
@@ -44,7 +44,7 @@ namespace UCL.ISM.BLL.DAL
 
             ExecuteCmd(query, temp);
         }
-        
+
 
         public void RemoveQuestion(IQuestion question)
         {
@@ -53,9 +53,16 @@ namespace UCL.ISM.BLL.DAL
 
         public IInterviewScheme GetInterviewScheme(int id)
         {
-            string query = "SELECT * FROM UCL_INTERVIEWSCHEME WHERE Id = @Id";
+            string query = "SELECT * FROM UCL_InterviewScheme WHERE Id = @Id";
 
             return ExecuteReaderScheme(query);
+        }
+
+        public List<InterviewScheme> GetAllInterviewSchemes()
+        {
+            string query = "SELECT * FROM UCL_InterviewScheme";
+
+            return ExecuteReaderListScheme(query);
         }
 
         public List<IQuestion> GetAllSchemeQuestions(int id)
@@ -68,7 +75,7 @@ namespace UCL.ISM.BLL.DAL
         public void UpdateInterviewScheme(int id)
         {
             string param1 = "@Id";
-            string query = "UPDATE UCL_INTERVIEWSCHEME WHERE Id = @Id";
+            string query = "UPDATE UCL_InterviewScheme WHERE Id = @Id";
 
             ExecuteCmd(query, SetParameterWithValue(param1, id));
         }
@@ -76,7 +83,7 @@ namespace UCL.ISM.BLL.DAL
         public void DeleteInterviewScheme(int id)
         {
             string param1 = "@Id";
-            string query = "DELETE FROM UCL_INTERVIEWSCHEME WHERE Id = @id";
+            string query = "DELETE FROM UCL_InterviewScheme WHERE Id = @id";
 
             ExecuteCmd(query, SetParameterWithValue(param1, id));
         }
@@ -163,6 +170,51 @@ namespace UCL.ISM.BLL.DAL
             }
         }
 
+        private List<InterviewScheme> ExecuteReaderListScheme(string query)
+        {
+            _db.Get_Connection();
+            InterviewScheme scheme;
+            List<InterviewScheme> list = new List<InterviewScheme>();
+
+            using (cmd.Connection = _db.connection)
+            {
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = query;
+
+                try
+                {
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            scheme = new InterviewScheme();
+
+                            scheme.Id = reader.GetInt32(0);
+                            scheme.CreatedDate = reader.GetDateTime(1);
+                            scheme.EditedDate = reader.GetDateTime(2);
+                            scheme.Name = reader.GetString(3).ToString();
+                            scheme.Comment = reader.GetString(4).ToString();
+
+                            list.Add(scheme);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
+                }
+            }
+            return list;
+        }
+
         private int ExecuteTrans(string query, string query2, MySqlParameter param, string param2, string param3, object value)
         {
             var schemeId = 0;
@@ -238,7 +290,7 @@ namespace UCL.ISM.BLL.DAL
                 {
                     if (_db.connection.State == System.Data.ConnectionState.Open)
                     {
-                       cmd.Connection.Close();
+                        cmd.Connection.Close();
                     }
                 }
             }
