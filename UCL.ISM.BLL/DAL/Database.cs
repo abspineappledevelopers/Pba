@@ -12,7 +12,7 @@ namespace UCL.ISM.BLL.DAL
 
         public Database()
         {
-
+            cmd = new MySqlCommand();
         }
 
         public void Get_Connection()
