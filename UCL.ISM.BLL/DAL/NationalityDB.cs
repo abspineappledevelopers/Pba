@@ -3,37 +3,40 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UCL.ISM.BLL.BLL;
+using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.BLL.DAL
 {
     class NationalityDB
     {
         private Database db = new Database();
-        List<Nationality> _listna;
+        List<INationality> _listna;
         Nationality _na;
 
         public bool IsEu(int id)
         {
+            string query = "SELECT * FROM UCL_Nationality WHERE Id = '" + id + "';";
             db.Get_Connection();
 
             MySqlCommand cmd = new MySqlCommand();
-            bool result;
+            bool result = false;
             cmd.Connection = db.conn;
 
             try
             {
-                cmd.CommandText = "SELECT * FROM UCL_Nationality WHERE Id = '" + id + "';";
+                cmd.CommandText = query;
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    _na = new Nationality();
+                    result = reader.GetBoolean(2);
+                    /*_na = new Nationality();
                     _na.Id = Convert.ToInt32(reader.GetInt32(0));
                     _na.Name = reader.GetString(1).ToString();
-                    _na.IsEU = reader.GetBoolean(2);
+                    _na.IsEU = reader.GetBoolean(2);*/
                 }
 
-                result = _na.IsEU;
+                //result = _na.IsEU;
             }
             catch(Exception)
             {
@@ -52,9 +55,9 @@ namespace UCL.ISM.BLL.DAL
             return result;
         }
 
-        public List<Nationality> GetAllNationalities()
+        public List<INationality> GetAllNationalities()
         {
-            List<StudyField> list = new List<StudyField>();
+            //List<StudyField> list = new List<StudyField>();  ???
             string query = "SELECT * FROM UCL_Nationality";
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
@@ -66,7 +69,7 @@ namespace UCL.ISM.BLL.DAL
                 cmd.CommandText = query;
 
                 MySqlDataReader reader = cmd.ExecuteReader();
-                _listna = new List<Nationality>();
+                _listna = new List<INationality>();
 
                 while (reader.Read())
                 {

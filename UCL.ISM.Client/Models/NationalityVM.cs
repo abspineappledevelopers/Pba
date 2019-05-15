@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UCL.ISM.BLL.BLL;
+using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.Client.Models
 {
-    public class NationalityVM
+    public class NationalityVM : INationality
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -30,6 +31,16 @@ namespace UCL.ISM.Client.Models
                 Name = vm.Name,
                 IsEU = vm.IsEU
             };
+        }
+
+        public bool IsEu(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<INationality> GetAllNationalities()
+        {
+            throw new NotImplementedException();
         }
     }
 }
