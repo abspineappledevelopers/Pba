@@ -1,0 +1,20 @@
+﻿@model UCL.ISM.Client.Models.ApplicantVM
+
+<div class="modal-header">
+    <h4 class="modal-title">Tilføj interview skema</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<form asp-action="Add_InterviewSchemeToApplicant" asp-controller="Administration" method="post">
+    <div class="modal-body">
+        <input asp-for="Id" type="hidden" />
+        <select asp-for="InterviewScheme.Id" asp-items="@Model.InterviewSchemes" class="form-control">
+            <option value="">Vælg skema</option>
+        </select>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Gem</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Luk</button>
+    </div>
+</form>

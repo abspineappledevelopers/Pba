@@ -9,5 +9,8 @@ namespace UCL.ISM.BLL.Interface
     {
         void CreateNewApplicant(Applicant model);
         List<Applicant> GetAllApplicantsWithoutSchema();
+        void AddInterviewerToApplicant(Applicant model);
+        void AddInterviewSchemeToApplicant(Applicant model);
+        Applicant GetApplicant(string id);
     }
 }

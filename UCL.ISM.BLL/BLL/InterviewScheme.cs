@@ -48,5 +48,10 @@ namespace UCL.ISM.BLL.BLL
             List<IQuestion> temp = _db.GetAllSchemeQuestions(id);
             return temp;
         }
+
+        public List<InterviewScheme> GetAllInterviewSchemes()
+        {
+            return _db.GetAllInterviewSchemes();
+        }
     }
 }

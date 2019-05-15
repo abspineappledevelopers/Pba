@@ -16,6 +16,7 @@ namespace UCL.ISM.BLL.BLL
         public Nationality Nationality { get; set; }
         public List<Nationality> Nationalities { get; set; }
         public bool IsEU { get; set; }
+        public bool HasResidencePermit { get; set; }
         //What does this do?
         public int Priority { get; set; }
         public string Comment { get; set; }
@@ -23,6 +24,8 @@ namespace UCL.ISM.BLL.BLL
         public List<Interviewer> Interviewers { get; set; }
         public StudyField StudyField { get; set; }
         public List<StudyField> StudyFields { get; set; }
+        public InterviewScheme InterviewScheme { get; set; }
+        public List<InterviewScheme> InterviewSchemes { get; set; }
 
         public Applicant()
         {
@@ -30,6 +33,8 @@ namespace UCL.ISM.BLL.BLL
             Interviewers = new List<Interviewer>();
             Nationality = new Nationality();
             Nationalities = new List<Nationality>();
+            InterviewScheme = new InterviewScheme();
+            InterviewSchemes = new List<InterviewScheme>();
         }
 
         private ApplicantDB db;
@@ -40,11 +45,30 @@ namespace UCL.ISM.BLL.BLL
             db.CreateApplicant(applicant);
         }
 
+        public Applicant GetApplicant(string id)
+        {
+            db = new ApplicantDB();
+
+            return db.GetApplicant(id);
+        }
+
         public List<Applicant> GetAllApplicantsWithoutSchema()
         {
             db = new ApplicantDB();
 
             return db.GetAllApplicantsWithoutSchema();
+        }
+
+        public void AddInterviewerToApplicant(Applicant model)
+        {
+            db = new ApplicantDB();
+            db.AddInterviewerToApplicant(model);
+        }
+
+        public void AddInterviewSchemeToApplicant(Applicant model)
+        {
+            db = new ApplicantDB();
+            db.AddInterviewSchemeToApplicant(model);
         }
     }
 }

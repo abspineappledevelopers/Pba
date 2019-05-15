@@ -66,12 +66,23 @@
                                 </div>
                             </div>
                             <div class="col-12 col-md-8">
-                                <div class="form-group" style="padding: 5px">
-                                    <label class="control-label" for="nationality">Nationalitet:</label>
-                                    <select asp-for="Nationality.Id" asp-items="@Model.Nationalities" class="form-control" required id="nationality">
-                                        <option value="">Vælg land</option>
-                                    </select>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="form-group" style="padding: 5px">
+                                            <label class="control-label" for="nationality">Nationalitet:</label>
+                                            <select asp-for="Nationality.Id" asp-items="@Model.Nationalities" class="form-control" required id="nationality">
+                                                <option value="">Vælg land</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group text-center" style="padding: 5px">
+                                            <label class="control-label" for="residence">Opholds.til:</label>
+                                            <input asp-for="HasResidencePermit" type="checkbox" class="form-control" id="residence" />
+                                        </div>
+                                    </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
