@@ -6,7 +6,7 @@ using UCL.ISM.BLL.BLL;
 
 namespace UCL.ISM.BLL.DAL
 {
-    public class ApplicantDB
+    public class ApplicantDB : MySqlExtension<Applicant>
     {
         private Database db = new Database();
         Applicant _app;
@@ -17,7 +17,7 @@ namespace UCL.ISM.BLL.DAL
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
@@ -65,9 +65,9 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
-                    db.connection.Close();
+                    db.conn.Close();
                 }
             }
         }
@@ -77,7 +77,7 @@ namespace UCL.ISM.BLL.DAL
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
@@ -130,9 +130,9 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
-                    db.connection.Close();
+                    db.conn.Close();
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace UCL.ISM.BLL.DAL
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
@@ -181,9 +181,9 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
-                    db.connection.Close();
+                    db.conn.Close();
                 }
             }
         }
@@ -193,7 +193,7 @@ namespace UCL.ISM.BLL.DAL
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
@@ -214,9 +214,9 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
-                    db.connection.Close();
+                    db.conn.Close();
                 }
             }
         }
@@ -226,7 +226,7 @@ namespace UCL.ISM.BLL.DAL
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
@@ -247,9 +247,9 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
-                    db.connection.Close();
+                    db.conn.Close();
                 }
             }
         }

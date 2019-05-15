@@ -30,7 +30,7 @@ namespace UCL.ISM.Client.Controllers
             //_interviewer = new Interviewer();
             //ApplicantVM appvm;
             
-            List<IApplicant> listapp = new List<IApplicant>();
+            List<ApplicantVM> listapp = new List<ApplicantVM>();
 
             //var studyfields = _studyField.GetAllStudyFields();
             //var nationalities = _nationality.GetAllNationalities();
@@ -40,7 +40,7 @@ namespace UCL.ISM.Client.Controllers
             {
                 //appvm = new ApplicantVM();
                 //appvm = app;
-                IApplicant applicant = app;
+                ApplicantVM applicant = app;
                 //foreach (var st in studyfields)
                 //{
                 //    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });

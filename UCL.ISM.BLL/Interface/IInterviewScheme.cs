@@ -15,10 +15,10 @@ namespace UCL.ISM.BLL.Interface
         List<IQuestion> Questions { get; set; }
         List<int> CountryId { get; set; }
 
-        List<IQuestion> GetQuestions(int id);
-        int AddInterviewSchema(InterviewScheme interview);
-        void AddQuestionToInterview(IQuestion quest);
-        List<InterviewScheme> GetAllInterviewSchemes();
+        //List<IQuestion> GetQuestions(int id);
+        //int AddInterviewSchema(InterviewScheme interview);
+        //void AddQuestionToInterview(IQuestion quest);
+        //List<InterviewScheme> GetAllInterviewSchemes();
         
     }
 }

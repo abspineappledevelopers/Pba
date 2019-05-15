@@ -24,8 +24,8 @@ namespace UCL.ISM.BLL
         {
             string query = "INSERT INTO UCL_StudyField(Name) VALUES (@Name)";
             string param1 = "@Name";
-            
-            ExecuteCmd(query, SetParameterWithValue(param1, fieldName));
+
+            _db.ExecuteCmd(query, _db.SetParameterWithValue(param1, fieldName));
         }
 
         public IStudyField GetStudyField(int Id)
@@ -46,7 +46,8 @@ namespace UCL.ISM.BLL
             string query = "UPDATE UCL_StudyField SET Name = @Name WHERE Id = @id;";
             string param1 = "@id";
             string param2 = "@Name";
-            ExecuteCmd(query, SetParameterWithValue(param1, studyField.Id), SetParameterWithValue(param2, studyField.FieldName));
+
+            _db.ExecuteCmd(query, _db.SetParameterWithValue(param1, studyField.Id), _db.SetParameterWithValue(param2, studyField.FieldName));
         }
 
         public void DeleteStudyField(int Id)
@@ -54,7 +55,7 @@ namespace UCL.ISM.BLL
             string query = "DELETE FROM UCL_StudyField WHERE Id = @id;";
             string param1 = "@id";
 
-            ExecuteCmd(query, SetParameterWithValue(param1, Id));
+            _db.ExecuteCmd(query, _db.SetParameterWithValue(param1, Id));
         }
 
         #region Functionality
@@ -63,7 +64,7 @@ namespace UCL.ISM.BLL
             _db.Get_Connection();
             List<IStudyField> list = new List<IStudyField>();
 
-            using (cmd.Connection = _db.connection)
+            using (cmd.Connection = _db.conn)
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
@@ -91,119 +92,13 @@ namespace UCL.ISM.BLL
                 }
                 finally
                 {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    if (_db.conn.State == System.Data.ConnectionState.Open)
                     {
                         cmd.Connection.Close();
                     }
                 }
             }
             return list;
-        }
-
-        private void ExecuteCmd(string query, List<MySqlParameter> parameters)
-        {
-            _db.Get_Connection();
-
-            using (cmd.Connection = _db.connection)
-            {
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-
-                foreach (var item in parameters)
-                {
-                    cmd.Parameters.Add(item);
-                }
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
-                    {
-                        cmd.Connection.Close();
-                    }
-                }
-            }
-        }
-
-        private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
-        {
-            _db.Get_Connection();
-
-            using (cmd.Connection = _db.connection)
-            {
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.Parameters.Add(param1);
-                cmd.Parameters.Add(param2);
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
-                    {
-                        cmd.Connection.Close();
-                    }
-                }
-
-            }
-        }
-
-        private void ExecuteCmd(string query, MySqlParameter param)
-        {
-            _db.Get_Connection();
-
-            using (cmd.Connection = _db.connection)
-            {
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.Parameters.Add(param);
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
-                    {
-                        cmd.Connection.Close();
-                    }
-                }
-
-            }
-        }
-
-        private MySqlParameter SetParameter(string param, MySqlDbType type, int size)
-        {
-            return new MySqlParameter(param, type, size);
-        }
-        private MySqlParameter SetParameter(string param, MySqlDbType type)
-        {
-            return new MySqlParameter(param, type);
-        }
-
-        private MySqlParameter SetParameterWithValue(string param, object value)
-        {
-            return new MySqlParameter(param, value);
         }
         #endregion
     }

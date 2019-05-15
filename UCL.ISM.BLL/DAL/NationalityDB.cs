@@ -18,7 +18,7 @@ namespace UCL.ISM.BLL.DAL
 
             MySqlCommand cmd = new MySqlCommand();
             bool result;
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
@@ -43,7 +43,7 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
                     db.CloseConnection();
                 }
@@ -55,15 +55,15 @@ namespace UCL.ISM.BLL.DAL
         public List<Nationality> GetAllNationalities()
         {
             List<StudyField> list = new List<StudyField>();
-
+            string query = "SELECT * FROM UCL_Nationality";
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
-                cmd.CommandText = "SELECT * FROM UCL_Nationality";
+                cmd.CommandText = query;
 
                 MySqlDataReader reader = cmd.ExecuteReader();
                 _listna = new List<Nationality>();
@@ -86,7 +86,7 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
                     db.CloseConnection();
                 }

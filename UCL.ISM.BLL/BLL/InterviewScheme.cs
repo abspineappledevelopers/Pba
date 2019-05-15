@@ -8,7 +8,6 @@ namespace UCL.ISM.BLL.BLL
 {
     public class InterviewScheme : IInterviewScheme
     {
-        private readonly List<IQuestion> _questions;
         private readonly InterviewSchemeDB _db;
 
         public int Id { get; set; }

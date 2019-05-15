@@ -8,7 +8,7 @@ using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.Client.Models
 {
-    public class InterviewSchemeVM
+    public class InterviewSchemeVM : IInterviewScheme
     {
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
