@@ -51,7 +51,7 @@ namespace UCL.ISM.Client.Controllers
                 //    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
                 //}
 
-                //if (appvm.Interviewer.Id == null)
+                //foreach (var inn in interviewers)
                 //{
                 //    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
                 //}
