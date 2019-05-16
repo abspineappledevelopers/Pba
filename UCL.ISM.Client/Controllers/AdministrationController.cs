@@ -253,6 +253,12 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [HttpPost]
+        public IActionResult Pass_Edited_Applicant(ApplicantVM model)
+        {
+            return null;
+        }
+
+        [HttpPost]
         public IActionResult Add_Interviewer(ApplicantVM model)
         {
             _applicant = new Applicant();
