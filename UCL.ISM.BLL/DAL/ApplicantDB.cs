@@ -7,18 +7,13 @@ using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.BLL.DAL
 {
-    public class ApplicantDB : MySqlExtension<Applicant>, IApplicantDB
+    public class ApplicantDB : MySqlExtension<Applicant>
     {
         private Database db = new Database();
-        IApplicant _app;
-        List<IApplicant> _listapp;
+        Applicant _app;
+        List<Applicant> _listapp;
 
-        public ApplicantDB()
-        {
-            _app = new Applicant(this);
-        }
-
-        public List<IApplicant> GetAllApplicantsWithoutSchema()
+        public List<Applicant> GetAllApplicantsWithoutSchema()
         {
             string query = "SELECT UCL_Applicant.ID, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age," +
                     "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," +
@@ -36,11 +31,11 @@ namespace UCL.ISM.BLL.DAL
                 cmd.CommandText = query;
 
                 MySqlDataReader reader = cmd.ExecuteReader();
-                _listapp = new List<IApplicant>();
+                _listapp = new List<Applicant>();
 
                 while (reader.Read())
                 {
-                    _app = new Applicant(this)
+                    _app = new Applicant()
                     {
                         Id = reader.GetGuid(0),
                         Firstname = reader.GetString(1).ToString(),
@@ -80,7 +75,7 @@ namespace UCL.ISM.BLL.DAL
             }
         }
 
-        public IApplicant GetApplicant(string id)
+        public Applicant GetApplicant(string id)
         {
             string query = "SELECT UCL_Applicant.Id, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age," +
                     "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," +
@@ -102,11 +97,11 @@ namespace UCL.ISM.BLL.DAL
                 cmd.Parameters["@Id"].Value = id;
 
                 MySqlDataReader reader = cmd.ExecuteReader();
-                _listapp = new List<IApplicant>();
+                _listapp = new List<Applicant>();
 
                 while (reader.Read())
                 {
-                    _app = new Applicant(this)
+                    _app = new Applicant()
                     {
                         Id = reader.GetGuid(0),
                         Firstname = reader.GetString(1).ToString(),
@@ -148,7 +143,7 @@ namespace UCL.ISM.BLL.DAL
             }
         }
 
-        public void CreateApplicant(IApplicant applicant)
+        public void CreateApplicant(Applicant applicant)
         {
             string query = "INSERT INTO UCL_Applicant(Id, Firstname, Lastname, Email, Age, IsEU, StudyField, Priority, Nationality, Interviewer, Comment) VALUES (@Id, @Firstname, @Lastname, @Email, @Age, @IsEU, @StudyField, @Priority, @Nationality, @Interviewer, @Comment)";
             string param1 = "@Id";
@@ -177,7 +172,7 @@ namespace UCL.ISM.BLL.DAL
             ExecuteCmd(query, SetParametersList(tempP, tempV));
         }
 
-        public void AddInterviewSchemeToApplicant(IApplicant model)
+        public void AddInterviewSchemeToApplicant(Applicant model)
         {
             string query = "UPDATE UCL_Applicant SET InterviewAssigned = @Scheme WHERE Id = @Id";
             string param1 = "@Id";
@@ -185,7 +180,7 @@ namespace UCL.ISM.BLL.DAL
             ExecuteCmd(query, SetParameterWithValue(param1, model.Id), SetParameterWithValue(param2, model.InterviewScheme.Id));
         }
 
-        public void AddInterviewerToApplicant(IApplicant model)
+        public void AddInterviewerToApplicant(Applicant model)
         {
             string query = "UPDATE UCL_Applicant SET Interviewer=@Interviewer WHERE Id = @Id";
             string param1 = "@Id";

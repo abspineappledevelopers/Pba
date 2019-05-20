@@ -7,7 +7,7 @@ using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.Client.Models
 {
-    public class NationalityVM : INationality
+    public class NationalityVM
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -31,16 +31,6 @@ namespace UCL.ISM.Client.Models
                 Name = vm.Name,
                 IsEU = vm.IsEU
             };
-        }
-
-        public bool IsEu(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<INationality> GetAllNationalities()
-        {
-            throw new NotImplementedException();
         }
     }
 }

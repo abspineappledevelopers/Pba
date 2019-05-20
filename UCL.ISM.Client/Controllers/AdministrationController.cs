@@ -21,6 +21,7 @@ namespace UCL.ISM.Client.Controllers
         Applicant _applicant;
         Interviewer _interviewer;
         InterviewScheme _interviewScheme;
+
         public AdministrationController(IServiceProvider provider)
         {
             
@@ -43,7 +44,7 @@ namespace UCL.ISM.Client.Controllers
             foreach(var app in list)
             {
                 appvm = new ApplicantVM();
-                appvm = (Applicant)app;
+                appvm = app;
                 //ApplicantVM applicant = (Applicant)app;
                 foreach (var st in studyfields)
                 {
@@ -71,27 +72,28 @@ namespace UCL.ISM.Client.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize(Roles = UserRoles.Administration)]
-        public IActionResult Create_StudyField()
+        public IActionResult Create_StudyField(StudyFieldVM model)
         {
             _studyField = new StudyField();
 
-            //var allStudyFields = _studyField.GetAllStudyFields();
-            //foreach (var studyfield in allStudyFields)
-            //{
-               // model.All
-                //sfvm = new StudyFieldVM();
-                //sfvm = studyfield;
-                //model.AllStudyFields.Add(sfvm);
-            //}
+            var allStudyFields = _studyField.GetAllStudyFields();
+            foreach (var studyfield in allStudyFields)
+            {
+                //model.All
+                StudyFieldVM sfvm = new StudyFieldVM();
+                sfvm = studyfield;
+                //
+                model.AllStudyFields.Add(sfvm);
+            }
 
-            return View("../Administration/Create_StudyField", _studyField.GetAllStudyFields());
+            return View("../Administration/Create_StudyField", model);
         }
 
         [HttpPost]
         [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Pass_New_StudyField(StudyFieldVM model)
         {
-            _studyField = new StudyField();
+            _studyField = new StudyFieldVM();
 
             _studyField.CreateNewStudyField(model.FieldName);
 
@@ -100,9 +102,9 @@ namespace UCL.ISM.Client.Controllers
 
         [HttpPost]
         [Authorize(Roles = UserRoles.Administration)]
-        public IActionResult Edit_StudyField(IStudyField model)
+        public IActionResult Edit_StudyField(StudyFieldVM model)
         {
-            _studyField = new StudyField();
+            _studyField = new StudyFieldVM();
             
             _studyField.EditStudyField(model);
 
@@ -112,7 +114,7 @@ namespace UCL.ISM.Client.Controllers
         [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Delete_StudyField(int Id)
         {
-            _studyField = new StudyField();
+            _studyField = new StudyFieldVM();
 
             _studyField.DeleteStudyField(Id);
 
@@ -122,9 +124,9 @@ namespace UCL.ISM.Client.Controllers
         [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Create_Applicant()
         {
-            _studyField = new StudyField();
-            _nationality = new Nationality();
-            _interviewer = new Interviewer();
+            _studyField = new StudyFieldVM();
+            _nationality = new NationalityVM();
+            _interviewer = new InterviewerVM();
 
             ApplicantVM vm = new ApplicantVM();
 
@@ -173,7 +175,7 @@ namespace UCL.ISM.Client.Controllers
         
         public IActionResult Get_Interview_Modal(string id)
         {
-            _interviewer = new Interviewer();
+            _interviewer = new InterviewerVM();
             var interviewers = _interviewer.GetAllInterviewers();
             
             List<SelectListItem> list = new List<SelectListItem>();
@@ -193,7 +195,7 @@ namespace UCL.ISM.Client.Controllers
 
         public IActionResult Get_InterviewScheme_Modal(string id)
         {
-            _interviewScheme = new InterviewScheme();
+            _interviewScheme = new InterviewSchemeVM();
             var schemes = _interviewScheme.GetAllInterviewSchemes();
 
             List<SelectListItem> list = new List<SelectListItem>();
@@ -218,10 +220,10 @@ namespace UCL.ISM.Client.Controllers
 
             vm = app.GetApplicant(id) as Applicant;
 
-            _studyField = new StudyField();
-            _nationality = new Nationality();
-            _interviewer = new Interviewer();
-            _interviewScheme = new InterviewScheme();
+            _studyField = new StudyFieldVM();
+            _nationality = new NationalityVM();
+            _interviewer = new InterviewerVM();
+            _interviewScheme = new InterviewSchemeVM();
             var studyfields = _studyField.GetAllStudyFields();
             var nationalities = _nationality.GetAllNationalities();
             var interviewers = _interviewer.GetAllInterviewers();
@@ -271,7 +273,7 @@ namespace UCL.ISM.Client.Controllers
         [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Create_InterviewScheme()
         {
-            _nationality = new Nationality();
+            _nationality = new NationalityVM();
             //_interviewScheme = new InterviewScheme();
             InterviewSchemeVM vm = new InterviewSchemeVM();
 
@@ -287,8 +289,8 @@ namespace UCL.ISM.Client.Controllers
         [HttpPost]
         public IActionResult Pass_InterviewScheme(InterviewSchemeVM model)
         {
-            _interviewScheme = new InterviewScheme();
-            _nationality = new Nationality();
+            _interviewScheme = new InterviewSchemeVM();
+            _nationality = new NationalityVM();
 
             var id = _interviewScheme.AddInterviewSchema(model);
 
@@ -353,7 +355,7 @@ namespace UCL.ISM.Client.Controllers
         {
             ApplicantVM appvm;
             _applicant = new Applicant();
-            List<IApplicantVM> listapp = new List<IApplicantVM>();
+            List<ApplicantVM> listapp = new List<ApplicantVM>();
             
             var list = _applicant.GetAllApplicantsWithoutSchema();
 
@@ -362,7 +364,7 @@ namespace UCL.ISM.Client.Controllers
                 if (app.IsEU)
                 {
                     appvm = new ApplicantVM();
-                    appvm = (Applicant)app;
+                    appvm = app;
 
                     listapp.Add(appvm);
                 }                

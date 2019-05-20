@@ -10,7 +10,7 @@ namespace UCL.ISM.BLL.Interface
         DateTime EditedDate { get; set; }
         string Name { get; set; }
         string Comment { get; set; }
-        List<IQuestion> Questions { get; set; }
+        List<UCL.ISM.BLL.BLL.Question> Questions { get; set; }
         List<int> CountryId { get; set; }
 
         //List<IQuestion> GetQuestions(int id);

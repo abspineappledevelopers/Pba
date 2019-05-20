@@ -12,7 +12,7 @@ namespace UCL.ISM.BLL
         private Database _db;
         private MySqlCommand cmd;
         StudyField _sf;
-        List<IStudyField> _listsf;
+        List<StudyField> _listsf;
 
         public StudyFieldDB()
         {
@@ -28,20 +28,20 @@ namespace UCL.ISM.BLL
             _db.ExecuteCmd(query, _db.SetParameterWithValue(param1, fieldName));
         }
 
-        public IStudyField GetStudyField(int Id)
+        public StudyField GetStudyField(int Id)
         {
             string query = "SELECT * FROM UCL_StudyField WHERE Id = @Id";
             throw new NotImplementedException();
         }
 
-        public List<IStudyField> GetAllStudyFields()
+        public List<StudyField> GetAllStudyFields()
         {
             string query = "SELECT * FROM UCL_StudyField";
 
             return ExecuteReaderStudyFields(query);
         }
 
-        public void EditStudyField(IStudyField studyField)
+        public void EditStudyField(StudyField studyField)
         {
             string query = "UPDATE UCL_StudyField SET Name = @Name WHERE Id = @id;";
             string param1 = "@id";
@@ -59,10 +59,10 @@ namespace UCL.ISM.BLL
         }
 
         #region Functionality
-        private List<IStudyField> ExecuteReaderStudyFields(string query)
+        private List<StudyField> ExecuteReaderStudyFields(string query)
         {
             _db.Get_Connection();
-            List<IStudyField> list = new List<IStudyField>();
+            List<StudyField> list = new List<StudyField>();
 
             using (cmd.Connection = _db.conn)
             {
@@ -75,7 +75,7 @@ namespace UCL.ISM.BLL
                     {
                         while (reader.Read())
                         {
-                            IStudyField sf = new StudyField();
+                            StudyField sf = new StudyField();
                             sf.Id = Convert.ToInt32(reader.GetInt32(0));
                             sf.FieldName = reader.GetString(1).ToString();
                             sf.Created = reader.GetDateTime(2);

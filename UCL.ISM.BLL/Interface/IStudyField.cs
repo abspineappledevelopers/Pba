@@ -12,9 +12,9 @@ namespace UCL.ISM.BLL.Interface
         DateTime Edited { get; set; }
 
         void CreateNewStudyField(string fieldName);
-        IStudyField GetStudyField(int Id);
-        List<IStudyField> GetAllStudyFields();
-        void EditStudyField(IStudyField studyField);
+        StudyField GetStudyField(int Id);
+        List<StudyField> GetAllStudyFields();
+        void EditStudyField(StudyField studyField);
         void DeleteStudyField(int Id);
     }
 }

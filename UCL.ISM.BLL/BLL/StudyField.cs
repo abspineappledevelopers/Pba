@@ -28,21 +28,21 @@ namespace UCL.ISM.BLL
             }
         }
 
-        public IStudyField GetStudyField(int Id)
+        public StudyField GetStudyField(int Id)
         {
             _db = new StudyFieldDB();
 
             return _db.GetStudyField(Id);
         }
 
-        public List<IStudyField> GetAllStudyFields()
+        public List<StudyField> GetAllStudyFields()
         {
             _db = new StudyFieldDB();
 
             return _db.GetAllStudyFields();
         }
 
-        public void EditStudyField(IStudyField studyField)
+        public void EditStudyField(StudyField studyField)
         {
             _db = new StudyFieldDB();
 

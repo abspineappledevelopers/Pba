@@ -19,7 +19,7 @@ namespace UCL.ISM.BLL.DAL
             cmd = new MySqlCommand();
         }
 
-        public int CreateNewInterviewScheme(IInterviewScheme interview)
+        public int CreateNewInterviewScheme(InterviewScheme interview)
         {
             string query = "INSERT INTO UCL_InterviewScheme(Comment) VALUES (@Comment)";
             string query2 = "INSERT INTO UCL_InterviewSchemeForCountry(Country, InterviewScheme) VALUES (@CountryId, @InterviewScheme)";
@@ -30,7 +30,7 @@ namespace UCL.ISM.BLL.DAL
             return ExecuteTrans(query, query2, _db.SetParameterWithValue(param1, interview.Comment), param2, param3, interview);
         }
 
-        public void AddQuestion(IQuestion question)
+        public void AddQuestion(Question question)
         {
             string query = "INSERT INTO UCL_Question(Id, Question, InterviewScheme) VALUES (@Id, @Question, @InterviewScheme)";
             string param1 = "@Id";
@@ -46,12 +46,12 @@ namespace UCL.ISM.BLL.DAL
         }
 
 
-        public void RemoveQuestion(IQuestion question)
+        public void RemoveQuestion(Question question)
         {
             throw new NotImplementedException();
         }
 
-        public IInterviewScheme GetInterviewScheme(int id)
+        public InterviewScheme GetInterviewScheme(int id)
         {
             string query = "SELECT * FROM UCL_InterviewScheme WHERE Id = @Id";
 
@@ -65,7 +65,7 @@ namespace UCL.ISM.BLL.DAL
             return ExecuteReaderListScheme(query);
         }
 
-        public List<IQuestion> GetAllSchemeQuestions(int id)
+        public List<Question> GetAllSchemeQuestions(int id)
         {
             string query = "SELECT * FROM UCL_Question WHERE InterviewScheme =" + id;
 
@@ -89,10 +89,10 @@ namespace UCL.ISM.BLL.DAL
         }
 
         #region Functionality
-        private List<IQuestion> ExecuteReaderQuestions(string query)
+        private List<Question> ExecuteReaderQuestions(string query)
         {
             _db.Get_Connection();
-            List<IQuestion> temp = new List<IQuestion>();
+            List<Question> temp = new List<Question>();
 
             using (cmd.Connection = _db.conn)
             {
@@ -103,7 +103,7 @@ namespace UCL.ISM.BLL.DAL
                 {
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        IQuestion quest;
+                        Question quest;
 
                         while (reader.Read())
                         {
@@ -131,10 +131,10 @@ namespace UCL.ISM.BLL.DAL
             return temp;
         }
 
-        private IInterviewScheme ExecuteReaderScheme(string query)
+        private InterviewScheme ExecuteReaderScheme(string query)
         {
             _db.Get_Connection();
-            IInterviewScheme scheme = new InterviewScheme();
+            InterviewScheme scheme = new InterviewScheme();
 
             using (cmd.Connection = _db.conn)
             {

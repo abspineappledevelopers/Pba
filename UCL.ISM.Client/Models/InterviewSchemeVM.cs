@@ -8,22 +8,22 @@ using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.Client.Models
 {
-    public class InterviewSchemeVM : IInterviewScheme
+    public class InterviewSchemeVM
     {
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime EditedDate { get; set; }
         public string Name { get; set; }
         public string Comment { get; set; }
-        public IQuestion Question { get; set; }
-        public List<IQuestion> Questions { get; set; }
+        public Question Question { get; set; }
+        public List<Question> Questions { get; set; }
         public List<int> CountryId { get; set; }
         public List<SelectListItem> Countries { get; set; }
 
         public InterviewSchemeVM()
         {
             Countries = new List<SelectListItem>();
-            Questions = new List<IQuestion>();
+            Questions = new List<Question>();
             CountryId = new List<int>();
             Question = new Question();
         }
