@@ -51,7 +51,7 @@ namespace UCL.ISM.BLL.DAL
             throw new NotImplementedException();
         }
 
-        public IInterviewScheme GetInterviewScheme(int id)
+        public IInterviewScheme GetInterviewScheme(int? id)
         {
             string query = "SELECT * FROM UCL_InterviewScheme WHERE Id = @Id";
 
@@ -65,7 +65,7 @@ namespace UCL.ISM.BLL.DAL
             return ExecuteReaderListScheme(query);
         }
 
-        public List<IQuestion> GetAllSchemeQuestions(int id)
+        public List<IQuestion> GetAllSchemeQuestions(int? id)
         {
             string query = "SELECT * FROM UCL_Question WHERE InterviewScheme =" + id;
 

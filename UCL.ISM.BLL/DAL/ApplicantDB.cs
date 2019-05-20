@@ -12,7 +12,7 @@ namespace UCL.ISM.BLL.DAL
         Applicant _app;
         List<Applicant> _listapp;
 
-        public List<Applicant> GetAllApplicantsWithoutSchema()
+        public List<Applicant> GetAllApplicantsWithoutSchemaOrInterviewer()
         {
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
@@ -23,9 +23,10 @@ namespace UCL.ISM.BLL.DAL
             {
                 cmd.CommandText = "SELECT UCL_Applicant.ID, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age,"+ 
                     "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," + 
-                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit FROM UCL_Applicant JOIN UCL_Nationality "+ 
+                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_InterviewScheme.Name FROM UCL_Applicant JOIN UCL_Nationality "+ 
                     "on UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_StudyField on UCL_Applicant.StudyField = UCL_StudyField.Id LEFT OUTER JOIN UCL_Interviewer "+
-                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id WHERE UCL_Applicant.InterviewAssigned is NULL";
+                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id LEFT OUTER JOIN UCL_InterviewScheme on UCL_Applicant.InterviewAssigned = UCL_InterviewScheme.Id"
+                    + " WHERE UCL_Applicant.InterviewAssigned is NULL OR UCL_Applicant.Interviewer is NULL";
 
                 MySqlDataReader reader = cmd.ExecuteReader();
                 _listapp = new List<Applicant>();
@@ -50,6 +51,11 @@ namespace UCL.ISM.BLL.DAL
                     if(reader.GetValue(12) != DBNull.Value)
                     {
                         _app.Interviewer = new Interviewer() { Id = reader.GetString(12).ToString(), Firstname = reader.GetString(13).ToString(), Lastname = reader.GetString(14).ToString() };
+                    }
+
+                    if(reader.GetValue(17) != DBNull.Value)
+                    {
+                        _app.InterviewScheme = new InterviewScheme() { Name = reader.GetString(17).ToString() };
                     }
 
                     _listapp.Add(_app);
@@ -83,7 +89,7 @@ namespace UCL.ISM.BLL.DAL
             {
                 cmd.CommandText = "SELECT UCL_Applicant.Id, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age," +
                     "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," +
-                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_Applicant.InterviewAssigned FROM UCL_Applicant JOIN UCL_Nationality " +
+                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_Applicant.InterviewAssigned, UCL_InterviewScheme.Name FROM UCL_Applicant JOIN UCL_Nationality " +
                     "on UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_StudyField on UCL_Applicant.StudyField = UCL_StudyField.Id LEFT OUTER JOIN UCL_Interviewer " +
                     "on UCL_Applicant.Interviewer = UCL_Interviewer.Id WHERE UCL_Applicant.Id = @Id";
 
@@ -121,6 +127,58 @@ namespace UCL.ISM.BLL.DAL
                 }
 
                 return _app;
+            }
+            catch (Exception)
+            {
+                db.CloseConnection();
+
+                throw;
+            }
+            finally
+            {
+                if (db.connection.State == System.Data.ConnectionState.Open)
+                {
+                    db.connection.Close();
+                }
+            }
+        }
+
+        public List<Applicant> GetAllApplicantsLimitedData()
+        {
+            db.Get_Connection();
+            MySqlCommand cmd = new MySqlCommand();
+
+            cmd.Connection = db.connection;
+
+            try
+            {
+                cmd.CommandText = "SELECT UCL_Applicant.Id, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_ApplicantProcess.Id," + 
+                "UCL_ApplicantProcess.Process FROM UCL_Applicant JOIN UCL_ApplicantProcess ON UCL_Applicant.Process = UCL_ApplicantProcess.Id";
+      
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+                _listapp = new List<Applicant>();
+                
+
+                while (reader.Read())
+                {
+                    _app = new Applicant()
+                    {
+                        Id = reader.GetGuid(0),
+                        Firstname = reader.GetString(1).ToString(),
+                        Lastname = reader.GetString(2).ToString(),
+
+                        Process = new ApplicantProcess()
+                        {
+                            Id = reader.GetInt32(3),
+                            Process = reader.GetString(4).ToString()
+                        }
+                    };
+
+                    _listapp.Add(_app);
+                }
+
+                return _listapp;
             }
             catch (Exception)
             {

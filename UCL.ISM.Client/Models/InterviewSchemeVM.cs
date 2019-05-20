@@ -10,7 +10,7 @@ namespace UCL.ISM.Client.Models
 {
     public class InterviewSchemeVM
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime EditedDate { get; set; }
         public string Name { get; set; }

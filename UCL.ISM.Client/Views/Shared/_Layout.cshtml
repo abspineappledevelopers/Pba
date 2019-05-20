@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />*@
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
@@ -20,21 +20,41 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark ucl-nav">
         <div class="container">
-            @*<a class="navbar-brand" href="#">Programmet</a>*@
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <img src="../images/Logo_UCL.jpg" alt="logo" style="width: 12vw">
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><span class="glyphicon glyphicon-home" /></a></li>
+                <ul class="navbar-nav ml-auto mx-auto">
+                    @*<li class="nav-item"><a class="nav-link" asp-area="" ><span class="glyphicon glyphicon-home" /></a></li>*@
                     @using Microsoft.Identity.Web
                     @if (User.Identity.IsAuthenticated && User.IsInRole(UCL.ISM.Client.Infrastructure.UserRoles.Administration))
                     {
-                        <li class="nav-item"><a class="nav-link" asp-controller="Administration" asp-action="Create_StudyField">Opret Uddannelse</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Administration" asp-action="Create_Applicant">Opret Ansøger</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Administration" asp-action="Create_InterviewScheme">Opret Spørgeskema</a></li>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                Ansøger
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="Administration" asp-action="Create_Applicant">Opret Ansøger</a>
+                                <a class="dropdown-item" asp-controller="Administration" asp-action="Applicant_Process">se ansøger proces</a>
+                            </div>
+                        </div>
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                    Spørgeskema
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-controller="Administration" asp-action="Create_InterviewScheme">Opret skema</a>
+                                    <a class="dropdown-item" href="#">Rediger/slet skema</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Administration" asp-action="Create_StudyField">Uddannelse</a></li>
                     }
                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">Om</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Kontakt</a></li>
@@ -44,19 +64,14 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <ul class="navbar-nav navbar-right">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-cog" />
-                            </a>
-                            <div class="dropdown-menu">
-                                <a asp-area="AzureAD" asp-controller="Account" asp-action="SignOut" class="dropdown-item"><span class="glyphicon glyphicon-user" /> Log ud</a>
-                            </div>
+                        <li class="nav-item">
+                                <a  asp-area="AzureAD" asp-controller="Account" asp-action="SignOut" class="nav-link"><span class="glyphicon glyphicon-user" /> Log ud</a>
                         </li>
                     </ul>
                 }
                 else
                 {
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="navbar-nav navbar-pull-right">
                         <li>
                             <a asp-area="AzureAD" asp-controller="Account" asp-action="SignIn">
                                 <span class="glyphicon glyphicon-user"> Sign-In</span>
@@ -80,7 +95,7 @@
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">

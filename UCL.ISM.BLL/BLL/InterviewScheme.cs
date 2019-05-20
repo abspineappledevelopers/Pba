@@ -11,7 +11,7 @@ namespace UCL.ISM.BLL.BLL
         private readonly List<IQuestion> _questions;
         private readonly InterviewSchemeDB _db;
 
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime EditedDate { get; set; }
         public string Name { get; set; }
@@ -43,7 +43,7 @@ namespace UCL.ISM.BLL.BLL
             _db.RemoveQuestion(question);
         }
 
-        public List<IQuestion> GetQuestions(int id)
+        public List<IQuestion> GetQuestions(int? id)
         {
             List<IQuestion> temp = _db.GetAllSchemeQuestions(id);
             return temp;

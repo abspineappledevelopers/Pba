@@ -4,6 +4,19 @@ body {
     padding-bottom: 20px;
 }
 
+.ucl-nav {
+    background-color: #cbe5e4 !important;
+    color: #014550 !important;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: large;
+}
+
+    .ucl-nav a {
+        color: #014550 !important;
+        text-decoration: none;
+    }
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {

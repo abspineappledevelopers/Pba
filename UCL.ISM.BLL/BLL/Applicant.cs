@@ -26,6 +26,7 @@ namespace UCL.ISM.BLL.BLL
         public List<StudyField> StudyFields { get; set; }
         public InterviewScheme InterviewScheme { get; set; }
         public List<InterviewScheme> InterviewSchemes { get; set; }
+        public ApplicantProcess Process { get; set; }
 
         public Applicant()
         {
@@ -35,6 +36,7 @@ namespace UCL.ISM.BLL.BLL
             Nationalities = new List<Nationality>();
             InterviewScheme = new InterviewScheme();
             InterviewSchemes = new List<InterviewScheme>();
+            Process = new ApplicantProcess();
         }
 
         private ApplicantDB db;
@@ -52,11 +54,18 @@ namespace UCL.ISM.BLL.BLL
             return db.GetApplicant(id);
         }
 
-        public List<Applicant> GetAllApplicantsWithoutSchema()
+        public List<Applicant> GetAllApplicantsLimitedData()
         {
             db = new ApplicantDB();
 
-            return db.GetAllApplicantsWithoutSchema();
+            return db.GetAllApplicantsLimitedData();
+        }
+
+        public List<Applicant> GetAllApplicantsWithoutSchemaOrInterviewer()
+        {
+            db = new ApplicantDB();
+
+            return db.GetAllApplicantsWithoutSchemaOrInterviewer();
         }
 
         public void AddInterviewerToApplicant(Applicant model)

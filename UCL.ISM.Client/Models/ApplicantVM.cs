@@ -35,6 +35,7 @@ namespace UCL.ISM.Client.Models
         public List<SelectListItem> StudyFields { get; set; }
         public InterviewSchemeVM InterviewScheme { get; set; }
         public List<SelectListItem> InterviewSchemes { get; set; }
+        public ApplicantProcess Process { get; set; }
 
         public ApplicantVM()
         {
@@ -46,6 +47,7 @@ namespace UCL.ISM.Client.Models
             Nationalities = new List<SelectListItem>();
             InterviewScheme = new InterviewSchemeVM();
             InterviewSchemes = new List<SelectListItem>();
+            Process = new ApplicantProcess();
         }
 
         public static implicit operator ApplicantVM(Applicant applicant)

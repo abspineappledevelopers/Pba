@@ -84,7 +84,7 @@
             <div class="col-md-12 col-lg-6">
                 <div class="form-group">
                     <small><label for="scheme">Interview skema</label></small>
-                    @if (Model.InterviewScheme.Id != 0)
+                    @if (Model.InterviewScheme.Name != null)
                     {
                         <p id="scheme">@Model.InterviewScheme.Name</p>
                     }

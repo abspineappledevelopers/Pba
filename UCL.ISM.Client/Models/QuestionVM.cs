@@ -11,7 +11,7 @@ namespace UCL.ISM.Client.Models
         public Guid Id { get; set; }
         public string Quest { get; set; }
         public string Answer { get; set; }
-        public int InterviewSchemeId { get; set; }
+        public int? InterviewSchemeId { get; set; }
 
         public static implicit operator QuestionVM(Question quest)
         {

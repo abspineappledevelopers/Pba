@@ -35,7 +35,7 @@ namespace UCL.ISM.Client.Controllers
             //var studyfields = _studyField.GetAllStudyFields();
             //var nationalities = _nationality.GetAllNationalities();
             //var interviewers = _interviewer.GetAllInterviewers();
-            var list = _applicant.GetAllApplicantsWithoutSchema();
+            var list = _applicant.GetAllApplicantsWithoutSchemaOrInterviewer();
             
 
             foreach (var app in list)
@@ -172,7 +172,31 @@ namespace UCL.ISM.Client.Controllers
             return RedirectToAction("Create_Applicant");
         }
 
-        
+        [HttpGet]
+        public IActionResult Applicant_Process()
+        {
+            _applicant = new Applicant();
+            var data = _applicant.GetAllApplicantsLimitedData();
+            LimitedApplicantData vm;
+            List<LimitedApplicantData> list = new List<LimitedApplicantData>();
+            foreach(var app in data)
+            {
+                vm = new LimitedApplicantData()
+                {
+                    Id = app.Id,
+                    Firstname = app.Firstname,
+                    Lastname = app.Lastname,
+                    ProcessId = app.Process.Id,
+                    Process = app.Process.Process
+                };
+
+                list.Add(vm);
+            }
+
+            return View("../Administration/ApplicantsProcess", list);
+        }
+
+
         public IActionResult Get_Interview_Modal(string id)
         {
             _interviewer = new Interviewer();
@@ -343,7 +367,7 @@ namespace UCL.ISM.Client.Controllers
 
             List<ApplicantVM> listapp = new List<ApplicantVM>();
             
-            var list = _applicant.GetAllApplicantsWithoutSchema();
+            var list = _applicant.GetAllApplicantsWithoutSchemaOrInterviewer();
             foreach (var app in list)
             {
                 appvm = new ApplicantVM();
@@ -363,7 +387,7 @@ namespace UCL.ISM.Client.Controllers
             _applicant = new Applicant();
             List<ApplicantVM> listapp = new List<ApplicantVM>();
             
-            var list = _applicant.GetAllApplicantsWithoutSchema();
+            var list = _applicant.GetAllApplicantsWithoutSchemaOrInterviewer();
 
             foreach (var app in list)
             {
@@ -386,7 +410,7 @@ namespace UCL.ISM.Client.Controllers
 
             List<ApplicantVM> listapp = new List<ApplicantVM>();
 
-            var list = _applicant.GetAllApplicantsWithoutSchema();
+            var list = _applicant.GetAllApplicantsWithoutSchemaOrInterviewer();
             foreach (var app in list)
             {
                 if (app.IsEU)
@@ -409,7 +433,7 @@ namespace UCL.ISM.Client.Controllers
             _applicant = new Applicant();
             List<ApplicantVM> listapp = new List<ApplicantVM>();
 
-            var list = _applicant.GetAllApplicantsWithoutSchema();
+            var list = _applicant.GetAllApplicantsWithoutSchemaOrInterviewer();
 
             foreach (var app in list)
             {
@@ -431,7 +455,7 @@ namespace UCL.ISM.Client.Controllers
             _applicant = new Applicant();
             List<ApplicantVM> listapp = new List<ApplicantVM>();
 
-            var list = _applicant.GetAllApplicantsWithoutSchema();
+            var list = _applicant.GetAllApplicantsWithoutSchemaOrInterviewer();
 
             foreach (var app in list)
             {
