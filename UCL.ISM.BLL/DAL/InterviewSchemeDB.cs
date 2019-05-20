@@ -19,7 +19,7 @@ namespace UCL.ISM.BLL.DAL
             cmd = new MySqlCommand();
         }
 
-        public int CreateNewInterviewScheme(IInterviewScheme interview)
+        public int CreateNewInterviewScheme(InterviewScheme interview)
         {
             string query = "INSERT INTO UCL_InterviewScheme(Comment) VALUES (@Comment)";
             string query2 = "INSERT INTO UCL_InterviewSchemeForCountry(Country, InterviewScheme) VALUES (@CountryId, @InterviewScheme)";
@@ -27,10 +27,10 @@ namespace UCL.ISM.BLL.DAL
             string param2 = "@CountryId";
             string param3 = "@InterviewScheme";
 
-            return ExecuteTrans(query, query2, SetParameterWithValue(param1, interview.Comment), param2, param3, interview);
+            return ExecuteTrans(query, query2, _db.SetParameterWithValue(param1, interview.Comment), param2, param3, interview);
         }
 
-        public void AddQuestion(IQuestion question)
+        public void AddQuestion(Question question)
         {
             string query = "INSERT INTO UCL_Question(Id, Question, InterviewScheme) VALUES (@Id, @Question, @InterviewScheme)";
             string param1 = "@Id";
@@ -38,20 +38,20 @@ namespace UCL.ISM.BLL.DAL
             string param3 = "@InterviewScheme";
 
             List<MySqlParameter> temp = new List<MySqlParameter>();
-            temp.Add(SetParameterWithValue(param1, Guid.NewGuid()));
-            temp.Add(SetParameterWithValue(param2, question.Quest));
-            temp.Add(SetParameterWithValue(param3, question.InterviewSchemeId));
+            temp.Add(_db.SetParameterWithValue(param1, Guid.NewGuid()));
+            temp.Add(_db.SetParameterWithValue(param2, question.Quest));
+            temp.Add(_db.SetParameterWithValue(param3, question.InterviewSchemeId));
 
-            ExecuteCmd(query, temp);
+            _db.ExecuteCmd(query, temp);
         }
 
 
-        public void RemoveQuestion(IQuestion question)
+        public void RemoveQuestion(Question question)
         {
             throw new NotImplementedException();
         }
 
-        public IInterviewScheme GetInterviewScheme(int? id)
+        public InterviewScheme GetInterviewScheme(int id)
         {
             string query = "SELECT * FROM UCL_InterviewScheme WHERE Id = @Id";
 
@@ -65,7 +65,7 @@ namespace UCL.ISM.BLL.DAL
             return ExecuteReaderListScheme(query);
         }
 
-        public List<IQuestion> GetAllSchemeQuestions(int? id)
+        public List<Question> GetAllSchemeQuestions(int id)
         {
             string query = "SELECT * FROM UCL_Question WHERE InterviewScheme =" + id;
 
@@ -77,7 +77,7 @@ namespace UCL.ISM.BLL.DAL
             string param1 = "@Id";
             string query = "UPDATE UCL_InterviewScheme WHERE Id = @Id";
 
-            ExecuteCmd(query, SetParameterWithValue(param1, id));
+            _db.ExecuteCmd(query, _db.SetParameterWithValue(param1, id));
         }
 
         public void DeleteInterviewScheme(int id)
@@ -85,16 +85,16 @@ namespace UCL.ISM.BLL.DAL
             string param1 = "@Id";
             string query = "DELETE FROM UCL_InterviewScheme WHERE Id = @id";
 
-            ExecuteCmd(query, SetParameterWithValue(param1, id));
+            _db.ExecuteCmd(query, _db.SetParameterWithValue(param1, id));
         }
 
         #region Functionality
-        private List<IQuestion> ExecuteReaderQuestions(string query)
+        private List<Question> ExecuteReaderQuestions(string query)
         {
             _db.Get_Connection();
-            List<IQuestion> temp = new List<IQuestion>();
+            List<Question> temp = new List<Question>();
 
-            using (cmd.Connection = _db.connection)
+            using (cmd.Connection = _db.conn)
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
@@ -103,7 +103,7 @@ namespace UCL.ISM.BLL.DAL
                 {
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        IQuestion quest;
+                        Question quest;
 
                         while (reader.Read())
                         {
@@ -122,7 +122,7 @@ namespace UCL.ISM.BLL.DAL
                 }
                 finally
                 {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    if (_db.conn.State == System.Data.ConnectionState.Open)
                     {
                         cmd.Connection.Close();
                     }
@@ -131,12 +131,12 @@ namespace UCL.ISM.BLL.DAL
             return temp;
         }
 
-        private IInterviewScheme ExecuteReaderScheme(string query)
+        private InterviewScheme ExecuteReaderScheme(string query)
         {
             _db.Get_Connection();
-            IInterviewScheme scheme = new InterviewScheme();
+            InterviewScheme scheme = new InterviewScheme();
 
-            using (cmd.Connection = _db.connection)
+            using (cmd.Connection = _db.conn)
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
@@ -161,7 +161,7 @@ namespace UCL.ISM.BLL.DAL
                 }
                 finally
                 {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    if (_db.conn.State == System.Data.ConnectionState.Open)
                     {
                         cmd.Connection.Close();
                     }
@@ -176,7 +176,7 @@ namespace UCL.ISM.BLL.DAL
             InterviewScheme scheme;
             List<InterviewScheme> list = new List<InterviewScheme>();
 
-            using (cmd.Connection = _db.connection)
+            using (cmd.Connection = _db.conn)
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
@@ -206,7 +206,7 @@ namespace UCL.ISM.BLL.DAL
                 }
                 finally
                 {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
+                    if (_db.conn.State == System.Data.ConnectionState.Open)
                     {
                         cmd.Connection.Close();
                     }
@@ -222,8 +222,8 @@ namespace UCL.ISM.BLL.DAL
 
             // Must assign both transaction object and connection
             // to Command object for a pending local transaction
-            cmd.Connection = _db.connection;
-            cmd.Transaction = _db.connection.BeginTransaction();
+            cmd.Connection = _db.conn;
+            cmd.Transaction = _db.conn.BeginTransaction();
             cmd.CommandType = System.Data.CommandType.Text;
             cmd.CommandText = query;
             cmd.Parameters.Add(param);
@@ -236,8 +236,8 @@ namespace UCL.ISM.BLL.DAL
                 {
                     cmd.Parameters.Clear();
                     cmd.CommandText = query2;
-                    cmd.Parameters.Add(SetParameterWithValue(param2, type.CountryId[i]));
-                    cmd.Parameters.Add(SetParameterWithValue(param3, schemeId));
+                    cmd.Parameters.Add(_db.SetParameterWithValue(param2, type.CountryId[i]));
+                    cmd.Parameters.Add(_db.SetParameterWithValue(param3, schemeId));
                     cmd.ExecuteNonQuery();
                 }
                 cmd.Transaction.Commit();
@@ -261,112 +261,6 @@ namespace UCL.ISM.BLL.DAL
                 cmd.Connection.Close();
             }
             return schemeId;
-        }
-
-        private void ExecuteCmd(string query, List<MySqlParameter> parameters)
-        {
-            _db.Get_Connection();
-
-            using (cmd.Connection = _db.connection)
-            {
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-
-                foreach (var item in parameters)
-                {
-                    cmd.Parameters.Add(item);
-                }
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
-                    {
-                        cmd.Connection.Close();
-                    }
-                }
-            }
-        }
-
-        private void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
-        {
-            _db.Get_Connection();
-
-            using (cmd.Connection = _db.connection)
-            {
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.Parameters.Add(param1);
-                cmd.Parameters.Add(param2);
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
-                    {
-                        cmd.Connection.Close();
-                    }
-                }
-
-            }
-        }
-
-        private void ExecuteCmd(string query, MySqlParameter param)
-        {
-            _db.Get_Connection();
-
-            using (cmd.Connection = _db.connection)
-            {
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.Parameters.Add(param);
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    if (_db.connection.State == System.Data.ConnectionState.Open)
-                    {
-                        cmd.Connection.Close();
-                    }
-                }
-
-            }
-        }
-
-        private MySqlParameter SetParameter(string param, MySqlDbType type, int size)
-        {
-            return new MySqlParameter(param, type, size);
-        }
-        private MySqlParameter SetParameter(string param, MySqlDbType type)
-        {
-            return new MySqlParameter(param, type);
-        }
-
-        private MySqlParameter SetParameterWithValue(string param, object value)
-        {
-            return new MySqlParameter(param, value);
         }
         #endregion
     }

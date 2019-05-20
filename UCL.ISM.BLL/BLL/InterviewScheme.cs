@@ -8,21 +8,20 @@ namespace UCL.ISM.BLL.BLL
 {
     public class InterviewScheme : IInterviewScheme
     {
-        private readonly List<IQuestion> _questions;
         private readonly InterviewSchemeDB _db;
 
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime EditedDate { get; set; }
         public string Name { get; set; }
         public string Comment { get; set; }
-        public List<IQuestion> Questions { get; set; }
+        public List<Question> Questions { get; set; }
         public List<int> CountryId { get; set; }
 
         public InterviewScheme()
         {
             _db = new InterviewSchemeDB();
-            Questions = new List<IQuestion>();
+            Questions = new List<Question>();
             CountryId = new List<int>();
         }
 
@@ -31,21 +30,21 @@ namespace UCL.ISM.BLL.BLL
             return _db.CreateNewInterviewScheme(interview);
         }
 
-        public void AddQuestionToInterview(IQuestion question)
+        public void AddQuestionToInterview(Question question)
         {
             question.Id = Guid.NewGuid();
 
             _db.AddQuestion(question);
         }
 
-        public void RemoveQuestion(IQuestion question)
+        public void RemoveQuestion(Question question)
         {
             _db.RemoveQuestion(question);
         }
 
-        public List<IQuestion> GetQuestions(int? id)
+        public List<Question> GetQuestions(int id)
         {
-            List<IQuestion> temp = _db.GetAllSchemeQuestions(id);
+            List<Question> temp = _db.GetAllSchemeQuestions(id);
             return temp;
         }
 

@@ -1,59 +1,35 @@
-﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using UCL.ISM.BLL.BLL;
 
 namespace UCL.ISM.BLL.DAL
 {
-    class InterviewerDB
+    class InterviewerDB : MySqlExtension<Interviewer>
     {
-        private Database db = new Database();
-        List<Interviewer> _listin;
-        Interviewer _in;
+        /*private Database db = new Database();
+        List<IInterviewer> _listin;
+        Interviewer _in;*/
+
 
         public List<Interviewer> GetAllInterviewers()
         {
+            string query = "SELECT * FROM UCL_Interviewer";
+            object[] temp = ExecuteReaderList(query, new Interviewer());
             List<Interviewer> list = new List<Interviewer>();
-
-            db.Get_Connection();
-
-            MySqlCommand cmd = new MySqlCommand();
-
-            cmd.Connection = db.connection;
-
-            try
+            foreach (object[] item in temp)
             {
-                cmd.CommandText = "SELECT * FROM UCL_Interviewer";
-
-                MySqlDataReader reader = cmd.ExecuteReader();
-                _listin = new List<Interviewer>();
-
-                while (reader.Read())
+                if (item != null)
                 {
-                    _in = new Interviewer();
-                    _in.Id = reader.GetString(0).ToString();
-                    _in.Firstname = reader.GetString(1).ToString();
-                    _in.Lastname = reader.GetString(2).ToString();
-
-                    _listin.Add(_in);
+                    list.Add(
+                    new Interviewer
+                    {
+                        Id = item[0].ToString(),
+                        Firstname = item[1].ToString(),
+                        Lastname = item[2].ToString()
+                    }
+                );
                 }
             }
-            catch (Exception e)
-            {
-                db.CloseConnection();
-
-                throw;
-            }
-            finally
-            {
-                if (db.connection.State == System.Data.ConnectionState.Open)
-                {
-                    db.CloseConnection();
-                }
-            }
-
-            return _listin;
+            return list;
         }
     }
 }

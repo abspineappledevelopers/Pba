@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UCL.ISM.BLL.BLL;
+using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.Client.Models
 {

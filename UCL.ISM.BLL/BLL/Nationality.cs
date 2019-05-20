@@ -14,7 +14,7 @@ namespace UCL.ISM.BLL.BLL
 
         private NationalityDB _db;
 
-        public List<Nationality> GetAllNationalities()
+        public List<INationality> GetAllNationalities()
         {
             _db = new NationalityDB();
 

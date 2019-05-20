@@ -16,50 +16,45 @@ namespace UCL.ISM.Client.Controllers
     [Authorize]
     public class AdministrationController : Controller
     {
-        IStudyField _studyField;
-        INationality _nationality;
-        IApplicant _applicant;
-        IInterviewer _interviewer;
+        StudyField _studyField;
+        Nationality _nationality;
+        Applicant _applicant;
+        Interviewer _interviewer;
         InterviewScheme _interviewScheme;
 
         public IActionResult Index()
         {
-            //_studyField = new StudyField();
+            _studyField = new StudyField();
             _applicant = new Applicant();
-            //_nationality = new Nationality();
+            _nationality = new Nationality();
             _interviewer = new Interviewer();
             ApplicantVM appvm;
             
             List<ApplicantVM> listapp = new List<ApplicantVM>();
 
-            //var studyfields = _studyField.GetAllStudyFields();
-            //var nationalities = _nationality.GetAllNationalities();
-            //var interviewers = _interviewer.GetAllInterviewers();
-            var list = _applicant.GetAllApplicantsWithoutSchemaOrInterviewer();
-            
-
-            foreach (var app in list)
+            var studyfields = _studyField.GetAllStudyFields();
+            var nationalities = _nationality.GetAllNationalities();
+            var interviewers = _interviewer.GetAllInterviewers();
+            var list = _applicant.GetAllApplicantsWithoutSchema();
+            foreach(var app in list)
             {
                 appvm = new ApplicantVM();
                 appvm = app;
+                //ApplicantVM applicant = (Applicant)app;
+                foreach (var st in studyfields)
+                {
+                    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
+                }
 
-                //foreach (var st in studyfields)
-                //{
-                //    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
-                //}
+                foreach (var na in nationalities)
+                {
+                    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
+                }
 
-                //foreach (var na in nationalities)
-                //{
-                //    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
-                //}
-
-                //if (appvm.Interviewer.Id == null)
-                //{
-                //    foreach (var inn in interviewers)
-                //    {
-                //        appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
-                //    }
-                //}
+                foreach (var inn in interviewers)
+                {
+                    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+                }
 
                 listapp.Add(appvm);
             }
@@ -72,17 +67,17 @@ namespace UCL.ISM.Client.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize(Roles = UserRoles.Administration)]
-        public IActionResult Create_StudyField()
+        public IActionResult Create_StudyField(StudyFieldVM model)
         {
             _studyField = new StudyField();
-            StudyFieldVM model = new StudyFieldVM();
-            StudyFieldVM sfvm;
 
             var allStudyFields = _studyField.GetAllStudyFields();
             foreach (var studyfield in allStudyFields)
             {
-                sfvm = new StudyFieldVM();
+                //model.All
+                StudyFieldVM sfvm = new StudyFieldVM();
                 sfvm = studyfield;
+                //
                 model.AllStudyFields.Add(sfvm);
             }
 

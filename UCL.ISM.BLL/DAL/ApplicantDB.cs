@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UCL.ISM.BLL.BLL;
+using UCL.ISM.BLL.Interface;
 
 namespace UCL.ISM.BLL.DAL
 {
-    public class ApplicantDB
+    public class ApplicantDB : MySqlExtension<Applicant>
     {
         private Database db = new Database();
         Applicant _app;
@@ -14,19 +15,20 @@ namespace UCL.ISM.BLL.DAL
 
         public List<Applicant> GetAllApplicantsWithoutSchemaOrInterviewer()
         {
+            string query = "SELECT UCL_Applicant.ID, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age," +
+                    "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," +
+                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit FROM UCL_Applicant JOIN UCL_Nationality " +
+                    "on UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_StudyField on UCL_Applicant.StudyField = UCL_StudyField.Id LEFT OUTER JOIN UCL_Interviewer " +
+                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id WHERE UCL_Applicant.InterviewAssigned is NULL";
+
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
-                cmd.CommandText = "SELECT UCL_Applicant.ID, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age,"+ 
-                    "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," + 
-                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_InterviewScheme.Name FROM UCL_Applicant JOIN UCL_Nationality "+ 
-                    "on UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_StudyField on UCL_Applicant.StudyField = UCL_StudyField.Id LEFT OUTER JOIN UCL_Interviewer "+
-                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id LEFT OUTER JOIN UCL_InterviewScheme on UCL_Applicant.InterviewAssigned = UCL_InterviewScheme.Id"
-                    + " WHERE UCL_Applicant.InterviewAssigned is NULL OR UCL_Applicant.Interviewer is NULL";
+                cmd.CommandText = query;
 
                 MySqlDataReader reader = cmd.ExecuteReader();
                 _listapp = new List<Applicant>();
@@ -71,27 +73,30 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
-                    db.connection.Close();
+                    db.conn.Close();
                 }
             }
         }
 
         public Applicant GetApplicant(string id)
         {
+            string query = "SELECT UCL_Applicant.Id, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age," +
+                    "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," +
+                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_Applicant.InterviewAssigned FROM UCL_Applicant JOIN UCL_Nationality " +
+                    "on UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_StudyField on UCL_Applicant.StudyField = UCL_StudyField.Id LEFT OUTER JOIN UCL_Interviewer " +
+                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id WHERE UCL_Applicant.Id = @Id";
+            string param1 = "@Id";
+
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
-                cmd.CommandText = "SELECT UCL_Applicant.Id, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age," +
-                    "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," +
-                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_Applicant.InterviewAssigned, UCL_InterviewScheme.Name FROM UCL_Applicant JOIN UCL_Nationality " +
-                    "on UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_StudyField on UCL_Applicant.StudyField = UCL_StudyField.Id LEFT OUTER JOIN UCL_Interviewer " +
-                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id WHERE UCL_Applicant.Id = @Id";
+                cmd.CommandText = query;
 
                 cmd.Parameters.Add("@Id", MySqlDbType.Guid);
                 cmd.Parameters["@Id"].Value = id;
@@ -136,9 +141,9 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
-                    db.connection.Close();
+                    db.conn.Close();
                 }
             }
         }
@@ -197,119 +202,47 @@ namespace UCL.ISM.BLL.DAL
 
         public void CreateApplicant(Applicant applicant)
         {
-            db.Get_Connection();
-            MySqlCommand cmd = new MySqlCommand();
+            string query = "INSERT INTO UCL_Applicant(Id, Firstname, Lastname, Email, Age, IsEU, StudyField, Priority, Nationality, Interviewer, Comment) VALUES (@Id, @Firstname, @Lastname, @Email, @Age, @IsEU, @StudyField, @Priority, @Nationality, @Interviewer, @Comment)";
+            string param1 = "@Id";
+            string param2 = "@Firstname";
+            string param3 = "@Lastname";
+            string param4 = "@Email";
+            string param5 = "@Age";
+            string param6 = "@IsEU";
+            string param7 = "@StudyField";
+            string param8 = "@Priority";
+            string param9 = "@Nationality";
+            string param10 = "@Interviewer";
+            string param11 = "@Comment";
 
-            cmd.Connection = db.connection;
+            List<string> tempP = new List<string>() {
+                param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11
+            };
 
-            try
+            List<object> tempV = new List<object>()
             {
-                cmd.CommandText = "INSERT INTO UCL_Applicant(Id, Firstname, Lastname, Email, Age, IsEU, StudyField, Priority, Nationality, Interviewer, Comment) VALUES (@Id, @Firstname, @Lastname, @Email, @Age, @IsEU, @StudyField, @Priority, @Nationality, @Interviewer, @Comment)";
-                cmd.Parameters.Add("@Id", MySqlDbType.Guid);
-                cmd.Parameters.Add("@Firstname", MySqlDbType.VarChar, 60);
-                cmd.Parameters.Add("@Lastname", MySqlDbType.VarChar, 60);
-                cmd.Parameters.Add("@Email", MySqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@Age", MySqlDbType.Int32, 3);
-                cmd.Parameters.Add("@IsEU", MySqlDbType.Bit);
-                cmd.Parameters.Add("@StudyField", MySqlDbType.Int32, 11);
-                cmd.Parameters.Add("@Priority", MySqlDbType.Int32, 3);
-                cmd.Parameters.Add("@Nationality", MySqlDbType.Int32, 11);
-                cmd.Parameters.Add("@Interviewer", MySqlDbType.Guid);
-                cmd.Parameters.Add("@Comment", MySqlDbType.VarChar, 1900);
+                applicant.Id, applicant.Firstname, applicant.Lastname, applicant.Email, applicant.Age,
+                applicant.IsEU, applicant.StudyField.Id, applicant.Priority, applicant.Nationality.Id,
+                applicant.Interviewer.Id, applicant.Comment
+            };
 
-                cmd.Parameters["@Id"].Value = applicant.Id;
-                cmd.Parameters["@Firstname"].Value = applicant.Firstname;
-                cmd.Parameters["@Lastname"].Value = applicant.Lastname;
-                cmd.Parameters["@Email"].Value = applicant.Email;
-                cmd.Parameters["@Age"].Value = applicant.Age;
-                cmd.Parameters["@IsEU"].Value = applicant.IsEU;
-                cmd.Parameters["@StudyField"].Value = applicant.StudyField.Id;
-                cmd.Parameters["@Priority"].Value = applicant.Priority;
-                cmd.Parameters["@Nationality"].Value = applicant.Nationality.Id;
-                cmd.Parameters["@Interviewer"].Value = applicant.Interviewer.Id;
-                cmd.Parameters["@Comment"].Value = applicant.Comment;
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                db.CloseConnection();
-
-                throw;
-            }
-            finally
-            {
-                if (db.connection.State == System.Data.ConnectionState.Open)
-                {
-                    db.connection.Close();
-                }
-            }
+            ExecuteCmd(query, SetParametersList(tempP, tempV));
         }
 
         public void AddInterviewSchemeToApplicant(Applicant model)
         {
-            db.Get_Connection();
-            MySqlCommand cmd = new MySqlCommand();
-
-            cmd.Connection = db.connection;
-
-            try
-            {
-                cmd.CommandText = "UPDATE UCL_Applicant SET InterviewAssigned = @Scheme WHERE Id = @Id";
-                cmd.Parameters.Add("@Id", MySqlDbType.Guid);
-                cmd.Parameters.Add("@Scheme", MySqlDbType.Int32, 11);
-
-                cmd.Parameters["@Id"].Value = model.Id;
-                cmd.Parameters["@Scheme"].Value = model.InterviewScheme.Id;
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                db.CloseConnection();
-
-                throw;
-            }
-            finally
-            {
-                if (db.connection.State == System.Data.ConnectionState.Open)
-                {
-                    db.connection.Close();
-                }
-            }
+            string query = "UPDATE UCL_Applicant SET InterviewAssigned = @Scheme WHERE Id = @Id";
+            string param1 = "@Id";
+            string param2 = "@Scheme";
+            ExecuteCmd(query, SetParameterWithValue(param1, model.Id), SetParameterWithValue(param2, model.InterviewScheme.Id));
         }
 
         public void AddInterviewerToApplicant(Applicant model)
         {
-            db.Get_Connection();
-            MySqlCommand cmd = new MySqlCommand();
-
-            cmd.Connection = db.connection;
-
-            try
-            {
-                cmd.CommandText = "UPDATE UCL_Applicant SET Interviewer=@Interviewer WHERE Id = @Id";
-                cmd.Parameters.Add("@Id", MySqlDbType.Guid);
-                cmd.Parameters.Add("@Interviewer", MySqlDbType.Guid);
-
-                cmd.Parameters["@Id"].Value = model.Id;
-                cmd.Parameters["@Interviewer"].Value = model.Interviewer.Id;
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                db.CloseConnection();
-
-                throw;
-            }
-            finally
-            {
-                if (db.connection.State == System.Data.ConnectionState.Open)
-                {
-                    db.connection.Close();
-                }
-            }
+            string query = "UPDATE UCL_Applicant SET Interviewer=@Interviewer WHERE Id = @Id";
+            string param1 = "@Id";
+            string param2 = "@Interviewer";
+            ExecuteCmd(query, SetParameterWithValue(param1, model.Id), SetParameterWithValue(param2, model.Interviewer.Id));
         }
     }
 }
