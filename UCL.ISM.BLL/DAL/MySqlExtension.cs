@@ -108,5 +108,17 @@ namespace UCL.ISM.BLL.DAL
             }
             return temp;
         }
+
+        public List<MySqlParameter> SetParametersList(List<string> param, List<object> value)
+        {
+            List<MySqlParameter> temp = new List<MySqlParameter>();
+
+            for (int i = 0; i < param.Count; i++)
+            {
+                temp.Add(SetParameterWithValue(param[i], value[i]));
+            }
+
+            return temp;
+        }
     }
 }

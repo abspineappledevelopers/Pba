@@ -16,47 +16,51 @@ namespace UCL.ISM.Client.Controllers
     [Authorize]
     public class AdministrationController : Controller
     {
-        IStudyField _studyField;
-        INationality _nationality;
-        IApplicant _applicant;
-        IInterviewer _interviewer;
+        StudyField _studyField;
+        Nationality _nationality;
+        Applicant _applicant;
+        Interviewer _interviewer;
         InterviewScheme _interviewScheme;
+        public AdministrationController(IServiceProvider provider)
+        {
+            
+        }
 
         public IActionResult Index()
         {
-            //_studyField = new StudyField();
+            _studyField = new StudyField();
             _applicant = new Applicant();
-            //_nationality = new Nationality();
-            //_interviewer = new Interviewer();
-            //ApplicantVM appvm;
+            _nationality = new Nationality();
+            _interviewer = new Interviewer();
+            ApplicantVM appvm;
             
             List<ApplicantVM> listapp = new List<ApplicantVM>();
 
-            //var studyfields = _studyField.GetAllStudyFields();
-            //var nationalities = _nationality.GetAllNationalities();
-            //var interviewers = _interviewer.GetAllInterviewers();
+            var studyfields = _studyField.GetAllStudyFields();
+            var nationalities = _nationality.GetAllNationalities();
+            var interviewers = _interviewer.GetAllInterviewers();
             var list = _applicant.GetAllApplicantsWithoutSchema();
             foreach(var app in list)
             {
-                //appvm = new ApplicantVM();
-                //appvm = app;
-                ApplicantVM applicant = app;
-                //foreach (var st in studyfields)
-                //{
-                //    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
-                //}
+                appvm = new ApplicantVM();
+                appvm = (Applicant)app;
+                //ApplicantVM applicant = (Applicant)app;
+                foreach (var st in studyfields)
+                {
+                    appvm.StudyFields.Add(new SelectListItem() { Text = st.FieldName, Value = st.Id.ToString() });
+                }
 
-                //foreach (var na in nationalities)
-                //{
-                //    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
-                //}
+                foreach (var na in nationalities)
+                {
+                    appvm.Nationalities.Add(new SelectListItem() { Text = na.Name, Value = na.Id.ToString() });
+                }
 
-                //foreach (var inn in interviewers)
-                //{
-                //    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
-                //}
+                foreach (var inn in interviewers)
+                {
+                    appvm.Interviewers.Add(new SelectListItem() { Text = inn.Firstname + " " + inn.Lastname, Value = inn.Id.ToString() });
+                }
 
-                listapp.Add(applicant);
+                listapp.Add(appvm);
             }
 
             return View("../Administration/Index", listapp);
@@ -156,7 +160,7 @@ namespace UCL.ISM.Client.Controllers
                 model.Id = Guid.NewGuid();
                 model.IsEU = _nationality.IsEu(model.Nationality.Id);
 
-                _applicant.CreateNewApplicant(model);
+                _applicant.CreateNewApplicant((Applicant)model);
             }
             catch
             {
@@ -209,10 +213,10 @@ namespace UCL.ISM.Client.Controllers
 
         public IActionResult Get_Applicant_Modal(string id)
         {
-            _applicant = new Applicant();
+            var app = new Applicant();
             ApplicantVM vm = new ApplicantVM();
 
-            vm = _applicant.GetApplicant(id);
+            vm = app.GetApplicant(id) as Applicant;
 
             _studyField = new StudyField();
             _nationality = new Nationality();
@@ -250,7 +254,7 @@ namespace UCL.ISM.Client.Controllers
         public IActionResult Add_Interviewer(ApplicantVM model)
         {
             _applicant = new Applicant();
-            _applicant.AddInterviewerToApplicant(model);
+            _applicant.AddInterviewerToApplicant((Applicant)model);
 
             return RedirectToAction("Index");
         }
@@ -259,7 +263,7 @@ namespace UCL.ISM.Client.Controllers
         public IActionResult Add_InterviewSchemeToApplicant(ApplicantVM model)
         {
             _applicant = new Applicant();
-            _applicant.AddInterviewSchemeToApplicant(model);
+            _applicant.AddInterviewSchemeToApplicant((Applicant)model);
 
             return RedirectToAction("Index");
         }
@@ -335,7 +339,7 @@ namespace UCL.ISM.Client.Controllers
             foreach (var app in list)
             {
                 appvm = new ApplicantVM();
-                appvm = app;
+                appvm = app as Applicant;
 
                 listapp.Add(appvm);
             }
@@ -349,7 +353,7 @@ namespace UCL.ISM.Client.Controllers
         {
             ApplicantVM appvm;
             _applicant = new Applicant();
-            List<ApplicantVM> listapp = new List<ApplicantVM>();
+            List<IApplicantVM> listapp = new List<IApplicantVM>();
             
             var list = _applicant.GetAllApplicantsWithoutSchema();
 
@@ -358,7 +362,7 @@ namespace UCL.ISM.Client.Controllers
                 if (app.IsEU)
                 {
                     appvm = new ApplicantVM();
-                    appvm = app;
+                    appvm = (Applicant)app;
 
                     listapp.Add(appvm);
                 }                
@@ -380,7 +384,7 @@ namespace UCL.ISM.Client.Controllers
                 if (app.IsEU)
                 {
                     appvm = new ApplicantVM();
-                    appvm = app;
+                    appvm = app as Applicant;
 
                     listapp.Add(appvm);
                 }
@@ -404,7 +408,7 @@ namespace UCL.ISM.Client.Controllers
                 if (!app.IsEU)
                 {
                     appvm = new ApplicantVM();
-                    appvm = app;
+                    appvm = app as Applicant;
 
                     listapp.Add(appvm);
                 }
@@ -426,7 +430,7 @@ namespace UCL.ISM.Client.Controllers
                 if (!app.IsEU)
                 {
                     appvm = new ApplicantVM();
-                    appvm = app;
+                    appvm = app as Applicant;
 
                     listapp.Add(appvm);
                 }

@@ -9,9 +9,9 @@ namespace UCL.ISM.BLL.DAL
 {
     class InterviewerDB : MySqlExtension<Interviewer>
     {
-        private Database db = new Database();
-        List<Interviewer> _listin;
-        Interviewer _in;
+        /*private Database db = new Database();
+        List<IInterviewer> _listin;
+        Interviewer _in;*/
         
 
         public List<Interviewer> GetAllInterviewers()
