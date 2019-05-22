@@ -168,6 +168,7 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Applicant_Process()
         {
             _applicant = new Applicant();
@@ -182,7 +183,8 @@ namespace UCL.ISM.Client.Controllers
                     Firstname = app.Firstname,
                     Lastname = app.Lastname,
                     ProcessId = app.Process.Id,
-                    Process = app.Process.Process
+                    Process = app.Process.Process,
+                    InterviewerName = app.Interviewer.Firstname + " " + app.Interviewer.Lastname
                 };
 
                 list.Add(vm);
@@ -191,7 +193,7 @@ namespace UCL.ISM.Client.Controllers
             return View("../Administration/ApplicantsProcess", list);
         }
 
-
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Get_Interview_Modal(string id)
         {
             _interviewer = new Interviewer();
@@ -212,6 +214,7 @@ namespace UCL.ISM.Client.Controllers
             return PartialView("../Administration/Partials/_PopulateModalWithInterviewers", vm);
         }
 
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Get_InterviewScheme_Modal(string id)
         {
             _interviewScheme = new InterviewScheme();
@@ -232,6 +235,7 @@ namespace UCL.ISM.Client.Controllers
             return PartialView("../Administration/Partials/_PopulateModalWithInterviewSchemes", vm);
         }
 
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Get_Applicant_Modal(string id)
         {
             _applicant = new Applicant();
@@ -272,12 +276,19 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Pass_Edited_Applicant(ApplicantVM model)
         {
-            return null;
+            _applicant = new Applicant();
+            ApplicantVM vm = new ApplicantVM();
+            vm = _applicant.EditApplicant(model);
+            string Id = vm.Id.ToString();
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Add_Interviewer(ApplicantVM model)
         {
             _applicant = new Applicant();
@@ -287,6 +298,7 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Add_InterviewSchemeToApplicant(ApplicantVM model)
         {
             _applicant = new Applicant();
@@ -312,6 +324,7 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Pass_InterviewScheme(InterviewSchemeVM model)
         {
             _interviewScheme = new InterviewScheme();
@@ -332,6 +345,7 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Pass_InterviewScheme_Question(InterviewSchemeVM model)
         {
             _interviewScheme = new InterviewScheme();
@@ -354,7 +368,7 @@ namespace UCL.ISM.Client.Controllers
             return View("../Administration/CreateQuestionToInterview", model);
         }
 
-        
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult SortByPriority()
         {
             _applicant = new Applicant();
@@ -376,6 +390,7 @@ namespace UCL.ISM.Client.Controllers
             return View("../Administration/Index", ordered);
         }
 
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult SortByEU()
         {
             ApplicantVM appvm;
@@ -398,6 +413,7 @@ namespace UCL.ISM.Client.Controllers
             return View("../Administration/Index", listapp);
         }
 
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult SortByEUPriority()
         {
             _applicant = new Applicant();
@@ -422,6 +438,7 @@ namespace UCL.ISM.Client.Controllers
             return View("../Administration/Index", ordered);
         }
 
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult SortByNonEU()
         {
             ApplicantVM appvm;
@@ -444,6 +461,7 @@ namespace UCL.ISM.Client.Controllers
             return View("../Administration/Index", listapp);
         }
 
+        [Authorize(Roles = UserRoles.Administration)]
         public IActionResult SortByNonEUPriority()
         {
             ApplicantVM appvm;

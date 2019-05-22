@@ -12,6 +12,7 @@ namespace UCL.ISM.Client.Models
         public string Lastname { get; set; }
         public int ProcessId { get; set; }
         public string Process { get; set; }
+        public string InterviewerName { get; set; }
 
         public LimitedApplicantData()
         {

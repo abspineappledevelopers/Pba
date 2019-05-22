@@ -140,6 +140,7 @@ namespace UCL.ISM.BLL.DAL
 
         public void ExecuteCmd(string query, List<MySqlParameter> parameters)
         {
+            cmd = new MySqlCommand();
             Get_Connection();
 
             using (cmd.Connection = conn)
@@ -173,6 +174,7 @@ namespace UCL.ISM.BLL.DAL
 
         public void ExecuteCmd(string query, MySqlParameter param1, MySqlParameter param2)
         {
+            cmd = new MySqlCommand();
             Get_Connection();
 
             using (cmd.Connection = conn)
@@ -203,6 +205,7 @@ namespace UCL.ISM.BLL.DAL
 
         public void ExecuteCmd(string query, MySqlParameter param)
         {
+            cmd = new MySqlCommand();
             Get_Connection();
 
             using (cmd.Connection = conn)

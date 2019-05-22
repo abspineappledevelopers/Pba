@@ -54,6 +54,13 @@ namespace UCL.ISM.BLL.BLL
             return db.GetApplicant(id);
         }
 
+        public Applicant EditApplicant(Applicant model)
+        {
+            db = new ApplicantDB();
+
+            return db.EditApplicant(model);
+        }
+
         public List<Applicant> GetAllApplicantsLimitedData()
         {
             db = new ApplicantDB();

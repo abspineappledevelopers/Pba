@@ -148,6 +148,39 @@ namespace UCL.ISM.BLL.DAL
             }
         }
 
+        public Applicant EditApplicant(Applicant applicant)
+        {
+            string query = "UPDATE UCL_Applicant SET Firstname = @Firstname, Lastname = @Lastname, Email = @Email, Age = @Age, IsEU = @IsEU, StudyField = @StudyField, Priority = @Priority, Nationality = @Nationality, Interviewer = @Interviewer, Comment = @Comment, ResidencePermit = @Residence, InterviewAssigned = @Scheme WHERE Id = @Id";
+            string id = "@Id";
+            string firstname = "@Firstname";
+            string lastname = "@Lastname";
+            string email = "@Email";
+            string age = "@Age";
+            string iseu = "@IsEU";
+            string studyfield = "@StudyField";
+            string priority = "@Priority";
+            string nationality = "@Nationality";
+            string interviewer = "@Interviewer";
+            string comment = "@Comment";
+            string residencepermit = "@Residence";
+            string interviewscheme = "@Scheme";
+
+            List<string> tempP = new List<string>() {
+                id, firstname, lastname, email, age, iseu, studyfield, priority, nationality, interviewer, comment, residencepermit, interviewscheme
+            };
+
+            List<object> tempV = new List<object>()
+            {
+                applicant.Id, applicant.Firstname, applicant.Lastname, applicant.Email, applicant.Age,
+                applicant.IsEU, applicant.StudyField.Id, applicant.Priority, applicant.Nationality.Id,
+                applicant.Interviewer.Id, applicant.Comment, applicant.HasResidencePermit, applicant.InterviewScheme.Id
+            };
+
+            ExecuteCmd(query, SetParametersList(tempP, tempV));
+
+            return applicant;
+        }
+
         public List<Applicant> GetAllApplicantsLimitedData()
         {
             db.Get_Connection();
@@ -157,8 +190,8 @@ namespace UCL.ISM.BLL.DAL
 
             try
             {
-                cmd.CommandText = "SELECT UCL_Applicant.Id, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_ApplicantProcess.Id," + 
-                "UCL_ApplicantProcess.Process FROM UCL_Applicant JOIN UCL_ApplicantProcess ON UCL_Applicant.Process = UCL_ApplicantProcess.Id";
+                cmd.CommandText = "SELECT UCL_Applicant.Id, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_ApplicantProcess.Id," +
+                "UCL_ApplicantProcess.Process, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname FROM UCL_Applicant JOIN UCL_ApplicantProcess ON UCL_Applicant.Process = UCL_ApplicantProcess.Id LEFT OUTER JOIN UCL_Interviewer ON UCL_Interviewer.Id = UCL_Applicant.Interviewer";
       
 
                 MySqlDataReader reader = cmd.ExecuteReader();
@@ -179,6 +212,15 @@ namespace UCL.ISM.BLL.DAL
                             Process = reader.GetString(4).ToString()
                         }
                     };
+
+                    if (_app.Process.Id != 1)
+                    {
+                        _app.Interviewer = new Interviewer()
+                        {
+                            Firstname = reader.GetString(5).ToString(),
+                            Lastname = reader.GetString(6).ToString()
+                        };
+                    }
 
                     _listapp.Add(_app);
                 }
@@ -202,7 +244,7 @@ namespace UCL.ISM.BLL.DAL
 
         public void CreateApplicant(Applicant applicant)
         {
-            string query = "INSERT INTO UCL_Applicant(Id, Firstname, Lastname, Email, Age, IsEU, StudyField, Priority, Nationality, Interviewer, Comment) VALUES (@Id, @Firstname, @Lastname, @Email, @Age, @IsEU, @StudyField, @Priority, @Nationality, @Interviewer, @Comment)";
+            string query = "INSERT INTO UCL_Applicant(Id, Firstname, Lastname, Email, Age, IsEU, StudyField, Priority, Nationality, Interviewer, Comment, Process) VALUES (@Id, @Firstname, @Lastname, @Email, @Age, @IsEU, @StudyField, @Priority, @Nationality, @Interviewer, @Comment, @Process)";
             string param1 = "@Id";
             string param2 = "@Firstname";
             string param3 = "@Lastname";
@@ -214,16 +256,17 @@ namespace UCL.ISM.BLL.DAL
             string param9 = "@Nationality";
             string param10 = "@Interviewer";
             string param11 = "@Comment";
+            string param12 = "Process";
 
             List<string> tempP = new List<string>() {
-                param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11
+                param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12
             };
 
             List<object> tempV = new List<object>()
             {
                 applicant.Id, applicant.Firstname, applicant.Lastname, applicant.Email, applicant.Age,
                 applicant.IsEU, applicant.StudyField.Id, applicant.Priority, applicant.Nationality.Id,
-                applicant.Interviewer.Id, applicant.Comment
+                applicant.Interviewer.Id, applicant.Comment, 1
             };
 
             ExecuteCmd(query, SetParametersList(tempP, tempV));
@@ -231,7 +274,7 @@ namespace UCL.ISM.BLL.DAL
 
         public void AddInterviewSchemeToApplicant(Applicant model)
         {
-            string query = "UPDATE UCL_Applicant SET InterviewAssigned = @Scheme WHERE Id = @Id";
+            string query = "UPDATE UCL_Applicant SET InterviewAssigned = @Scheme WHERE Id = @Id; UPDATE UCL_Applicant SET Process = 2 WHERE Id = @Id AND Interviewer IS NOT NULL";
             string param1 = "@Id";
             string param2 = "@Scheme";
             ExecuteCmd(query, SetParameterWithValue(param1, model.Id), SetParameterWithValue(param2, model.InterviewScheme.Id));
@@ -239,7 +282,7 @@ namespace UCL.ISM.BLL.DAL
 
         public void AddInterviewerToApplicant(Applicant model)
         {
-            string query = "UPDATE UCL_Applicant SET Interviewer=@Interviewer WHERE Id = @Id";
+            string query = "UPDATE UCL_Applicant SET Interviewer=@Interviewer WHERE Id = @Id; UPDATE UCL_Applicant SET Process = 2 WHERE Id = @Id AND InterviewAssigned IS NOT NULL";
             string param1 = "@Id";
             string param2 = "@Interviewer";
             ExecuteCmd(query, SetParameterWithValue(param1, model.Id), SetParameterWithValue(param2, model.Interviewer.Id));

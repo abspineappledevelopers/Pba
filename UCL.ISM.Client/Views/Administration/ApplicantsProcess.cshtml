@@ -1,7 +1,77 @@
 ﻿@model List<UCL.ISM.Client.Models.LimitedApplicantData>
 @{
     ViewData["Title"] = "ApplicantsProcess";
+    var admin = Model.Where(x => x.ProcessId == 1).ToList();
+    var interview = Model.Where(x => x.ProcessId == 2).ToList();
+    var finished = Model.Where(x => x.ProcessId == 3).ToList();
+    var interviewers = new List<string>();
+    foreach (var inter in interview)
+    {
+        if (!interviewers.Contains(inter.InterviewerName))
+        {
+            interviewers.Add(inter.InterviewerName);
+        }
+    }
+    interviewers = interviewers.OrderBy(q => q).ToList();
 }
 
-<h2>ApplicantsProcess</h2>
+<h2>Status</h2>
 
+<div class="row">
+    <div class="col-12 col-md-4" style="border-right: solid 1px black">
+        <h3>Påbegyndt</h3>
+        
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>studieadministration</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < admin.Count; i++)
+                {
+                    <partial name="../Administration/Partials/_ApplicantProcessAdministration" model="admin[i]" />
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-12 col-md-4" style="border-right: solid 1px black">
+        <h3>Afventer interview</h3>
+        @foreach (var name in interviewers)
+        {
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th>@name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < interview.Count; i++)
+                    {
+                        if (name == interview[i].InterviewerName)
+                        {
+                            <partial name="../Administration/Partials/_ApplicantProcessAdministration" model="interview[i]" />
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+    <div class="col-12 col-md-4">
+        <h3>Afsluttet</h3>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>Studieoptag</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < finished.Count; i++)
+                {
+                    <partial name="../Administration/Partials/_ApplicantProcessAdministration" model="finished[i]" />
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
