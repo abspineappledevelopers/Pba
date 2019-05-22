@@ -87,7 +87,7 @@ namespace UCL.ISM.BLL.DAL
                     "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," +
                     "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_Applicant.InterviewAssigned, UCL_InterviewScheme.Name FROM UCL_Applicant JOIN UCL_Nationality " +
                     "on UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_StudyField on UCL_Applicant.StudyField = UCL_StudyField.Id LEFT OUTER JOIN UCL_Interviewer " +
-                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id JOIN UCL_InterviewScheme on UCL_InterviewScheme.Id = UCL_Applicant.InterviewAssigned WHERE UCL_Applicant.Id = @Id";
+                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id LEFT OUTER JOIN UCL_InterviewScheme on UCL_InterviewScheme.Id = UCL_Applicant.InterviewAssigned WHERE UCL_Applicant.Id = @Id";
             string param1 = "@Id";
 
             db.Get_Connection();
