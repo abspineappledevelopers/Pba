@@ -17,9 +17,10 @@ namespace UCL.ISM.BLL.DAL
         {
             string query = "SELECT UCL_Applicant.ID, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age," +
                     "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," +
-                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit FROM UCL_Applicant JOIN UCL_Nationality " +
+                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_InterviewScheme.Name FROM UCL_Applicant JOIN UCL_Nationality " +
                     "on UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_StudyField on UCL_Applicant.StudyField = UCL_StudyField.Id LEFT OUTER JOIN UCL_Interviewer " +
-                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id WHERE UCL_Applicant.InterviewAssigned is NULL";
+                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id LEFT OUTER JOIN UCL_InterviewScheme on UCL_Applicant.InterviewAssigned = UCL_InterviewScheme.Id"
+                    + " WHERE UCL_Applicant.InterviewAssigned is NULL OR UCL_Applicant.Interviewer is NULL";
 
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
@@ -84,9 +85,9 @@ namespace UCL.ISM.BLL.DAL
         {
             string query = "SELECT UCL_Applicant.Id, UCL_Applicant.Firstname, UCL_Applicant.Lastname, UCL_Applicant.Email, UCL_Applicant.Age," +
                     "UCL_Applicant.IsEU, UCL_Applicant.Priority, UCL_Nationality.Id, UCL_Nationality.Name, UCL_Nationality.IsEU, UCL_StudyField.Id," +
-                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_Applicant.InterviewAssigned FROM UCL_Applicant JOIN UCL_Nationality " +
+                    "UCL_StudyField.Name, UCL_Interviewer.Id, UCL_Interviewer.Firstname, UCL_Interviewer.Lastname, UCL_Applicant.Comment, UCL_Applicant.ResidencePermit, UCL_Applicant.InterviewAssigned, UCL_InterviewScheme.Name FROM UCL_Applicant JOIN UCL_Nationality " +
                     "on UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_StudyField on UCL_Applicant.StudyField = UCL_StudyField.Id LEFT OUTER JOIN UCL_Interviewer " +
-                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id WHERE UCL_Applicant.Id = @Id";
+                    "on UCL_Applicant.Interviewer = UCL_Interviewer.Id JOIN UCL_InterviewScheme on UCL_InterviewScheme.Id = UCL_Applicant.InterviewAssigned WHERE UCL_Applicant.Id = @Id";
             string param1 = "@Id";
 
             db.Get_Connection();
@@ -102,7 +103,6 @@ namespace UCL.ISM.BLL.DAL
                 cmd.Parameters["@Id"].Value = id;
 
                 MySqlDataReader reader = cmd.ExecuteReader();
-                _listapp = new List<Applicant>();
 
                 while (reader.Read())
                 {
@@ -153,7 +153,7 @@ namespace UCL.ISM.BLL.DAL
             db.Get_Connection();
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = db.connection;
+            cmd.Connection = db.conn;
 
             try
             {
@@ -193,9 +193,9 @@ namespace UCL.ISM.BLL.DAL
             }
             finally
             {
-                if (db.connection.State == System.Data.ConnectionState.Open)
+                if (db.conn.State == System.Data.ConnectionState.Open)
                 {
-                    db.connection.Close();
+                    db.conn.Close();
                 }
             }
         }

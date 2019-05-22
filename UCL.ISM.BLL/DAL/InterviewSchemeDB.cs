@@ -51,7 +51,7 @@ namespace UCL.ISM.BLL.DAL
             throw new NotImplementedException();
         }
 
-        public InterviewScheme GetInterviewScheme(int id)
+        public InterviewScheme GetInterviewScheme(int? id)
         {
             string query = "SELECT * FROM UCL_InterviewScheme WHERE Id = @Id";
 
@@ -65,14 +65,14 @@ namespace UCL.ISM.BLL.DAL
             return ExecuteReaderListScheme(query);
         }
 
-        public List<Question> GetAllSchemeQuestions(int id)
+        public List<Question> GetAllSchemeQuestions(int? id)
         {
             string query = "SELECT * FROM UCL_Question WHERE InterviewScheme =" + id;
 
             return ExecuteReaderQuestions(query);
         }
 
-        public void UpdateInterviewScheme(int id)
+        public void UpdateInterviewScheme(int? id)
         {
             string param1 = "@Id";
             string query = "UPDATE UCL_InterviewScheme WHERE Id = @Id";
@@ -80,7 +80,7 @@ namespace UCL.ISM.BLL.DAL
             _db.ExecuteCmd(query, _db.SetParameterWithValue(param1, id));
         }
 
-        public void DeleteInterviewScheme(int id)
+        public void DeleteInterviewScheme(int? id)
         {
             string param1 = "@Id";
             string query = "DELETE FROM UCL_InterviewScheme WHERE Id = @id";

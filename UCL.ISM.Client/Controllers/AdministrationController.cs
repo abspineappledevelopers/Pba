@@ -35,7 +35,7 @@ namespace UCL.ISM.Client.Controllers
             var studyfields = _studyField.GetAllStudyFields();
             var nationalities = _nationality.GetAllNationalities();
             var interviewers = _interviewer.GetAllInterviewers();
-            var list = _applicant.GetAllApplicantsWithoutSchema();
+            var list = _applicant.GetAllApplicantsWithoutSchemaOrInterviewer();
             foreach(var app in list)
             {
                 appvm = new ApplicantVM();

@@ -10,7 +10,7 @@ namespace UCL.ISM.BLL.BLL
     {
         private readonly InterviewSchemeDB _db;
 
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime EditedDate { get; set; }
         public string Name { get; set; }
@@ -42,7 +42,7 @@ namespace UCL.ISM.BLL.BLL
             _db.RemoveQuestion(question);
         }
 
-        public List<Question> GetQuestions(int id)
+        public List<Question> GetQuestions(int? id)
         {
             List<Question> temp = _db.GetAllSchemeQuestions(id);
             return temp;
