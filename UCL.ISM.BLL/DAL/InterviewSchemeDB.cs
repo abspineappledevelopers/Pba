@@ -94,25 +94,28 @@ namespace UCL.ISM.BLL.DAL
             _db.ExecuteCmd(query, _db.SetParameterWithValue(param1, id));
         }
 
-        public List<InterviewScheme> GetAllInterviewSchemesAndQuestions()
+        public InterviewScheme GetInterviewSchemeAndQuestions(int? Id)
         {
-            string query = "SELECT * FROM UCL_InterviewScheme";
+            string query = "SELECT * FROM UCL_InterviewScheme WHERE Id = @Id";
             string query2 = "SELECT * FROM UCL_Question WHERE InterviewScheme = @Id";
             string id = "@Id";
+            int? value = Id;
 
-            return ExecuteReaderSchemeAndQuestions(query, query2, id);
+            return ExecuteReaderSchemeAndQuestions(query, query2, id, value);
         }
 
         #region Functionality
-        private List<InterviewScheme> ExecuteReaderSchemeAndQuestions(string query, string query2, string id)
+        private InterviewScheme ExecuteReaderSchemeAndQuestions(string query, string query2, string id, int? value)
         {
             _db.Get_Connection();
-            List<InterviewScheme> temp = new List<InterviewScheme>();
+            InterviewScheme temp = new InterviewScheme();
 
             using (cmd.Connection = _db.conn)
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(_db.SetParameterWithValue(id, value));
 
                 try
                 {
@@ -127,34 +130,30 @@ namespace UCL.ISM.BLL.DAL
                             ivs.CreatedDate = reader.GetDateTime(1);
                             ivs.EditedDate = reader.GetDateTime(2);
                             ivs.Name = reader.GetString(3);
-                            if(reader.GetValue(4) != DBNull.Value)
+                            if (reader.GetValue(4) != DBNull.Value)
                             {
                                 ivs.Comment = reader.GetString(4);
                             }
 
-                            temp.Add(ivs);
+                            temp = ivs;
                         }
                     }
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query2;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(_db.SetParameterWithValue(id, value));
 
-                    for(int i = 0; i < temp.Count; i++)
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        cmd.CommandType = System.Data.CommandType.Text;
-                        cmd.CommandText = query2;
-                        cmd.Parameters.Clear();
-                        cmd.Parameters.Add(_db.SetParameterWithValue(id, temp[i].Id));
-
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
+                            temp.Questions.Add(new Question()
                             {
-                                temp[i].Questions.Add(new Question()
-                                {
-                                    Id = reader.GetGuid(0),
-                                    Order = reader.GetInt32(1),
-                                    Quest = reader.GetString(2).ToString(),
-                                    InterviewSchemeId = reader.GetInt32(4)
-                                });
-                            }
+                                Id = reader.GetGuid(0),
+                                Order = reader.GetInt32(1),
+                                Quest = reader.GetString(2).ToString(),
+                                InterviewSchemeId = reader.GetInt32(4)
+                            });
                         }
                     }
                 }
@@ -236,7 +235,11 @@ namespace UCL.ISM.BLL.DAL
                             scheme.Id = reader.GetInt32(0);
                             scheme.CreatedDate = reader.GetDateTime(1);
                             scheme.EditedDate = reader.GetDateTime(2);
-                            scheme.Comment = reader.GetString(3);
+                            scheme.Name = reader.GetString(3);
+                            if(reader.GetValue(4) != DBNull.Value)
+                            {
+                                scheme.Comment = reader.GetString(4);
+                            }
                         }
                     }
                 }
@@ -279,7 +282,10 @@ namespace UCL.ISM.BLL.DAL
                             scheme.CreatedDate = reader.GetDateTime(1);
                             scheme.EditedDate = reader.GetDateTime(2);
                             scheme.Name = reader.GetString(3).ToString();
-                            scheme.Comment = reader.GetString(4).ToString();
+                            if (reader.GetValue(4) != DBNull.Value)
+                            {
+                                scheme.Comment = reader.GetString(4);
+                            }
 
                             list.Add(scheme);
                         }
@@ -311,7 +317,7 @@ namespace UCL.ISM.BLL.DAL
             cmd.Connection = _db.conn;
             cmd.Transaction = _db.conn.BeginTransaction();
             cmd.CommandType = System.Data.CommandType.Text;
-            
+
             try
             {
                 cmd.CommandText = query;

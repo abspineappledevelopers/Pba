@@ -23,7 +23,7 @@ namespace UCL.ISM.Client.Controllers
         {
             _nationality = new Nationality();
             _studyField = new StudyField();
-            
+
             InterviewSchemeVM vm = new InterviewSchemeVM();
 
             var nationalities = _nationality.GetAllNationalities();
@@ -56,7 +56,7 @@ namespace UCL.ISM.Client.Controllers
             {
                 model.Countries.Add(new SelectListItem() { Text = country.Name, Value = country.Id.ToString() });
             }
-            foreach(var study in studyfields)
+            foreach (var study in studyfields)
             {
                 model.Studyfields.Add(new SelectListItem() { Text = study.FieldName, Value = study.Id.ToString() });
             }
@@ -95,7 +95,7 @@ namespace UCL.ISM.Client.Controllers
             }
 
             _interviewScheme.AddQuestionToInterview(model.Question);
-            
+
             var nationalities = _nationality.GetAllNationalities();
             var studyfields = _studyField.GetAllStudyFields();
             foreach (var country in nationalities)
@@ -123,26 +123,55 @@ namespace UCL.ISM.Client.Controllers
         public IActionResult Get_All_InterviewScheme()
         {
             _interviewScheme = new InterviewScheme();
-
-            InterviewSchemeVM vm;
+            
             List<InterviewSchemeVM> listvm = new List<InterviewSchemeVM>();
 
-            var list = _interviewScheme.GetAllInterviewSchemesAndQuestions();
+            var list = _interviewScheme.GetAllInterviewSchemes();
 
             foreach(var item in list)
             {
-                vm = new InterviewSchemeVM();
-                vm = item;
-                //vm.Questions = new List<QuestionVM>();
-                foreach (var quest in item.Questions)
-                {
-                    vm.Questions.Add(new QuestionVM() { Id = quest.Id, Order = quest.Order, InterviewSchemeId = quest.InterviewSchemeId, Quest = quest.Quest });
-                }
-                vm.Questions = vm.Questions.OrderBy(x => x.Order).ToList();
-                listvm.Add(vm);
+                listvm.Add(item);
             }
+            
 
             return View("../Administration/Get_All_InterviewSchemes_And_Questions", listvm);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = UserRoles.Administration)]
+        public IActionResult Get_InterviewSchemeAndQuestions_Modal(int? id)
+        {
+            _interviewScheme = new InterviewScheme();
+            _nationality = new Nationality();
+            _studyField = new StudyField();
+
+
+            InterviewSchemeVM vm = new InterviewSchemeVM();
+            List<InterviewSchemeVM> listvm = new List<InterviewSchemeVM>();
+
+            var model = _interviewScheme.GetInterviewSchemeAndQuestions(id);
+            vm = model;
+
+            var nationalities = _nationality.GetAllNationalities();
+            var studyfields = _studyField.GetAllStudyFields();
+
+            foreach (var country in nationalities)
+            {
+                vm.Countries.Add(new SelectListItem() { Text = country.Name, Value = country.Id.ToString() });
+            }
+            foreach (var study in studyfields)
+            {
+                vm.Studyfields.Add(new SelectListItem() { Text = study.FieldName, Value = study.Id.ToString() });
+            }
+
+            foreach (var quest in model.Questions)
+            {
+                vm.Questions.Add(new QuestionVM() { Id = quest.Id, Order = quest.Order, InterviewSchemeId = quest.InterviewSchemeId, Quest = quest.Quest });
+            }
+            vm.Questions = vm.Questions.OrderBy(x => x.Order).ToList();
+
+
+            return PartialView("../Administration/Get_All_InterviewSchemes_And_Questions", vm);
         }
     }
 }

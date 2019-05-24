@@ -56,9 +56,9 @@ namespace UCL.ISM.BLL.BLL
             return _db.GetAllInterviewSchemes();
         }
 
-        public List<InterviewScheme> GetAllInterviewSchemesAndQuestions()
+        public InterviewScheme GetInterviewSchemeAndQuestions(int? id)
         {
-            return _db.GetAllInterviewSchemesAndQuestions();
+            return _db.GetInterviewSchemeAndQuestions(id);
         }
     }
 }

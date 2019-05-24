@@ -1,20 +1,70 @@
 ﻿@model UCL.ISM.Client.Models.InterviewSchemeVM
 @{ }
 <div class="row">
-    <input asp-for="Id" type="hidden" />
+    
     <div class="col-12">
-        <input asp-for="Name" type="text" />
+        
     </div>
 </div>
 
-@for (int i = 0; i < Model.Questions.Count; i++)
-{
-<div class="row">
-    <input asp-for="Questions[i].Id" type="hidden" />
-    <div class="col-12">
-        <input asp-for="Questions[i].Quest" type="text" />
+<div class="card flex-fill" style="background-color: #e6e6e6; margin-bottom: 30px;">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <input asp-for="Id" type="hidden" />
+                <div class="form-group">
+                    <small><label for="firstname">Navn</label></small>
+                    <p>@Model.Name</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <small><label for="created">Lavet d.</label></small>
+                    <small id="created">@Model.CreatedDate</small>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <small><label for="created">redigeret d.</label></small>
+                    <small id="sidst redigeret">@Model.EditedDate</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-12">
+                <a id="schemebtn" class="btn btn-success" style="width: 100%;" href="#" onclick="createModal('@Url.Action("Get_InterviewSchemeAndQuestions_Modal", "Administration_InterviewScheme" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                    Gå til
+                </a>
+            </div>
+        </div>
     </div>
 </div>
-}
+
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="modelContent">
+        </div>
+    </div>
+</div>
+
+<script>
+    function createModal(url) {
+        $('#modelContent').load(url);
+        $('#myModal').modal('show');
+    }
+</script>
+
+@*@for (int i = 0; i < Model.Questions.Count; i++)
+    {
+    <div class="row">
+        <input asp-for="Questions[i].Id" type="hidden" />
+        <div class="col-12">
+            <input asp-for="Questions[i].Quest" type="text" />
+        </div>
+    </div>
+    }*@
 
 
