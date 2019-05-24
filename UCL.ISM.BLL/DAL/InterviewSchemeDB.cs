@@ -21,24 +21,30 @@ namespace UCL.ISM.BLL.DAL
 
         public int CreateNewInterviewScheme(InterviewScheme interview)
         {
-            string query = "INSERT INTO UCL_InterviewScheme(Comment) VALUES (@Comment)";
-            string query2 = "INSERT INTO UCL_InterviewSchemeForCountry(Country, InterviewScheme) VALUES (@CountryId, @InterviewScheme)";
+            string query = "INSERT INTO UCL_InterviewScheme(Name, Comment) VALUES (@Name, @Comment)";
+            string query2 = "INSERT INTO UCL_InterviewSchemeForCountry(Id, Country, InterviewScheme) VALUES (@Guid, @CountryId, @InterviewScheme)";
+            string query3 = "INSERT INTO UCL_InterviewSchemeForStudyField(Id, StudyField, InterviewScheme) VALUES (@Guid, @StudyId, @InterviewScheme)";
+            string SchemeName = "@Name";
             string param1 = "@Comment";
             string param2 = "@CountryId";
             string param3 = "@InterviewScheme";
+            string param4 = "@StudyId";
+            string param5 = "@Guid";
 
-            return ExecuteTrans(query, query2, _db.SetParameterWithValue(param1, interview.Comment), param2, param3, interview);
+            return ExecuteTrans(query, query2, query3, _db.SetParameterWithValue(param1, interview.Comment), _db.SetParameterWithValue(SchemeName, interview.Name), param2, param3, param4, param5, interview);
         }
 
         public void AddQuestion(Question question)
         {
-            string query = "INSERT INTO UCL_Question(Id, Question, InterviewScheme) VALUES (@Id, @Question, @InterviewScheme)";
+            string query = "INSERT INTO UCL_Question(Id, OrderInList, Question, InterviewScheme) VALUES (@Id, @Order, @Question, @InterviewScheme)";
             string param1 = "@Id";
             string param2 = "@Question";
             string param3 = "@InterviewScheme";
+            string order = "@Order";
 
             List<MySqlParameter> temp = new List<MySqlParameter>();
             temp.Add(_db.SetParameterWithValue(param1, Guid.NewGuid()));
+            temp.Add(_db.SetParameterWithValue(order, question.Order));
             temp.Add(_db.SetParameterWithValue(param2, question.Quest));
             temp.Add(_db.SetParameterWithValue(param3, question.InterviewSchemeId));
 
@@ -88,7 +94,86 @@ namespace UCL.ISM.BLL.DAL
             _db.ExecuteCmd(query, _db.SetParameterWithValue(param1, id));
         }
 
+        public List<InterviewScheme> GetAllInterviewSchemesAndQuestions()
+        {
+            string query = "SELECT * FROM UCL_InterviewScheme";
+            string query2 = "SELECT * FROM UCL_Question WHERE InterviewScheme = @Id";
+            string id = "@Id";
+
+            return ExecuteReaderSchemeAndQuestions(query, query2, id);
+        }
+
         #region Functionality
+        private List<InterviewScheme> ExecuteReaderSchemeAndQuestions(string query, string query2, string id)
+        {
+            _db.Get_Connection();
+            List<InterviewScheme> temp = new List<InterviewScheme>();
+
+            using (cmd.Connection = _db.conn)
+            {
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = query;
+
+                try
+                {
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        InterviewScheme ivs;
+
+                        while (reader.Read())
+                        {
+                            ivs = new InterviewScheme();
+                            ivs.Id = reader.GetInt32(0);
+                            ivs.CreatedDate = reader.GetDateTime(1);
+                            ivs.EditedDate = reader.GetDateTime(2);
+                            ivs.Name = reader.GetString(3);
+                            if(reader.GetValue(4) != DBNull.Value)
+                            {
+                                ivs.Comment = reader.GetString(4);
+                            }
+
+                            temp.Add(ivs);
+                        }
+                    }
+
+                    for(int i = 0; i < temp.Count; i++)
+                    {
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.CommandText = query2;
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.Add(_db.SetParameterWithValue(id, temp[i].Id));
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                temp[i].Questions.Add(new Question()
+                                {
+                                    Id = reader.GetGuid(0),
+                                    Order = reader.GetInt32(1),
+                                    Quest = reader.GetString(2).ToString(),
+                                    InterviewSchemeId = reader.GetInt32(4)
+                                });
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    if (_db.conn.State == System.Data.ConnectionState.Open)
+                    {
+                        cmd.Connection.Close();
+                    }
+                }
+            }
+            return temp;
+        }
+
         private List<Question> ExecuteReaderQuestions(string query)
         {
             _db.Get_Connection();
@@ -109,8 +194,9 @@ namespace UCL.ISM.BLL.DAL
                         {
                             quest = new Question();
                             quest.Id = reader.GetGuid(0);
-                            quest.Quest = reader.GetString(1).ToString();
-                            quest.InterviewSchemeId = reader.GetInt32(3);
+                            quest.Order = reader.GetInt32(1);
+                            quest.Quest = reader.GetString(2).ToString();
+                            quest.InterviewSchemeId = reader.GetInt32(4);
                             temp.Add(quest);
                         }
                     }
@@ -215,7 +301,7 @@ namespace UCL.ISM.BLL.DAL
             return list;
         }
 
-        private int ExecuteTrans(string query, string query2, MySqlParameter param, string param2, string param3, object value)
+        private int ExecuteTrans(string query, string query2, string query3, MySqlParameter param, MySqlParameter name, string param2, string param3, string param4, string param5, object value)
         {
             var schemeId = 0;
             _db.Get_Connection();
@@ -225,19 +311,36 @@ namespace UCL.ISM.BLL.DAL
             cmd.Connection = _db.conn;
             cmd.Transaction = _db.conn.BeginTransaction();
             cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = query;
-            cmd.Parameters.Add(param);
+            
             try
             {
+                cmd.CommandText = query;
+                cmd.Parameters.Add(param);
+                cmd.Parameters.Add(name);
                 cmd.ExecuteNonQuery();
+
                 schemeId = Convert.ToInt32(cmd.LastInsertedId);
                 var type = value as InterviewScheme;
                 for (int i = 0; i < type.CountryId.Count; i++)
                 {
+                    var id = Guid.NewGuid();
+
                     cmd.Parameters.Clear();
                     cmd.CommandText = query2;
                     cmd.Parameters.Add(_db.SetParameterWithValue(param2, type.CountryId[i]));
                     cmd.Parameters.Add(_db.SetParameterWithValue(param3, schemeId));
+                    cmd.Parameters.Add(_db.SetParameterWithValue(param5, id));
+                    cmd.ExecuteNonQuery();
+                }
+                for (int i = 0; i < type.StudyFieldId.Count; i++)
+                {
+                    var id = Guid.NewGuid();
+
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = query3;
+                    cmd.Parameters.Add(_db.SetParameterWithValue(param4, type.StudyFieldId[i]));
+                    cmd.Parameters.Add(_db.SetParameterWithValue(param3, schemeId));
+                    cmd.Parameters.Add(_db.SetParameterWithValue(param5, id));
                     cmd.ExecuteNonQuery();
                 }
                 cmd.Transaction.Commit();

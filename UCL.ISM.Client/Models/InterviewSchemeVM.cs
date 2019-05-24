@@ -15,16 +15,20 @@ namespace UCL.ISM.Client.Models
         public DateTime EditedDate { get; set; }
         public string Name { get; set; }
         public string Comment { get; set; }
-        public Question Question { get; set; }
-        public List<Question> Questions { get; set; }
+        public QuestionVM Question { get; set; }
+        public List<QuestionVM> Questions { get; set; }
         public List<int> CountryId { get; set; }
         public List<SelectListItem> Countries { get; set; }
+        public List<int> StudyfieldId { get; set; }
+        public List<SelectListItem> Studyfields { get; set; }
 
         public InterviewSchemeVM()
         {
             Countries = new List<SelectListItem>();
-            Questions = new List<Question>();
+            Studyfields = new List<SelectListItem>();
+            Questions = new List<QuestionVM>();
             CountryId = new List<int>();
+            StudyfieldId = new List<int>();
             Question = new Question();
         }
 
@@ -37,7 +41,8 @@ namespace UCL.ISM.Client.Models
                 EditedDate = interview.EditedDate,
                 Name = interview.Name,
                 Comment = interview.Comment,
-                CountryId = interview.CountryId
+                CountryId = interview.CountryId,
+                StudyfieldId = interview.StudyFieldId
             };
         }
 
@@ -50,7 +55,8 @@ namespace UCL.ISM.Client.Models
                 EditedDate = vm.EditedDate,
                 Name = vm.Name,
                 Comment = vm.Comment,
-                CountryId = vm.CountryId
+                CountryId = vm.CountryId,
+                StudyFieldId = vm.StudyfieldId
             };
         }
     }

@@ -1,0 +1,21 @@
+﻿@model UCL.ISM.Client.Models.QuestionVM
+
+<form asp-action="Pass_InterviewScheme_Question" asp-controller="Administration_InterviewScheme" method="post">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="Order" type="hidden" />
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-4">
+                    <input asp-for="Quest" type="text" class="form-control" id="name" />
+                </div>
+                <div class="col-1">
+                    <button type="submit" class="btn btn-warning">Ændre</button>
+                </div>
+                <div class="col-1">
+                    <a href="#" class="btn btn-danger">Slet</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

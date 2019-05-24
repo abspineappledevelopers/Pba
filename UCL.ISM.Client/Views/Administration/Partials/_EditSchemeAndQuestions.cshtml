@@ -1,0 +1,20 @@
+﻿@model UCL.ISM.Client.Models.InterviewSchemeVM
+@{ }
+<div class="row">
+    <input asp-for="Id" type="hidden" />
+    <div class="col-12">
+        <input asp-for="Name" type="text" />
+    </div>
+</div>
+
+@for (int i = 0; i < Model.Questions.Count; i++)
+{
+<div class="row">
+    <input asp-for="Questions[i].Id" type="hidden" />
+    <div class="col-12">
+        <input asp-for="Questions[i].Quest" type="text" />
+    </div>
+</div>
+}
+
+

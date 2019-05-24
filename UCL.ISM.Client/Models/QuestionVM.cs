@@ -9,6 +9,7 @@ namespace UCL.ISM.Client.Models
     public class QuestionVM
     {
         public Guid Id { get; set; }
+        public int Order { get; set; }
         public string Quest { get; set; }
         public string Answer { get; set; }
         public int? InterviewSchemeId { get; set; }
@@ -18,6 +19,7 @@ namespace UCL.ISM.Client.Models
             return new QuestionVM
             {
                 Id = quest.Id,
+                Order = quest.Order,
                 Quest = quest.Quest,
                 Answer = quest.Answer,
                 InterviewSchemeId = quest.InterviewSchemeId
@@ -30,6 +32,7 @@ namespace UCL.ISM.Client.Models
             return new Question
             {
                 Id = vm.Id,
+                Order = vm.Order,
                 Quest = vm.Quest,
                 Answer = vm.Answer,
                 InterviewSchemeId = vm.InterviewSchemeId
