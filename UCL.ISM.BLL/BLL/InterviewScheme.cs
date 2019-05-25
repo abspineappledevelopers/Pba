@@ -32,6 +32,16 @@ namespace UCL.ISM.BLL.BLL
             return _db.CreateNewInterviewScheme(interview);
         }
 
+        public void UpdateInterviewScheme(InterviewScheme interview)
+        {
+            _db.UpdateInterviewScheme(interview);
+        }
+
+        public void DeleteInterviewScheme(int? id)
+        {
+            _db.DeleteInterviewScheme(id);
+        }
+
         public void AddQuestionToInterview(Question question)
         {
             question.Id = Guid.NewGuid();
@@ -39,9 +49,17 @@ namespace UCL.ISM.BLL.BLL
             _db.AddQuestion(question);
         }
 
-        public void RemoveQuestion(Question question)
+        public void UpdateQuestion(Question question)
         {
-            _db.RemoveQuestion(question);
+            if (!string.IsNullOrEmpty(question.Quest))
+            {
+                _db.UpdateQuestion(question);
+            }
+        }
+
+        public void RemoveQuestion(Guid id)
+        {
+            _db.RemoveQuestion(id);
         }
 
         public List<Question> GetQuestions(int? id)
@@ -54,6 +72,11 @@ namespace UCL.ISM.BLL.BLL
         public List<InterviewScheme> GetAllInterviewSchemes()
         {
             return _db.GetAllInterviewSchemes();
+        }
+
+        public List<InterviewScheme> GetSpecificInterviewSchemes(string id)
+        {
+            return _db.GetSpecificInterviewSchemes(id);
         }
 
         public InterviewScheme GetInterviewSchemeAndQuestions(int? id)

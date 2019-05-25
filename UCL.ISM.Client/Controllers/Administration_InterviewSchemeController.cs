@@ -91,7 +91,9 @@ namespace UCL.ISM.Client.Controllers
             }
             else
             {
-                model.Question.Order = countquestions.Count + 1;
+                countquestions = countquestions.OrderBy(x => x.Order).ToList();
+                var last = countquestions.LastOrDefault();
+                model.Question.Order = last.Order + 1;
             }
 
             _interviewScheme.AddQuestionToInterview(model.Question);
@@ -116,6 +118,17 @@ namespace UCL.ISM.Client.Controllers
             model.Questions = model.Questions.OrderBy(x => x.Order).ToList();
 
             return View("../Administration/CreateQuestionToInterview", model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = UserRoles.Administration)]
+        public IActionResult Pass_Edited_InterviewScheme_Question(QuestionVM model)
+        {
+            _interviewScheme = new InterviewScheme();
+            
+            _interviewScheme.UpdateQuestion(model);
+            
+            return RedirectToAction("Get_Specific_Interview", new { id = model.InterviewSchemeId });
         }
 
         [HttpGet]
@@ -170,31 +183,75 @@ namespace UCL.ISM.Client.Controllers
             vm.Questions = vm.Questions.OrderBy(x => x.Order).ToList();
 
             return View("../Administration/Specific_Interview_And_Questions", vm);
-            //return View("../Administration/Partials/Get_All_InterviewSchemes_And_Questions", vm);
+        }
+        
+        [Authorize(Roles = UserRoles.Administration)]
+        public IActionResult Delete_InterviewScheme_Question(string id, string schemeid)
+        {
+            _interviewScheme = new InterviewScheme();
+            
+            _interviewScheme.RemoveQuestion(Guid.Parse(id));
+
+            return RedirectToAction("Get_Specific_Interview", new { id = schemeid });
         }
 
         [HttpPost]
         [Authorize(Roles = UserRoles.Administration)]
-        public IActionResult New_Question_To_Modal(InterviewSchemeVM vm)
+        public IActionResult Pass_new_Question(InterviewSchemeVM model)
         {
-            var index = vm.Questions.Count + 1;
-            vm.Question.Order = index;
 
-            vm.Questions.Add(vm.Question);
+            _interviewScheme = new InterviewScheme();
 
-            return PartialView("../Administration/Partials/Get_All_InterviewSchemes_And_Questions", vm);
-            //return RedirectToAction("Get_All_InterviewScheme");
+            model.Question.InterviewSchemeId = model.Id;
+
+            var countquestions = _interviewScheme.GetQuestions(model.Id);
+            
+            if (countquestions.Count == 0)
+            {
+                model.Question.Order = 1;
+            }
+            else
+            {
+                countquestions = countquestions.OrderBy(x => x.Order).ToList();
+                var last = countquestions.LastOrDefault();
+                model.Question.Order = last.Order + 1;
+            }
+
+            _interviewScheme.AddQuestionToInterview(model.Question);
+
+            return RedirectToAction("Get_Specific_Interview", new { id = model.Id });
         }
+
+        //[HttpPost]
+        //[Authorize(Roles = UserRoles.Administration)]
+        //public IActionResult New_Question_To_Modal(InterviewSchemeVM vm)
+        //{
+        //    var index = vm.Questions.Count + 1;
+        //    vm.Question.Order = index;
+
+        //    vm.Questions.Add(vm.Question);
+
+        //    return PartialView("../Administration/Partials/Get_All_InterviewSchemes_And_Questions", vm);
+        //}
 
         [HttpPost]
         [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Save_Changes_InterviewSchemeAndQuestions(InterviewSchemeVM vm)
         {
-            var index = vm.Questions.Count + 1;
-            vm.Question.Order = index;
+            _interviewScheme = new InterviewScheme();
 
-            vm.Questions.Add(vm.Question);
-            
+            _interviewScheme.UpdateInterviewScheme(vm);
+
+            return RedirectToAction("Get_Specific_Interview", new { id = vm.Id });
+        }
+        
+        [Authorize(Roles = UserRoles.Administration)]
+        public IActionResult Delete_InterviewSchemeAndQuestions(InterviewSchemeVM vm)
+        {
+            _interviewScheme = new InterviewScheme();
+
+            _interviewScheme.DeleteInterviewScheme(vm.Id);
+
             return RedirectToAction("Get_All_InterviewScheme");
         }
     }

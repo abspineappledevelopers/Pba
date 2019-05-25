@@ -7,14 +7,21 @@
 
 <form asp-action="Add_InterviewSchemeToApplicant" asp-controller="Administration" method="post">
     <div class="modal-body">
-        <input asp-for="Id" type="hidden" />
-        <select asp-for="InterviewScheme.Id" asp-items="@Model.InterviewSchemes" class="form-control">
-            <option value="">Vælg skema</option>
-        </select>
+        @if (Model.InterviewSchemes.Count != 0)
+        {
+            <input asp-for="Id" type="hidden" />
+            <select asp-for="InterviewScheme.Id" asp-items="@Model.InterviewSchemes" class="form-control">
+                <option value="">Vælg skema</option>
+            </select>
+        }
+
     </div>
 
     <div class="modal-footer">
-        <button type="submit" class="btn ucl-btn">Gem</button>
-        <button type="button" class="btn ucl-btn" data-dismiss="modal">Luk</button>
-    </div>
+        @if (Model.InterviewSchemes.Count != 0)
+        {
+            <button type="submit" class="btn ucl-btn">Gem</button>
+        }
+            <button type="button" class="btn ucl-btn" data-dismiss="modal">Luk</button>
+        </div>
 </form>
