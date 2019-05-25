@@ -1,50 +1,15 @@
-﻿
+﻿@model List<ApplicantVM>
 @{
     ViewData["Title"] = "Interview";
 }
 
 <div class="container">
-    <dl>
-        <dt>Priority</dt>
-        <dd></dd>
-        <dt>Fag</dt>
-        <dd></dd>
-        <dt>Navn</dt>
-        <dd></dd>
-        <dt>Status</dt>
-        <dd>
-    </dl>
-    <form class="form-horizontal" method="post">
-        <div class="form-group" id="applicants">
-            <table class="table-hover">
-                <thead>
-                    <tr>
-                        <th>Prioritet</th>
-                        <th>Fornavn</th>
-                        <th>Efternavn</th>
-                        <th>Fag</th>
-                        <th>Nationalitet</th>
-                        <th>EU</th>
-                        <th>E-mail</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-            
-        </div>
-        <div class="form-group" id="interviewScheme">
-
-        </div>
-</form>
+    <div class="row" id="applicants" style="margin-top: 30px;">
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <div class="col-sm-6 col-lg-4 d-flex">
+                <partial name="../Interviewer/Partials/_Applicants" model="@Model[i]" />
+            </div>
+        }
+    </div>
 </div>

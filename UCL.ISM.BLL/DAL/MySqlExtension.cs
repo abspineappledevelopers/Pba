@@ -71,9 +71,10 @@ namespace UCL.ISM.BLL.DAL
             {
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.CommandText = query;
+                cmd.Parameters.Add(SetParameterWithValue("@Id", source));
                 try
                 {
-                    int rows = 20;
+                    int rows = 100;
                     vs = new object[rows];
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -103,7 +104,6 @@ namespace UCL.ISM.BLL.DAL
                     cmd.Connection.Close();
                 }
             }
-            return vs = null;
         }
 
         

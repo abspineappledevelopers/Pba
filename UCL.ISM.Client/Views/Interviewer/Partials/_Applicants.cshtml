@@ -1,0 +1,88 @@
+﻿@model ApplicantVM
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="card flex-fill" style="background-color: #e6e6e6; margin-bottom: 30px;">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <input asp-for="Id" type="hidden" />
+                <div class="form-group">
+                    <small><label for="firstname">Fornavn(e)</label></small>
+                    <p id="firstname">@Model.Firstname</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="lastname">Efternavn(e)</label></small>
+                    <p id="lastname">@Model.Lastname</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                    <small><label for="age">Alder</label></small>
+                    <p id="age">@Model.Age</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                    <small><label for="email">Email</label></small>
+                    <p id="lastname">@Model.Email</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="nationality">Land</label></small>
+                    <p id="nationality">@Model.Nationality.Name</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="form-group">
+                            <small><label for="iseu">EU?</label></small>
+                            <p id="iseu">@(Model.Nationality.IsEU ? "Ja" : "Nej")</p>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="form-group">
+                            <small><label for="residence">Opholds.til?</label></small>
+                            <p id="residence">@(Model.HasResidencePermit ? "Ja" : "Nej")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="priority">Prioritet</label></small>
+                    <p id="priority">@Model.Priority</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="study">Uddannelse</label></small>
+                    <p id="study">@Model.StudyField.FieldName</p>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                    <small><label for="interviewer">Interviewer</label></small>
+                    @if (Model.Interviewer.Id != null)
+                    {
+                        <p id="priority">@Model.Interviewer.Firstname @Model.Interviewer.Lastname</p>
+                    }
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-group">
+                        <small><label for="scheme">Interview skema</label></small>
+                        @if (Model.InterviewScheme.Name != null)
+                        {
+                            <p id="scheme">@Model.InterviewScheme.Name</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

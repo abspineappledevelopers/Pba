@@ -9,6 +9,7 @@ using System.Security.Claims;
 
 namespace UCL.ISM.Client.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly ITokenAcquisition tokenAcquisition;
@@ -33,7 +34,6 @@ namespace UCL.ISM.Client.Controllers
 
             User me = await _service.GetMeAsync(accessToken);
             IList<Group> groups = await _service.GetMyGroupsAsync(accessToken);
-            
             ViewData["Me"] = me;
             ViewData["Groups"] = groups;
 

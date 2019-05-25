@@ -14,9 +14,16 @@ namespace UCL.ISM.BLL.BLL
 
         InterviewerDB db;
 
-        public Interviewer GetInterviewer(Guid Id)
+        public void CreateInterviewer(Interviewer interviewer)
         {
-            return null;
+            db = new InterviewerDB();
+            db.CreateInterviewer(interviewer);
+        }
+
+        public Interviewer GetInterviewer(string id)
+        {
+            db = new InterviewerDB();
+            return db.GetInterviewer(id);
         }
 
         public List<Interviewer> GetAllInterviewers()

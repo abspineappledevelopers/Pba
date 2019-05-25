@@ -56,6 +56,20 @@
                         </li>
                         <li class="nav-item"><a class="nav-link" asp-controller="Administration" asp-action="Create_StudyField">Uddannelse</a></li>
                     }
+                    else if (User.Identity.IsAuthenticated && User.IsInRole(UCL.ISM.Client.Infrastructure.UserRoles.Interviewer))
+                    {
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                    Spørgeskema
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-controller="Administration_InterviewScheme" asp-action="Create_InterviewScheme">Opret skema</a>
+                                    <a class="dropdown-item" asp-controller="Administration_InterviewScheme" asp-action="Get_All_InterviewScheme">Rediger/slet skema</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">Om</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Kontakt</a></li>
 

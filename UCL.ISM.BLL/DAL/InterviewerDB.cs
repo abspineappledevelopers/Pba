@@ -8,7 +8,32 @@ namespace UCL.ISM.BLL.DAL
         /*private Database db = new Database();
         List<IInterviewer> _listin;
         Interviewer _in;*/
+        public void CreateInterviewer(Interviewer interviewer)
+        {
+            string query = "INSERT INTO UCL_Interviewer(Id, Firstname, Lastname) VALUES(@Id, @Firstname, @Lastname)";
+            string param1 = "@Id";
+            string param2 = "@Firstname";
+            string param3 = "@Lastname";
 
+            List<string> tempP = new List<string>
+            {
+                param1, param2, param3
+            };
+
+            List<object> tempV = new List<object>
+            {
+                interviewer.Id, interviewer.Firstname, interviewer.Lastname
+            };
+            ExecuteCmd(query, SetParametersList(tempP, tempV));
+        }
+
+        public Interviewer GetInterviewer(string id)
+        {
+            string query = "SELECT * FROM UCL_Interviewer WHERE UCL_Interviewer.Id = @Id";
+            string param1 = "@Id";
+            object[] temp = ExecuteReaderList(query, id);
+            return new Interviewer() { Id = temp[0].ToString(), Firstname = temp[1].ToString(), Lastname = temp[2].ToString() };
+        }
 
         public List<Interviewer> GetAllInterviewers()
         {
@@ -26,7 +51,7 @@ namespace UCL.ISM.BLL.DAL
                         Firstname = item[1].ToString(),
                         Lastname = item[2].ToString()
                     }
-                );
+                    );
                 }
             }
             return list;

@@ -68,6 +68,12 @@ namespace UCL.ISM.BLL.BLL
             return db.GetAllApplicantsLimitedData();
         }
 
+        public List<Applicant> GetAllApplicantsForInterviewer(string id)
+        {
+            db = new ApplicantDB();
+            return db.GetAllApplicantsForInterviewer(id);
+        }
+
         public List<Applicant> GetAllApplicantsWithoutSchemaOrInterviewer()
         {
             db = new ApplicantDB();

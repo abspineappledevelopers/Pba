@@ -242,6 +242,30 @@ namespace UCL.ISM.BLL.DAL
             }
         }
 
+        public List<Applicant> GetAllApplicantsForInterviewer(string id)
+        {
+            List<Applicant> list = new List<Applicant>();
+            string query = "SELECT * FROM UCL_Applicant WHERE UCL_Applicant.Interviewer = @Id";
+            object[] temp = ExecuteReaderList(query, id);
+            foreach (object[] item in temp)
+            {
+                list.Add(new Applicant {
+                    Id = Guid.Parse(item[0].ToString()),
+                    Firstname = item[1].ToString(),
+                    Lastname = item[2].ToString(),
+                    Email = item[3].ToString(),
+                    Age = Convert.ToInt32(item[4]),
+                    IsEU = Convert.ToBoolean(item[5]),
+                    Priority = Convert.ToInt32(item[6]),
+                    Nationality = new Nationality() { Id = Convert.ToInt32(item[7]), Name = item[8].ToString(), IsEU = Convert.ToBoolean(item[9]) },
+                    StudyField = new StudyField() { Id = Convert.ToInt32(item[10]), FieldName = item[11].ToString() },
+                    Comment = item[15].ToString(),
+                    HasResidencePermit = Convert.ToBoolean(item[16])
+                });
+            }
+            return list;
+        }
+        
         public void CreateApplicant(Applicant applicant)
         {
             string query = "INSERT INTO UCL_Applicant(Id, Firstname, Lastname, Email, Age, IsEU, StudyField, Priority, Nationality, Interviewer, Comment, Process) VALUES (@Id, @Firstname, @Lastname, @Email, @Age, @IsEU, @StudyField, @Priority, @Nationality, @Interviewer, @Comment, @Process)";
