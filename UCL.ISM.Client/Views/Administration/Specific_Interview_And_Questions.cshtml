@@ -56,8 +56,8 @@
                 }
             <div class="row" style="margin-top: 10px;">
                 <div class="col-12">
-                    <button type="submit" class="btn btn-success">Gem</button>
-                    <button type="button" class="btn btn-danger">Slet</button>
+                    <button type="submit" class="btn ucl-btn" style="margin-right:10px;">Gem</button>
+                    <button type="button" class="btn ucl-btn">Slet</button>
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
             <input asp-for="Question.Quest" type="text" placeholder="Nyt spørgsmål .." class="form-control" required />
         </div>
         <div class="col-12" style="margin-top: 5px;">
-            <button class="btn btn-success" style="width: 100%;" type="submit" asp-action="Add_new_Question_To_Modal" asp-controller="Administration_InterviewScheme">
+            <button class="btn ucl-btn" style="width: 100%;" type="submit" asp-action="Add_new_Question_To_Modal" asp-controller="Administration_InterviewScheme">
                 Tilføj spørgsmål
             </button>
         </div>

@@ -8,21 +8,21 @@
         <h2 style="color: #014550">Velkommen</h2>
     </div>
 
-        <div class="dropdown">
+        <div class="dropdown ucl-dropdown">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 Sorter
             </button>
-            <div class="dropdown-menu">
-                <div class="dropdown-header">Alle ansøgere</div>
-                <a asp-action="SortByPriority" asp-controller="Administration" class="btn btn-default dropdown-item"> Prioritet</a>
+            <div class="dropdown-menu" style="background-color: #014550;">
+                <div class="dropdown-header" style="color: #fff; font-weight: 700;">ALLE ANSØGERE</div>
+                <a asp-action="SortByPriority" asp-controller="Administration" class="btn btn-default dropdown-item" style="color: #fff;"> Prioritet</a>
                 <div class="dropdown-divider"></div>
-                <div class="dropdown-header">EU</div>
-                <a asp-action="SortByEU" asp-controller="Administration" class="btn btn-default dropdown-item"> Alle EU ansøgere</a>
-                <a asp-action="SortByEUPriority" asp-controller="Administration" class="btn btn-default dropdown-item"> Prioritet</a>
-                <div class="dropdown-divider"></div>
-                <div class="dropdown-header">Ikke EU</div>
-                <a asp-action="SortByNonEU" asp-controller="Administration" class="btn btn-default dropdown-item"> Alle ikke EU ansøgere</a>
-                <a asp-action="SortByNonEUPriority" asp-controller="Administration" class="btn btn-default dropdown-item"> Prioritet</a>
+                <div class="dropdown-header" style="color: #fff;">EU</div>
+                <a asp-action="SortByEU" asp-controller="Administration" class="btn btn-default dropdown-item" style="color: #fff;"> Ansøgere</a>
+                <a asp-action="SortByEUPriority" asp-controller="Administration" class="btn btn-default dropdown-item" style="color: #fff;"> Prioritet</a>
+                <div class="dropdown-divider" style="color: #fff;"></div>
+                <div class="dropdown-header" style="color: #fff;">IKKE EU</div>
+                <a asp-action="SortByNonEU" asp-controller="Administration" class="btn btn-default dropdown-item" style="color: #fff;"> Ansøgere</a>
+                <a asp-action="SortByNonEUPriority" asp-controller="Administration" class="btn btn-default dropdown-item" style="color: #fff;"> Prioritet</a>
             </div>
         </div>
 

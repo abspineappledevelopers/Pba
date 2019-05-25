@@ -19,18 +19,31 @@
                     <p id="lastname">@Model.Lastname</p>
                 </div>
             </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <small><label for="email">Email</label></small>
+                    <p id="lastname">@Model.Email</p>
+                </div>
+            </div>
             <div class="col-md-6 col-lg-6">
                 <div class="form-group">
                     <small><label for="age">Alder</label></small>
                     <p id="age">@Model.Age</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-6">
+            <div class="col-6">
                 <div class="form-group">
-                    <small><label for="email">Email</label></small>
-                    <p id="lastname">@Model.Email</p>
+                    <small><label for="priority">Prioritet</label></small>
+                    <p id="priority">@Model.Priority</p>
                 </div>
             </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <small><label for="study">Uddannelse</label></small>
+                    <p id="study">@Model.StudyField.FieldName</p>
+                </div>
+            </div>
+
             <div class="col-md-12 col-lg-6">
                 <div class="form-group">
                     <small><label for="nationality">Land</label></small>
@@ -53,18 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 col-lg-6">
-                <div class="form-group">
-                    <small><label for="priority">Prioritet</label></small>
-                    <p id="priority">@Model.Priority</p>
-                </div>
-            </div>
-            <div class="col-md-12 col-lg-6">
-                <div class="form-group">
-                    <small><label for="study">Uddannelse</label></small>
-                    <p id="study">@Model.StudyField.FieldName</p>
-                </div>
-            </div>
+
             <div class="col-md-12 col-lg-6">
                 <div class="form-group">
                     <small><label for="interviewer">Interviewer</label></small>
@@ -112,7 +114,7 @@
 
 <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" id="modelContent">
+        <div class="modal-content ucl-bg" id="modelContent">
         </div>
     </div>
 </div>

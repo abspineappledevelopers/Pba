@@ -17,6 +17,100 @@ body {
         text-decoration: none;
     }
 
+.ucl-bg {
+    background: #cbe5e4;
+    color: #fff;
+}
+
+.ucl-bg-dark {
+    background: #014550;
+    color: #fff;
+}
+
+.ucl-btn {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: #014550;
+    border-radius: 0px;
+    color: #014550 !important;
+}
+
+    .ucl-btn:hover {
+        outline-width: 2px;
+        outline-style: solid;
+        outline-color: #014550;
+        background: #014550;
+        border-radius: 0px;
+        color: #fff !important;
+    }
+
+.ucl-dropdown {
+    list-style: none;
+    /*background: #014550;*/
+    padding: 10px;
+    display: inline-block;
+}
+
+    .ucl-dropdown .dropdown-menu a {
+        color: #000;
+        text-decoration: none;
+    }
+
+.ucl-dropdown .btn {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: #014550;
+    border-radius: 0px;
+    color: #014550;
+}
+
+    .ucl-dropdown .btn:hover {
+        outline-width: 2px;
+        outline-style: solid;
+        outline-color: #014550;
+        background: #014550;
+        border-radius: 0px;
+        color: #fff;
+    }
+
+    .ucl-dropdown .btn:active {
+        outline-width: 2px;
+        outline-style: solid;
+        outline-color: #014550;
+        background: #014550;
+        border-radius: 0px;
+        color: #fff;
+    }
+
+    .ucl-dropdown .btn:focus {
+        outline-width: 2px;
+        outline-style: solid;
+        outline-color: #014550;
+        background: #014550;
+        border-radius: 0px;
+        color: #fff;
+    }
+
+.ucl-dropdown-menu .dropdown-item {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 5px;
+}
+
+.ucl-dropdown .dropdown-menu a:hover {
+    color: #ffc107 !important;
+    outline-width: 1px;
+    outline-style: solid;
+    outline-color: #ffc107;
+}
+
+.container .ucl-dropdown .dropdown-menu a:hover {
+    color: #ffc107;
+    outline-width: 1px;
+    outline-style: solid;
+    outline-color: #ffc107;
+}
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {

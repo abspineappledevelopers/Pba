@@ -34,15 +34,18 @@
                     @using Microsoft.Identity.Web
                     @if (User.Identity.IsAuthenticated && User.IsInRole(UCL.ISM.Client.Infrastructure.UserRoles.Administration))
                     {
-                        <div class="dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown">
-                                Ansøger
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-controller="Administration" asp-action="Create_Applicant">Opret Ansøger</a>
-                                <a class="dropdown-item" asp-controller="Administration" asp-action="Applicant_Process">se ansøger proces</a>
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                    Ansøger
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-controller="Administration" asp-action="Create_Applicant">Opret Ansøger</a>
+                                    <a class="dropdown-item" asp-controller="Administration" asp-action="Applicant_Process">se ansøger proces</a>
+                                </div>
                             </div>
-                        </div>
+                        </li>
+
                         <li class="nav-item">
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -65,7 +68,7 @@
                 {
                     <ul class="navbar-nav navbar-right">
                         <li class="nav-item">
-                                <a  asp-area="AzureAD" asp-controller="Account" asp-action="SignOut" class="nav-link"><span class="glyphicon glyphicon-user" /> Log ud</a>
+                            <a asp-area="AzureAD" asp-controller="Account" asp-action="SignOut" class="nav-link"><span class="glyphicon glyphicon-user" /> Log ud</a>
                         </li>
                     </ul>
                 }
