@@ -98,14 +98,16 @@ namespace UCL.ISM.BLL.DAL
         {
             string query = "SELECT * FROM UCL_InterviewScheme WHERE Id = @Id";
             string query2 = "SELECT * FROM UCL_Question WHERE InterviewScheme = @Id";
+            string query3 = "SELECT * FROM UCL_InterviewSchemeForCountry WHERE InterviewScheme = @Id";
+            string query4 = "SELECT * FROM UCL_InterviewSchemeForStudyField WHERE InterviewScheme = @Id";
             string id = "@Id";
             int? value = Id;
 
-            return ExecuteReaderSchemeAndQuestions(query, query2, id, value);
+            return ExecuteReaderSchemeAndQuestions(query, query2, query3, query4, id, value);
         }
 
         #region Functionality
-        private InterviewScheme ExecuteReaderSchemeAndQuestions(string query, string query2, string id, int? value)
+        private InterviewScheme ExecuteReaderSchemeAndQuestions(string query, string query2, string query3, string query4, string id, int? value)
         {
             _db.Get_Connection();
             InterviewScheme temp = new InterviewScheme();
@@ -154,6 +156,32 @@ namespace UCL.ISM.BLL.DAL
                                 Quest = reader.GetString(2).ToString(),
                                 InterviewSchemeId = reader.GetInt32(4)
                             });
+                        }
+                    }
+
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query3;
+                    //cmd.Parameters.Clear();
+                    //cmd.Parameters.Add(_db.SetParameterWithValue(id, value));
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            temp.CountryId.Add(reader.GetInt32(2));
+                        }
+                    }
+
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query4;
+                    //cmd.Parameters.Clear();
+                    //cmd.Parameters.Add(_db.SetParameterWithValue(id, value));
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            temp.StudyFieldId.Add(reader.GetInt32(2));
                         }
                     }
                 }

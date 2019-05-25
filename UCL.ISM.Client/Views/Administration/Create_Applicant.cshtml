@@ -3,11 +3,13 @@
     ViewData["Title"] = "Create_Applicant";
 }
 
-<br />
-<h2>Opret ansøger</h2>
-<br />
-<div class="container-fluid">
-    <h3>Ansøger information</h3>
+<div style="padding: 10px 7px 40px 7px; background-image: linear-gradient(to bottom, #cbe5e4, #edf9fc);">
+    <div class="text-center" style="margin-top: 40px; padding: 10px 7px 10px 7px">
+        <h2 style="color: #014550">Opret ansøger</h2>
+    </div>
+    <div class="text-center" style="color: #014550">
+        <h4>Ansøger information</h4>
+    </div>
     <br />
     <form asp-action="createApplicant" asp-controller="Administration" class="form-horizontal" method="post">
         <div class="row">
@@ -17,7 +19,7 @@
                         <div class="row">
                             <div class="col-12 col-md-4">
                                 <div class="form-group" style="padding: 5px">
-                                    <label class="control-label" for="prio">Prioritet:</label>
+                                    <label class="control-label" for="prio" style="color: #014550">Prioritet:</label>
                                     <select asp-for="Priority" id="priority" class="form-control">
                                         <option selected="selected" value="1">1</option>
                                         <option value="2">2</option>
@@ -32,7 +34,7 @@
                             </div>
                             <div class="col-12 col-md-8">
                                 <div class="form-group" style="padding: 5px">
-                                    <label class="control-label" for="field">Uddannelse:</label>
+                                    <label class="control-label" for="field" style="color: #014550">Uddannelse:</label>
                                     <select asp-for="StudyField.Id" asp-items="@Model.StudyFields" class="form-control" required id="studyfield">
                                         <option value="">Vælg uddannelse</option>
                                     </select>
@@ -44,24 +46,24 @@
                         <div class="row">
                             <div class="col-12 col-md-6">
                                 <div class="form-group" style="padding: 5px">
-                                    <label class="control-label" for="applicant">Fornavn:</label>
+                                    <label class="control-label" for="applicant" style="color: #014550">Fornavn:</label>
                                     <input asp-for="Firstname" type="text" class="form-control" id="firstname" placeholder="Ansøgers fornavn" />
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
                                 <div class="form-group" style="padding: 5px">
-                                    <label class="control-label" for="lastname">Efternavn:</label>
+                                    <label class="control-label" for="lastname" style="color: #014550">Efternavn:</label>
                                     <input asp-for="Lastname" type="text" class="form-control" id="lastname" placeholder="Ansøgers efternavn" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-12">
                         <div class="row">
                             <div class="col-12 col-md-4">
                                 <div class="form-group" style="padding: 5px">
-                                    <label class="control-label" for="age">Alder:</label>
+                                    <label class="control-label" for="age" style="color: #014550">Alder:</label>
                                     <input asp-for="Age" type="number" class="form-control" id="age" />
                                 </div>
                             </div>
@@ -69,7 +71,7 @@
                                 <div class="row">
                                     <div class="col-lg-8">
                                         <div class="form-group" style="padding: 5px">
-                                            <label class="control-label" for="nationality">Nationalitet:</label>
+                                            <label class="control-label" for="nationality" style="color: #014550">Nationalitet:</label>
                                             <select asp-for="Nationality.Id" asp-items="@Model.Nationalities" class="form-control" required id="nationality">
                                                 <option value="">Vælg land</option>
                                             </select>
@@ -77,12 +79,12 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group text-center" style="padding: 5px">
-                                            <label class="control-label" for="residence">Opholds.til:</label>
+                                            <label class="control-label" for="residence" style="color: #014550">Opholds.til:</label>
                                             <input asp-for="HasResidencePermit" type="checkbox" class="form-control" id="residence" />
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -91,13 +93,13 @@
                         <div class="row">
                             <div class="col-12 col-md-6">
                                 <div class="form-group" style="padding: 5px">
-                                    <label class="control-label" for="email">E-mail:</label>
+                                    <label class="control-label" for="email" style="color: #014550">E-mail:</label>
                                     <input asp-for="Email" type="email" class="form-control" id="email" placeholder="Ansøgers E-mail" />
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
                                 <div class="form-group" style="padding: 5px">
-                                    <label class="control-label" for="interviewer">Interviewer:</label>
+                                    <label class="control-label" for="interviewer" style="color: #014550">Interviewer:</label>
                                     <select asp-for="Interviewer.Id" asp-items="@Model.Interviewers" class="form-control" id="interviewer">
                                         <option value="">Vælg interviewer</option>
                                     </select>
@@ -105,12 +107,12 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="col-xs-12 col-md-6">
                 <div class="form-group" style="padding: 5px">
-                    <label class="control-label" for="comment">Kommentar:</label>
+                    <label class="control-label" for="comment" style="color: #014550">Kommentar:</label>
                     <textarea asp-for="Comment" placeholder="Skriv en kommentar ..." class="form-control" rows="14" id="comment"></textarea>
                 </div>
             </div>

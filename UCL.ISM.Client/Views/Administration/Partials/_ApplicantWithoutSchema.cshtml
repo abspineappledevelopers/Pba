@@ -3,7 +3,7 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<div class="card flex-fill" style="background-color: #e6e6e6; margin-bottom: 30px;">
+<div class="card flex-fill" style="background-color: #014550; color: #fff; margin-bottom: 30px;">
     <div class="card-body">
         <div class="row">
             <div class="col-md-12 col-lg-6">
@@ -74,7 +74,7 @@
                     }
                     else
                     {
-                        <a id="interviewerbtn" class="btn btn-warning" href="#" onclick="createModal('@Url.Action("Get_Interview_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                        <a id="interviewerbtn" class="btn btn-outline-warning" href="#" onclick="createModal('@Url.Action("Get_Interview_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
                             Tilføj interviewer
                         </a>
                     }
@@ -90,7 +90,7 @@
                     }
                     else
                     {
-                        <a id="schemebtn" class="btn btn-warning" href="#" onclick="createModal('@Url.Action("Get_InterviewScheme_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                        <a id="schemebtn" class="btn btn-outline-warning" href="#" onclick="createModal('@Url.Action("Get_InterviewScheme_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
                             Tilføj skema
                         </a>
                     }
@@ -101,8 +101,8 @@
     </div>
     <div class="card-footer">
         <div class="row">
-            <div class="col-xs-12">
-                <a id="schemebtn" class="btn btn-success" style="width: 100%;" href="#" onclick="createModal('@Url.Action("Get_Applicant_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+            <div class="col-12">
+                <a id="schemebtn" class="btn btn-light" style="width: 100%;" href="#" onclick="createModal('@Url.Action("Get_Applicant_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
                     Gå til
                 </a>
             </div>

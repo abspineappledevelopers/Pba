@@ -2,37 +2,39 @@
 @{
     ViewData["Title"] = "Index";
 }
-<br />
-<h2>Ansøgere der ikke har fået tildelt et interview skema endnu</h2>
-<br />
-<div class="container-fluid">
-    <div class="dropdown">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            Sorter
-        </button>
-        <div class="dropdown-menu">
-            <div class="dropdown-header">Alle ansøgere</div>
-            <a asp-action="SortByPriority" asp-controller="Administration" class="btn btn-default dropdown-item"> Prioritet</a>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-header">EU</div>
-            <a asp-action="SortByEU" asp-controller="Administration" class="btn btn-default dropdown-item"> Alle EU ansøgere</a>
-            <a asp-action="SortByEUPriority" asp-controller="Administration" class="btn btn-default dropdown-item"> Prioritet</a>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-header">Ikke EU</div>
-            <a asp-action="SortByNonEU" asp-controller="Administration" class="btn btn-default dropdown-item"> Alle ikke EU ansøgere</a>
-            <a asp-action="SortByNonEUPriority" asp-controller="Administration" class="btn btn-default dropdown-item"> Prioritet</a>
-        </div>
-    </div>
-    
 
-    <div class="row" id="applicants" style="margin-top: 30px;">
-        @for (int i = 0; i < Model.Count(); i++)
-        {
-        <div class="col-sm-6 col-lg-4 d-flex">
-            <partial name="../Administration/Partials/_ApplicantWithoutSchema" model="@Model[i]" />
-        </div>
-        }
+<div style="padding: 10px 7px 40px 7px; background-image: linear-gradient(to bottom, #cbe5e4, #edf9fc);">
+    <div class="text-center" style="margin-top: 40px; padding: 10px 7px 10px 7px">
+        <h2 style="color: #014550">Velkommen</h2>
     </div>
-</div>
+
+        <div class="dropdown">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Sorter
+            </button>
+            <div class="dropdown-menu">
+                <div class="dropdown-header">Alle ansøgere</div>
+                <a asp-action="SortByPriority" asp-controller="Administration" class="btn btn-default dropdown-item"> Prioritet</a>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-header">EU</div>
+                <a asp-action="SortByEU" asp-controller="Administration" class="btn btn-default dropdown-item"> Alle EU ansøgere</a>
+                <a asp-action="SortByEUPriority" asp-controller="Administration" class="btn btn-default dropdown-item"> Prioritet</a>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-header">Ikke EU</div>
+                <a asp-action="SortByNonEU" asp-controller="Administration" class="btn btn-default dropdown-item"> Alle ikke EU ansøgere</a>
+                <a asp-action="SortByNonEUPriority" asp-controller="Administration" class="btn btn-default dropdown-item"> Prioritet</a>
+            </div>
+        </div>
+
+
+        <div class="row" id="applicants" style="margin-top: 30px;">
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <div class="col-sm-6 col-lg-4 d-flex">
+                    <partial name="../Administration/Partials/_ApplicantWithoutSchema" model="@Model[i]" />
+                </div>
+            }
+        </div>
+    </div>
 
 

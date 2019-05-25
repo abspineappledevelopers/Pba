@@ -1,14 +1,15 @@
 ﻿@model UCL.ISM.Client.Models.StudyFieldVM
 
-<br />
-<h2>Opret uddannelse</h2>
-<br />
-<div class="container-fluid">
+<div style="padding: 10px 7px 40px 7px; background-image: linear-gradient(to bottom, #cbe5e4, #edf9fc);">
+    <div class="text-center" style="margin-top: 40px; padding: 10px 7px 10px 7px">
+        <h4 style="color: #014550">Opret uddannelse</h4>
+    </div>
+
     <div>
         <partial name="../Administration/Partials/_Add_StudyField" />
     </div>
 
-    <div style="margin-top: 50px;">
+    <div class="text-center" style="margin-top: 50px; color: #014550">
         <h3>Registrerede uddannelser</h3>
         <hr />
         <partial name="../Administration/Partials/_All_StudyFields" model="Model.AllStudyFields" />

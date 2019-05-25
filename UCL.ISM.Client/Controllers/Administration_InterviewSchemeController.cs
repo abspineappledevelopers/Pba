@@ -137,9 +137,9 @@ namespace UCL.ISM.Client.Controllers
             return View("../Administration/Get_All_InterviewSchemes_And_Questions", listvm);
         }
 
-        [HttpGet]
+        
         [Authorize(Roles = UserRoles.Administration)]
-        public IActionResult Get_InterviewSchemeAndQuestions_Modal(int? id)
+        public IActionResult Get_Specific_Interview(int? id)
         {
             _interviewScheme = new InterviewScheme();
             _nationality = new Nationality();
@@ -147,7 +147,6 @@ namespace UCL.ISM.Client.Controllers
 
 
             InterviewSchemeVM vm = new InterviewSchemeVM();
-            List<InterviewSchemeVM> listvm = new List<InterviewSchemeVM>();
 
             var model = _interviewScheme.GetInterviewSchemeAndQuestions(id);
             vm = model;
@@ -170,8 +169,33 @@ namespace UCL.ISM.Client.Controllers
             }
             vm.Questions = vm.Questions.OrderBy(x => x.Order).ToList();
 
+            return View("../Administration/Specific_Interview_And_Questions", vm);
+            //return View("../Administration/Partials/Get_All_InterviewSchemes_And_Questions", vm);
+        }
 
-            return PartialView("../Administration/Get_All_InterviewSchemes_And_Questions", vm);
+        [HttpPost]
+        [Authorize(Roles = UserRoles.Administration)]
+        public IActionResult New_Question_To_Modal(InterviewSchemeVM vm)
+        {
+            var index = vm.Questions.Count + 1;
+            vm.Question.Order = index;
+
+            vm.Questions.Add(vm.Question);
+
+            return PartialView("../Administration/Partials/Get_All_InterviewSchemes_And_Questions", vm);
+            //return RedirectToAction("Get_All_InterviewScheme");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = UserRoles.Administration)]
+        public IActionResult Save_Changes_InterviewSchemeAndQuestions(InterviewSchemeVM vm)
+        {
+            var index = vm.Questions.Count + 1;
+            vm.Question.Order = index;
+
+            vm.Questions.Add(vm.Question);
+            
+            return RedirectToAction("Get_All_InterviewScheme");
         }
     }
 }
