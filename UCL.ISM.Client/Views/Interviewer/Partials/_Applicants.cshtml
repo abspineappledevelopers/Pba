@@ -65,17 +65,43 @@
                     <p id="study">@Model.StudyField.FieldName</p>
                 </div>
             </div>
-            <div class="col-md-12 col-lg-6">
-                <div class="col-md-12 col-lg-6">
-                    <div class="form-group">
-                        <small><label for="scheme">Interview skema</label></small>
-                        @if (Model.InterviewScheme.Name != null)
-                        {
-                            <p id="scheme">@Model.InterviewScheme.Name</p>
-                        }
-                    </div>
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <small><label for="process">Status</label></small>
+                    <p id="process">@Model.Process.Process</p>
+                </div>
+                <div class="form-group">
+                    <small><label for="scheme">Interview skema</label></small>
+                    @if (Model.InterviewScheme.Name != null)
+                    {
+                        <p id="scheme">@Model.InterviewScheme.Name</p>
+                    }
+                    else
+                    {
+                        <p id="scheme">Intet skema</p>
+                        <a id="schemebtn" class="btn btn-outline-warning" href="#" onclick="createModal('@Url.Action("Get_InterviewScheme_Modal", "Interviewer" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                            Tilføj skema
+                        </a>
+                    }
+                    <a id="interviewbtn" class="btn btn-outline-warning" href="#" onclick="createModal('@Url.Action("Get_Interview_Modal", "Interviewer" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                        Udfør Interview
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content ucl-bg" id="modelContent">
+        </div>
+    </div>
+</div>
+
+<script>
+    function createModal(url) {
+        $('#modelContent').load(url);
+        $('#myModal').modal('show');
+    }
+</script>

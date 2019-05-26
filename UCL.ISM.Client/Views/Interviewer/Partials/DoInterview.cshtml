@@ -1,0 +1,67 @@
+﻿
+@model UCL.ISM.Client.Models.ApplicantVM
+
+<div class="modal-header">
+    <h4 class="modal-title">Udfør interview</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<form asp-action="GetApplicantScheme" asp-controller="Interviewer" method="post">
+    <div class="modal-body">
+        @if (Model.InterviewScheme.Questions.Count != 0)
+        {
+            <input asp-for="Id" type="hidden" />
+            <div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col-7">
+                                <label class="control-label" style="color: #014550">Navn:</label>
+                                <label>@Model.Firstname @Model.Lastname</label>
+                            </div>
+                            <div class="col-5">
+                                <label class="control-label" style="color: #014550">Kommentar:</label>
+                                <textarea asp-for="Comment" type="text" class="form-control" style="height: 200px;" id="comment">@Model.Comment</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label class="control-label" style="color: #014550">Lande:</label>
+                                    <label>@Model.Nationality</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label class="control-label" style="color: #014550">Uddannelser:</label>
+                                    <label>@Model.StudyField</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn ucl-btn">Gem</button>
+            </div>
+        }
+    </div>
+</form>
+<form asp-action="Add_Answer" asp-controller="Interviewer" method="post">
+    <input asp-for="Id" value="@Model.InterviewScheme.Id" type="hidden" />
+    <input asp-for="InterviewScheme.Question.InterviewSchemeId" type="hidden" />
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-12">
+            <label>@Model.InterviewScheme.Question.Quest</label>
+            <textarea asp-for="InterviewScheme.Question.Answer" type="text" placeholder="Tilføj svar .." class="form-control" required />
+        </div>
+        <div class="col-12" style="margin-top: 5px;">
+            <button class="btn ucl-btn" style="width: 100%;" type="submit">
+                Tilføj svar
+            </button>
+        </div>
+    </div>
+</form>
+

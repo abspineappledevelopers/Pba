@@ -35,7 +35,7 @@ namespace UCL.ISM.Client.Models
         public List<SelectListItem> StudyFields { get; set; }
         public InterviewSchemeVM InterviewScheme { get; set; }
         public List<SelectListItem> InterviewSchemes { get; set; }
-        public ApplicantProcess Process { get; set; }
+        public ApplicantProcessVM Process { get; set; }
 
         public ApplicantVM()
         {
@@ -47,7 +47,7 @@ namespace UCL.ISM.Client.Models
             Nationalities = new List<SelectListItem>();
             InterviewScheme = new InterviewSchemeVM();
             InterviewSchemes = new List<SelectListItem>();
-            Process = new ApplicantProcess();
+            Process = new ApplicantProcessVM();
         }
 
         public static implicit operator ApplicantVM(Applicant applicant)
@@ -66,7 +66,8 @@ namespace UCL.ISM.Client.Models
                 Interviewer = applicant.Interviewer, 
                 StudyField = applicant.StudyField,
                 Comment = applicant.Comment,
-                InterviewScheme = applicant.InterviewScheme
+                InterviewScheme = applicant.InterviewScheme,
+                Process = applicant.Process
             };
         }
 
@@ -86,7 +87,8 @@ namespace UCL.ISM.Client.Models
                 Interviewer = vm.Interviewer,
                 StudyField = vm.StudyField,
                 Comment = vm.Comment,
-                InterviewScheme = vm.InterviewScheme
+                InterviewScheme = vm.InterviewScheme,
+                Process = vm.Process
             };
         }
     }

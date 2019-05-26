@@ -245,7 +245,7 @@ namespace UCL.ISM.BLL.DAL
         public List<Applicant> GetAllApplicantsForInterviewer(string id)
         {
             List<Applicant> list = new List<Applicant>();
-            string query = "SELECT * FROM UCL_Applicant WHERE UCL_Applicant.Interviewer = @Id";
+            string query = "SELECT * FROM UCL_Applicant JOIN UCL_StudyField ON UCL_Applicant.StudyField = UCL_StudyField.Id JOIN UCL_Nationality ON UCL_Applicant.Nationality = UCL_Nationality.Id JOIN UCL_ApplicantProcess ON UCL_Applicant.Process = UCL_ApplicantProcess.Id WHERE UCL_Applicant.Interviewer = @Id";
             List<object[]> temp = ExecuteReaderList(query, id);
             foreach (object[] item in temp)
             {
@@ -255,12 +255,14 @@ namespace UCL.ISM.BLL.DAL
                     Lastname = item[2].ToString(),
                     Email = item[3].ToString(),
                     Age = Convert.ToInt32(item[4]),
-                    IsEU = Convert.ToBoolean(item[5]),
-                    Priority = Convert.ToInt32(item[6]),
-                    Nationality = new Nationality() { Id = Convert.ToInt32(item[7]), Name = item[8].ToString(), IsEU = Convert.ToBoolean(item[9]) },
-                    StudyField = new StudyField() { Id = Convert.ToInt32(item[10]), FieldName = item[11].ToString() },
-                    Comment = item[15].ToString(),
-                    HasResidencePermit = Convert.ToBoolean(item[16])
+                    IsEU = Convert.ToBoolean(item[20]),
+                    StudyField = new StudyField() { Id = Convert.ToInt32(item[14]), FieldName = item[15].ToString() },
+                    Priority = Convert.ToInt32(item[7]),
+                    Nationality = new Nationality() { Id = Convert.ToInt32(item[18]), Name = item[19].ToString(), IsEU = Convert.ToBoolean(item[20]) },
+                    Interviewer = new Interviewer() { Id = item[9].ToString() },
+                    Comment = item[11].ToString(),
+                    HasResidencePermit = Convert.ToBoolean(item[12]),
+                    Process = new ApplicantProcess() { Id = Convert.ToInt32(item[21]), Process = item[22].ToString() }
                 });
             }
             return list;
@@ -280,7 +282,7 @@ namespace UCL.ISM.BLL.DAL
             string param9 = "@Nationality";
             string param10 = "@Interviewer";
             string param11 = "@Comment";
-            string param12 = "Process";
+            string param12 = "@Process";
 
             List<string> tempP = new List<string>() {
                 param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12
