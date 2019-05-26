@@ -3,33 +3,35 @@
     ViewData["Title"] = "CreateQuestionToInterview";
 }
 
-<h2>Tilføj Spørgsmål</h2>
+<div style="padding: 10px 7px 40px 7px; background-image: linear-gradient(to bottom, #cbe5e4, #edf9fc);">
+    <div class="text-center" style="margin-top: 40px; padding: 10px 7px 10px 7px">
+        <h4 style="color: #014550">Tilføj spørgsmål</h4>
+    </div>
 
-<div class="container-fluid">
     <form asp-action="Pass_InterviewScheme_Question" asp-controller="Administration_InterviewScheme" method="post">
         <div class="row">
             <div class="col-3">
                 @Html.HiddenFor(x => x.Id)
                 <input asp-for="Name" type="text" hidden />
                 <input asp-for="Comment" type="text" hidden />
-                <label class="control-label">Skema navn:</label>
+                <label class="control-label" style="color: #014550">Skema navn:</label>
                 <input asp-for="Name" type="text" disabled class="form-control" id="name" />
             </div>
             <div class="col-3">
                 <div class="form-group">
-                    <label class="control-label">Skema Kommentar:</label>
+                    <label class="control-label" style="color: #014550">Skema Kommentar:</label>
                     <textarea asp-for="Comment" rows="3" disabled class="form-control" id="comment"></textarea>
                 </div>
             </div>
             <div class="col-3">
                 <div class="form-group">
-                    <label class="control-label">Lande skema gælder for:</label>
+                    <label class="control-label" style="color: #014550">Lande skema gælder for:</label>
                     <select multiple="multiple" asp-for="CountryId" asp-items="@Model.Countries" class="form-control multi-select" id="countries"></select>
                 </div>
             </div>
             <div class="col-3">
                 <div class="form-group">
-                    <label class="control-label">Uddannelser skema gælder for:</label>
+                    <label class="control-label" style="color: #014550">Uddannelser skema gælder for:</label>
                     <select multiple="multiple" asp-for="StudyfieldId" asp-items="@Model.Studyfields" class="form-control multi-select" id="studyfields"></select>
                 </div>
             </div>
@@ -38,27 +40,27 @@
         <div class="row">
             <div class="col-12">
                 <div class="form-group">
-                    <label class="control-label">Tilføj spørgsmål:</label>
-                    <input asp-for="Question.Quest" type="text" value="" class="form-control" id="name" />
+                    <label class="control-label" style="color: #014550">Tilføj spørgsmål:</label>
+                    <input asp-for="Question.Quest" type="text" value="" class="form-control" id="name" required />
                 </div>
             </div>
             <div class="col-12">
-                <button type="submit" class="btn btn-success">Gem</button>
+                <button type="submit" class="btn ucl-btn">Tilføj</button>
             </div>
         </div>
     </form>
     @*Lav til partial*@
     @if (Model.Questions.Count != 0)
     {
-    <div style="margin-top: 30px;">
-        <h3>Registreret spørgsmål</h3>
-        
-        @for (int i = 0; i < Model.Questions.Count; i++)
-        {
-        <partial name="../Administration/Partials/_EditQuestions" model="Model.Questions[i]" />
-        }
-    </div>
-        
+        <div class="text-center" style="margin-top: 30px; color: #014550">
+            <h3>Registreret spørgsmål</h3>
+
+            @for (int i = 0; i < Model.Questions.Count; i++)
+            {
+                <partial name="../Administration/Partials/_EditQuestions" model="Model.Questions[i]" />
+            }
+        </div>
+
     }
 
 

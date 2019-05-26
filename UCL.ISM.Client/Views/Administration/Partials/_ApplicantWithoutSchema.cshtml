@@ -3,7 +3,7 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<div class="card flex-fill" style="background-color: #e6e6e6; margin-bottom: 30px;">
+<div class="card flex-fill" style="background-color: #014550; color: #fff; margin-bottom: 30px;">
     <div class="card-body">
         <div class="row">
             <div class="col-md-12 col-lg-6">
@@ -19,18 +19,31 @@
                     <p id="lastname">@Model.Lastname</p>
                 </div>
             </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <small><label for="email">Email</label></small>
+                    <p id="lastname">@Model.Email</p>
+                </div>
+            </div>
             <div class="col-md-6 col-lg-6">
                 <div class="form-group">
                     <small><label for="age">Alder</label></small>
                     <p id="age">@Model.Age</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-6">
+            <div class="col-6">
                 <div class="form-group">
-                    <small><label for="email">Email</label></small>
-                    <p id="lastname">@Model.Email</p>
+                    <small><label for="priority">Prioritet</label></small>
+                    <p id="priority">@Model.Priority</p>
                 </div>
             </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <small><label for="study">Uddannelse</label></small>
+                    <p id="study">@Model.StudyField.FieldName</p>
+                </div>
+            </div>
+
             <div class="col-md-12 col-lg-6">
                 <div class="form-group">
                     <small><label for="nationality">Land</label></small>
@@ -53,18 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 col-lg-6">
-                <div class="form-group">
-                    <small><label for="priority">Prioritet</label></small>
-                    <p id="priority">@Model.Priority</p>
-                </div>
-            </div>
-            <div class="col-md-12 col-lg-6">
-                <div class="form-group">
-                    <small><label for="study">Uddannelse</label></small>
-                    <p id="study">@Model.StudyField.FieldName</p>
-                </div>
-            </div>
+
             <div class="col-md-12 col-lg-6">
                 <div class="form-group">
                     <small><label for="interviewer">Interviewer</label></small>
@@ -74,7 +76,7 @@
                     }
                     else
                     {
-                        <a id="interviewerbtn" class="btn btn-warning" href="#" onclick="createModal('@Url.Action("Get_Interview_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                        <a id="interviewerbtn" class="btn btn-outline-warning" href="#" onclick="createModal('@Url.Action("Get_Interview_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
                             Tilføj interviewer
                         </a>
                     }
@@ -90,7 +92,7 @@
                     }
                     else
                     {
-                        <a id="schemebtn" class="btn btn-warning" href="#" onclick="createModal('@Url.Action("Get_InterviewScheme_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+                        <a id="schemebtn" class="btn btn-outline-warning" href="#" onclick="createModal('@Url.Action("Get_InterviewScheme_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
                             Tilføj skema
                         </a>
                     }
@@ -101,8 +103,8 @@
     </div>
     <div class="card-footer">
         <div class="row">
-            <div class="col-xs-12">
-                <a id="schemebtn" class="btn btn-success" style="width: 100%;" href="#" onclick="createModal('@Url.Action("Get_Applicant_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
+            <div class="col-12">
+                <a id="schemebtn" class="btn btn-light" style="width: 100%;" href="#" onclick="createModal('@Url.Action("Get_Applicant_Modal", "Administration" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
                     Gå til
                 </a>
             </div>
@@ -112,7 +114,7 @@
 
 <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" id="modelContent">
+        <div class="modal-content ucl-bg" id="modelContent">
         </div>
     </div>
 </div>

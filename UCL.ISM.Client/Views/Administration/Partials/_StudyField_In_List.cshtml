@@ -7,7 +7,7 @@
     <div class="row" style="margin-top: 10px;">
         <div class="col-3">
             <input type="hidden" asp-for="Id" />
-            <input type="text" asp-for="FieldName" />
+            <input type="text" asp-for="FieldName" style="width: 100%;" />
         </div>
         <div class="col-3">
             @Model.Created
@@ -18,10 +18,10 @@
         <div class="col-3">
             <div class="row">
                 <div class="col-6">
-                    <button type="submit" class="btn btn-success" style="width: 100%">Gem</button>
+                    <button type="submit" class="btn ucl-btn" style="width: 100%">Gem</button>
                 </div>
                 <div class="col-6">
-                    <a asp-action="Delete_StudyField" asp-controller="Administration" asp-route-id="@Model.Id" class="btn btn-danger" style="width: 100%">Slet</a>
+                    <a asp-action="Delete_StudyField" asp-controller="Administration" asp-route-id="@Model.Id" class="btn ucl-btn" style="width: 100%">Slet</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,82 @@
+﻿@model UCL.ISM.Client.Models.InterviewSchemeVM
+@{
+    ViewData["Title"] = "Specific_Interview_And_Questions";
+}
+<div style="padding: 10px 7px 40px 7px; background-image: linear-gradient(to bottom, #cbe5e4, #edf9fc);">
+    <div class="text-center" style="margin-top: 40px; padding: 10px 7px 10px 7px">
+        <h4 style="color: #014550">Rediger interview skema</h4>
+    </div>
+
+    <form asp-action="Save_Changes_InterviewSchemeAndQuestions" asp-controller="Administration_InterviewScheme" method="post">
+        <input asp-for="Id" type="hidden" />
+
+        <div>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="row">
+                        <div class="col-7">
+                            <label class="control-label" style="color: #014550">Navn:</label>
+                            <input asp-for="Name" type="text" class="form-control" id="name" required />
+                            <label class="control-label" style="margin-top:10px;"><small style="color: #014550">Lavet:</small></label>
+                            <small style="color: #014550">@Model.CreatedDate</small>
+                            @if (Model.EditedDate != Model.CreatedDate)
+                            {
+                                <br>
+                                <label class="control-label"><small style="padding-top:0px; color: #014550;">Redigeret:</small></label>
+                                <small style="color: #014550">@Model.EditedDate</small>
+                            }
+
+                        </div>
+                        <div class="col-5">
+                            <label class="control-label" style="color: #014550">Kommentar:</label>
+                            <textarea asp-for="Comment" type="text" class="form-control" style="height: 200px;" id="comment"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label" style="color: #014550">Lande:</label>
+                                <select multiple="multiple" asp-for="CountryId" asp-items="@Model.Countries" class="form-control multi-select" style="height: 200px;" id="countries"></select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label" style="color: #014550">Uddannelser:</label>
+                                <select multiple="multiple" asp-for="StudyfieldId" asp-items="@Model.Studyfields" class="form-control multi-select" style="height: 200px;" id="studyfields"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-12">
+                    <button type="submit" class="btn ucl-btn" style="margin-right:10px;">Gem</button>
+                    <a asp-action="Delete_InterviewSchemeAndQuestions" asp-controller="Administration_InterviewScheme" asp-route-id="@Model.Id" class="btn ucl-btn">Slet</a>
+                </div>
+            </div>
+        </div>
+    </form>
+    @for (int i = 0; i < Model.Questions.Count; i++)
+    {
+        <partial name="../Administration/Partials/_EditQuestions" model="Model.Questions[i]" />
+    }
+
+        <form asp-action="Pass_new_Question" asp-controller="Administration_InterviewScheme" method="post">
+            <input asp-for="Id" type="hidden" />
+            <div class="row" style="margin-top: 30px;">
+                <div class="col-12">
+                    <input asp-for="Question.Quest" type="text" placeholder="Nyt spørgsmål .." class="form-control" required />
+                </div>
+                <div class="col-12" style="margin-top: 5px;">
+                    <button class="btn ucl-btn" style="width: 100%;" type="submit">
+                        Tilføj spørgsmål
+                    </button>
+                </div>
+            </div>
+        </form>
+    
+</div>

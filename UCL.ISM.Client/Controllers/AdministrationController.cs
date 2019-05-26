@@ -198,7 +198,7 @@ namespace UCL.ISM.Client.Controllers
         public IActionResult Get_InterviewScheme_Modal(string id)
         {
             _interviewScheme = new InterviewScheme();
-            var schemes = _interviewScheme.GetAllInterviewSchemes();
+            var schemes = _interviewScheme.GetSpecificInterviewSchemes(id);
 
             List<SelectListItem> list = new List<SelectListItem>();
             foreach (var sch in schemes)
@@ -230,7 +230,7 @@ namespace UCL.ISM.Client.Controllers
             var studyfields = _studyField.GetAllStudyFields();
             var nationalities = _nationality.GetAllNationalities();
             var interviewers = _interviewer.GetAllInterviewers();
-            var schemes = _interviewScheme.GetAllInterviewSchemes();
+            var schemes = _interviewScheme.GetSpecificInterviewSchemes(id);
 
             foreach (var sf in studyfields)
             {

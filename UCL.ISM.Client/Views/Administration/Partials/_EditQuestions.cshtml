@@ -1,19 +1,20 @@
 ﻿@model UCL.ISM.Client.Models.QuestionVM
 
-<form asp-action="Pass_InterviewScheme_Question" asp-controller="Administration_InterviewScheme" method="post">
-    <input asp-for="Id" type="hidden" />
+<form asp-action="Pass_Edited_InterviewScheme_Question" asp-controller="Administration_InterviewScheme" method="post">
+    <input asp-for="Id" value="@Model.Id" type="hidden" />
+    <input asp-for="InterviewSchemeId" type="hidden" />
     <input asp-for="Order" type="hidden" />
     <div class="row" style="margin-top: 10px;">
         <div class="col-12">
             <div class="row">
-                <div class="col-4">
+                <div class="col-10">
                     <input asp-for="Quest" type="text" class="form-control" id="name" />
                 </div>
                 <div class="col-1">
-                    <button type="submit" class="btn btn-warning">Ændre</button>
+                    <button type="submit" class="btn ucl-btn">Ændre</button>
                 </div>
                 <div class="col-1">
-                    <a href="#" class="btn btn-danger">Slet</a>
+                    <a asp-action="Delete_InterviewScheme_Question" asp-controller="Administration_InterviewScheme" asp-route-id="@Model.Id" asp-route-schemeid="@Model.InterviewSchemeId" class="btn ucl-btn">Slet</a>
                 </div>
             </div>
         </div>

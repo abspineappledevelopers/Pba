@@ -3,21 +3,21 @@
     ViewData["Title"] = "Create_InterviewScheme";
 }
 
-<br />
-<h2>Opret spørgeskema</h2>
-<br />
+<div style="padding: 10px 7px 40px 7px; background-image: linear-gradient(to bottom, #cbe5e4, #edf9fc);">
+    <div class="text-center" style="margin-top: 40px; padding: 10px 7px 10px 7px">
+        <h4 style="color: #014550">Opret interview skema</h4>
+    </div>
 
-<div class="container-fluid">
     <form asp-action="Pass_InterviewScheme" asp-controller="Administration_InterviewScheme" method="post">
         <div class="row">
             <div class="col-12 col-md-6">
                 <div class="row">
                     <div class="col-7">
-                        <label class="control-label">Skema navn:</label>
+                        <label class="control-label" style="color: #014550">Skema navn:</label>
                         <input asp-for="Name" type="text" class="form-control" id="name" required />
                     </div>
                     <div class="col-5">
-                        <label class="control-label">Skema Kommentar:</label>
+                        <label class="control-label" style="color: #014550">Skema Kommentar:</label>
                         <textarea asp-for="Comment" type="text" class="form-control" style="height: 500px;" id="comment"></textarea>
                     </div>
                 </div>
@@ -27,23 +27,23 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label class="control-label">Lande skema gælder for:</label>
+                            <label class="control-label" style="color: #014550">Lande skema gælder for:</label>
                             <select multiple="multiple" asp-for="CountryId" asp-items="@Model.Countries" class="form-control multi-select" style="height: 500px;" id="countries"></select>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label class="control-label">Uddannelser skema gælder for:</label>
+                            <label class="control-label" style="color: #014550">Uddannelser skema gælder for:</label>
                             <select multiple="multiple" asp-for="StudyfieldId" asp-items="@Model.Studyfields" class="form-control multi-select" style="height: 500px;" id="studyfields"></select>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <div class="row">
             <div class="col-12 col-md-2">
-                <button type="submit" class="btn btn-success" style="margin-top: 30px; width: 100%">Gem</button>
+                <button type="submit" class="btn ucl-btn" style="margin-top: 30px; width: 100%">Gem</button>
             </div>
         </div>
     </form>
