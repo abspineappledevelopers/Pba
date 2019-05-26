@@ -147,26 +147,6 @@ namespace UCL.ISM.Client.Controllers
             return View("../Administration/Create_Applicant", vm);
         }
 
-        [Authorize(Roles = UserRoles.Administration)]
-        public async Task<IActionResult> createApplicant(ApplicantVM model)
-        {
-            try
-            {
-                _applicant = new Applicant();
-                _nationality = new Nationality();
-                model.Id = Guid.NewGuid();
-                model.IsEU = _nationality.IsEu(model.Nationality.Id);
-
-                _applicant.CreateNewApplicant(model);
-            }
-            catch
-            {
-                return RedirectToAction("Create_Applicant");
-            }
-
-            return RedirectToAction("Create_Applicant");
-        }
-
         [HttpGet]
         [Authorize(Roles = UserRoles.Administration)]
         public IActionResult Applicant_Process()

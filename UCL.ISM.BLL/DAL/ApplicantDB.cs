@@ -246,7 +246,7 @@ namespace UCL.ISM.BLL.DAL
         {
             List<Applicant> list = new List<Applicant>();
             string query = "SELECT * FROM UCL_Applicant WHERE UCL_Applicant.Interviewer = @Id";
-            object[] temp = ExecuteReaderList(query, id);
+            List<object[]> temp = ExecuteReaderList(query, id);
             foreach (object[] item in temp)
             {
                 list.Add(new Applicant {

@@ -31,14 +31,25 @@ namespace UCL.ISM.BLL.DAL
         {
             string query = "SELECT * FROM UCL_Interviewer WHERE UCL_Interviewer.Id = @Id";
             string param1 = "@Id";
-            object[] temp = ExecuteReaderList(query, id);
-            return new Interviewer() { Id = temp[0].ToString(), Firstname = temp[1].ToString(), Lastname = temp[2].ToString() };
+            List<object[]> temp = ExecuteReaderList(query, id);
+            foreach (object[] item in temp)
+            {
+                if (item != null)
+                {
+                    return new Interviewer() { Id = item[0].ToString(), Firstname = item[1].ToString(), Lastname = item[2].ToString() };
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return null;
         }
 
         public List<Interviewer> GetAllInterviewers()
         {
             string query = "SELECT * FROM UCL_Interviewer";
-            object[] temp = ExecuteReaderList(query, new Interviewer());
+            List<object[]> temp = ExecuteReaderList(query, new Interviewer());
             List<Interviewer> list = new List<Interviewer>();
             foreach (object[] item in temp)
             {

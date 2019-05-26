@@ -5,13 +5,13 @@ using UCL.ISM.BLL.BLL;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace UCL.ISM.Client.Controllers
 {
     [Authorize]
     public class InterviewerController : Controller
     {
-        Interviewer _interviewer;
         /// <summary>
         /// ("Role") Security Group - Interviewer = (GUID) "be407188-013b-43da-8c34-444f6a944b0f".
         /// </summary>
@@ -19,45 +19,51 @@ namespace UCL.ISM.Client.Controllers
         [Authorize(Roles = UserRoles.Interviewer)]
         public IActionResult Index()
         {
-            _interviewer = new Interviewer();
-            foreach (var item in User.Claims)
+            Interviewer _interviewer = new Interviewer();
+            string[] split = User.FindFirst("name").Value.Split(' ', 2);
+            _interviewer.Firstname = split[0];
+            _interviewer.Lastname = split[1];
+            _interviewer.Id = User.FindFirst("oid").Value;
+
+            if (_interviewer.GetInterviewer(_interviewer.Id) == null)
             {
-                if (item.Type == "oid")
-                {
-                    _interviewer = _interviewer.GetInterviewer(item.Value);
-                    break;
-                }
+                return RedirectToAction("CreateInterviewer", new { interviewer = _interviewer });
             }
-            
-            Applicant appl = new Applicant();
-
-            List<Applicant> applicants = appl.GetAllApplicantsForInterviewer(_interviewer.Id);
-
-
-
-            return View("..Interviewer/Partials/_Applicants", applicants);
+            else
+            {
+                return RedirectToAction("GetApplicants", new { id = _interviewer.Id });
+            }
         }
 
+        [HttpPost]
         [Authorize(Roles = UserRoles.Interviewer)]
-        public IActionResult CreateInterviewer()
+        public IActionResult CreateInterviewer(Interviewer interviewer)
         {
-
+            interviewer.CreateInterviewer(interviewer);
             return View();
         }
 
+        [HttpGet]
         [Authorize(Roles = UserRoles.Interviewer)]
-        public IActionResult GetApplicants()
+        public IActionResult GetApplicants(string id)
         {
-            var user = HttpContext.Request.Query["Id"][0];
-            _interviewer.GetInterviewer(user);
             Applicant appl = new Applicant();
+            List<Applicant> temp = appl.GetAllApplicantsForInterviewer(id);
+            List<Models.ApplicantVM> applicants = new List<Models.ApplicantVM>();
 
-            List<Applicant> applicants = appl.GetAllApplicantsForInterviewer(_interviewer.Id);
+            foreach (Models.ApplicantVM item in temp)
+            {
+                applicants.Add(item);
+            }
 
-
-
-            return View("..Interviewer/Partials/_Applicants", applicants);
+            return View("Index", applicants);
         }
         
+        public IActionResult GetApplicantScheme(string id)
+        {
+            return View();
+        }
+
+
     }
 }

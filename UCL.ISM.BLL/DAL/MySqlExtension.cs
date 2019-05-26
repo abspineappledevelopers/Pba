@@ -61,9 +61,9 @@ namespace UCL.ISM.BLL.DAL
             }
         }
 
-        public object[] ExecuteReaderList(string query, object source)
+        public List<object[]> ExecuteReaderList(string query, object source)
         {
-            object[] vs;
+            List<object[]> list = new List<object[]>();
             cmd = new MySqlCommand();
             Get_Connection();
 
@@ -74,11 +74,8 @@ namespace UCL.ISM.BLL.DAL
                 cmd.Parameters.Add(SetParameterWithValue("@Id", source));
                 try
                 {
-                    int rows = 100;
-                    vs = new object[rows];
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        int j = 0;
                         int index = reader.FieldCount;
                         while (reader.Read())
                         {
@@ -88,10 +85,9 @@ namespace UCL.ISM.BLL.DAL
                                 temp[i] = reader[i];
                                 
                             }
-                            vs[j] = temp;
-                            j++;
+                            list.Add(temp);
                         }
-                        return vs;
+                        return list;
                     }
                 }
                 catch (Exception)
