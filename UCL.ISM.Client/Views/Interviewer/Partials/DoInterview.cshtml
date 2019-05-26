@@ -43,25 +43,16 @@
                     </div>
                 </div>
             </div>
+            @for (int i = 0; i < Model.InterviewScheme.Questions.Count; i++)
+            {
+                <div class="col-sm-6 col-lg-4 d-flex">
+                    <partial name="../Interviewer/Partials/_Interview" model="@Model.InterviewScheme.Questions[i]" />
+                </div>
+            }
             <div class="modal-footer">
                 <button type="submit" class="btn ucl-btn">Gem</button>
             </div>
         }
-    </div>
-</form>
-<form asp-action="Add_Answer" asp-controller="Interviewer" method="post">
-    <input asp-for="Id" value="@Model.InterviewScheme.Id" type="hidden" />
-    <input asp-for="InterviewScheme.Question.InterviewSchemeId" type="hidden" />
-    <div class="row" style="margin-top: 30px;">
-        <div class="col-12">
-            <label>@Model.InterviewScheme.Question.Quest</label>
-            <textarea asp-for="InterviewScheme.Question.Answer" type="text" placeholder="Tilføj svar .." class="form-control" required />
-        </div>
-        <div class="col-12" style="margin-top: 5px;">
-            <button class="btn ucl-btn" style="width: 100%;" type="submit">
-                Tilføj svar
-            </button>
-        </div>
     </div>
 </form>
 

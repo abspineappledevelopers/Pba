@@ -49,6 +49,11 @@ namespace UCL.ISM.BLL.BLL
             _db.AddQuestion(question);
         }
 
+        public void AddAnswerToInterview(Applicant id, Question question)
+        {
+            _db.AddAnswer(id, question);
+        }
+
         public void UpdateQuestion(Question question)
         {
             if (!string.IsNullOrEmpty(question.Quest))

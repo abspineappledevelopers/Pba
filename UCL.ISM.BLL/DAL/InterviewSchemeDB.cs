@@ -53,6 +53,23 @@ namespace UCL.ISM.BLL.DAL
             _db.ExecuteCmd(query, temp);
         }
 
+        public void AddAnswer(Applicant id, Question question)
+        {
+            string query = "INSERT INTO UCL_Answer(Id, Answer, QuestionId) VALUES (@Id, @Answer, @QuestionId)";
+            string param1 = "@Id";
+            string param2 = "@Answer";
+            string param3 = "@QuestionId";
+            string param4 = "@ApplicantId";
+
+            List<MySqlParameter> temp = new List<MySqlParameter>();
+            temp.Add(_db.SetParameterWithValue(param1, Guid.NewGuid()));
+            temp.Add(_db.SetParameterWithValue(param2, question.Answer));
+            temp.Add(_db.SetParameterWithValue(param3, question.Id));
+            temp.Add(_db.SetParameterWithValue(param4, id.Id));
+
+            _db.ExecuteCmd(query, temp);
+        }
+
         public InterviewScheme GetInterviewScheme(int? id)
         {
             string query = "SELECT * FROM UCL_InterviewScheme WHERE Id = @Id";

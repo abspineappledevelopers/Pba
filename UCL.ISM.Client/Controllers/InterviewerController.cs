@@ -79,25 +79,23 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [Authorize(Roles = UserRoles.Interviewer)]
-        public IActionResult GetApplicantScheme()
+        public IActionResult GetApplicantScheme(Models.ApplicantVM model)
         {
             Applicant app = new Applicant();
+            app.InterviewScheme.GetInterviewSchemeAndQuestions(model.InterviewScheme.Id);
             
-            if (TempData["schemeId"] != null)
-            {
-                InterviewScheme scheme = new InterviewScheme();
-                scheme.GetInterviewSchemeAndQuestions(Convert.ToInt32(TempData["schemeId"]));
-            }
             
             return View();
         }
 
         [HttpPost]
         [Authorize(Roles = UserRoles.Interviewer)]
-        public IActionResult Add_Answer()
+        public IActionResult Add_Answer(Models.ApplicantVM model)
         {
             Applicant app = new Applicant();
-            return View();
+            app.InterviewScheme.GetInterviewSchemeAndQuestions(model.InterviewScheme.Id);
+            app.InterviewScheme.AddAnswerToInterview(model, model.InterviewScheme.Question);
+            return View("Index");
         }
 
         [Authorize(Roles = UserRoles.Interviewer)]
@@ -122,15 +120,15 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [Authorize(Roles = UserRoles.Interviewer)]
-        public IActionResult Get_Interview_Modal(int id)
+        public IActionResult Get_Interview_Modal(Models.ApplicantVM id)
         {
-            Applicant app = new Applicant();
+           /* Models.ApplicantVM app = new Models.ApplicantVM();
             InterviewScheme _interviewScheme = new InterviewScheme();
-            app.InterviewScheme = _interviewScheme.GetInterviewSchemeAndQuestions(id);
+            app.InterviewScheme = _interviewScheme.GetInterviewSchemeAndQuestions(id);*/
 
             
 
-            return PartialView("../Interviewer/Partials/DoInterview", app);
+            return PartialView("../Interviewer/Partials/DoInterview", id);
         }
     }
 }
