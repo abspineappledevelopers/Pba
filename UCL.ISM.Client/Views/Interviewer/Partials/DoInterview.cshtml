@@ -17,11 +17,11 @@
                         <div class="row">
                             <div class="col-7">
                                 <label class="control-label" style="color: #014550">Navn:</label>
-                                <label>@Model.Firstname @Model.Lastname</label>
+                                <p>@Model.Firstname @Model.Lastname</p>
                             </div>
                             <div class="col-5">
                                 <label class="control-label" style="color: #014550">Kommentar:</label>
-                                <textarea asp-for="Comment" type="text" class="form-control" style="height: 200px;" id="comment">@Model.Comment</textarea>
+                                <textarea asp-for="Comment" disabled type="text" class="form-control" style="height: 200px;" id="comment">@Model.Comment</textarea>
                             </div>
                         </div>
                     </div>
@@ -30,25 +30,25 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label class="control-label" style="color: #014550">Lande:</label>
-                                    <label>@Model.Nationality</label>
+                                    <p>@Model.Nationality.Name</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label class="control-label" style="color: #014550">Uddannelser:</label>
-                                    <label>@Model.StudyField</label>
+                                    <p>@Model.StudyField.FieldName</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
-            </div>
-            @for (int i = 0; i < Model.InterviewScheme.Questions.Count; i++)
-            {
-                <div class="col-sm-6 col-lg-4 d-flex">
+                @for (int i = 0; i < Model.InterviewScheme.Questions.Count; i++)
+                {
                     <partial name="../Interviewer/Partials/_Interview" model="@Model.InterviewScheme.Questions[i]" />
-                </div>
-            }
+                }
+            </div>
+            
             <div class="modal-footer">
                 <button type="submit" class="btn ucl-btn">Gem</button>
             </div>

@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace UCL.ISM.Client.Controllers
 {
@@ -120,15 +121,21 @@ namespace UCL.ISM.Client.Controllers
         }
 
         [Authorize(Roles = UserRoles.Interviewer)]
-        public IActionResult Get_Interview_Modal(Models.ApplicantVM id)
+        public IActionResult Get_Interview_Modal(string id)
         {
-           /* Models.ApplicantVM app = new Models.ApplicantVM();
+            Models.ApplicantVM app = new Models.ApplicantVM();
+            Applicant temp = new Applicant();
+            app = temp.GetApplicant(id);
             InterviewScheme _interviewScheme = new InterviewScheme();
-            app.InterviewScheme = _interviewScheme.GetInterviewSchemeAndQuestions(id);*/
+            var quest = _interviewScheme.GetInterviewSchemeAndQuestions(app.InterviewScheme.Id);
+            foreach (var item in quest.Questions)
+            {
+                app.InterviewScheme.Questions.Add(new Models.QuestionVM() { Id = item.Id, Order = item.Order, Answer = item.Answer, InterviewSchemeId = item.InterviewSchemeId, Quest = item.Quest });
+            }
+            app.InterviewScheme.Questions.OrderBy(x => x.Order).ToList();
 
-            
 
-            return PartialView("../Interviewer/Partials/DoInterview", id);
+            return PartialView("../Interviewer/Partials/DoInterview", app);
         }
     }
 }

@@ -4,15 +4,20 @@
 <form asp-action="Add_Answer" asp-controller="Interviewer" method="post">
     <input asp-for="Id" value="@Model.Id" type="hidden" />
     <input asp-for="InterviewSchemeId" type="hidden" />
-    <div class="row" style="margin-top: 30px;">
+
+    <div class="row">
         <div class="col-12">
-            <label>@Model.Quest</label>
-            <textarea asp-for="Answer" type="text" placeholder="Tilføj svar .." class="form-control" required />
+            <div class="form-group">
+                <label>@Model.Quest</label>
+                <textarea asp-for="Answer" type="text" placeholder="Tilføj svar .." class="form-control" required />
+            </div>
         </div>
-        <div class="col-12" style="margin-top: 5px;">
+        <div class="col-12" style="margin-bottom: 20px; margin-top: 5px;">
             <button class="btn ucl-btn" style="width: 100%;" type="submit">
                 Tilføj svar
             </button>
         </div>
     </div>
+        
+
 </form>

@@ -79,11 +79,8 @@
                     else
                     {
                         <p id="scheme">Intet skema</p>
-                        <a id="schemebtn" class="btn btn-outline-warning" href="#" onclick="createModal('@Url.Action("Get_InterviewScheme_Modal", "Interviewer" , new { id = Model.Id })')" data-toggle="modal" data-target="#myModal">
-                            Tilføj skema
-                        </a>
                     }
-                    <a id="interviewbtn" class="btn btn-outline-warning" href="#" onclick="createModal('@Url.Action("Get_Interview_Modal", "Interviewer" , new { Model = Model })')" data-toggle="modal" data-target="#myModal">
+                    <a id="interviewbtn" class="btn btn-outline-warning" href="#" onclick="createModal('@Url.Action("Get_Interview_Modal", "Interviewer" , new { Id = Model.Id })')" data-toggle="modal" data-target="#myModal">
                         Udfør Interview
                     </a>
                 </div>
