@@ -47,9 +47,13 @@ namespace UCL.ISM.BLL.DAL
                         Priority = reader.GetInt32(6),
                         Nationality = new Nationality() { Id = reader.GetInt32(7), Name = reader.GetString(8).ToString(), IsEU = reader.GetBoolean(9) },
                         StudyField = new StudyField() { Id = reader.GetInt32(10), FieldName = reader.GetString(11).ToString() },
-                        Comment = reader.GetString(15).ToString(),
                         HasResidencePermit = reader.GetBoolean(16)
                     };
+
+                    if(reader.GetValue(15) != DBNull.Value)
+                    {
+                        _app.Comment = reader.GetString(15).ToString();
+                    }
 
                     if(reader.GetValue(12) != DBNull.Value)
                     {
